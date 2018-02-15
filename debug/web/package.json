@@ -1,0 +1,40 @@
+{
+  "name": "water",
+  "version": "0.0.1",
+  "description": "diplom work",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xKIVIx/water.git"
+  },
+  "author": "Aleksandrov Maksim",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xKIVIx/water/issues"
+  },
+  "homepage": "https://github.com/xKIVIx/water#readme",
+  "devDependencies": {
+    "graceful-fs": "^4.1.11",
+    "gulp": "^3.9.1",
+    "gulp-concat-css": "^3.0.0",
+    "gulp-cssmin": "^0.2.0",
+    "gulp-inject": "^4.3.0",
+    "gulp-jshint": "^2.1.0",
+    "gulp-sass": "^3.1.0",
+    "jshint": "^2.9.5",
+    "uglifyjs-webpack-plugin": "^1.1.8",
+    "webpack": "^3.11.0",
+    "webpack-stream": "^4.0.1"
+  },
+  "dependencies": {
+    "@babel/core": "^7.0.0-beta.40",
+    "@babel/preset-env": "^7.0.0-beta.40",
+    "babel-loader": "^8.0.0-beta.0",
+    "gulp-htmlhint": "^2.0.0",
+    "gulp-htmlmin": "^4.0.0",
+    "gulp-install": "^1.1.0"
+  }
+}
