@@ -1,173 +1,274 @@
-import {mat4} from "./includes/GLMatrix/gl-matrix.js";
-class webGlContext {
+/* Copyright (c) 2018, Aleksandrov Maksim */
+
+import {mat4,vec3,quat} from "./includes/GLMatrix/gl-matrix.js";
+import {webGLcam} from "./webGLcam.js";
+import {webGLobject} from "./webGLobject.js";
+import * as glSettings from "./defaultSettings/webGl.js";
+
+/** 
+ * The webgl context class. 
+ * When created, it is attached to the canvas element. 
+ */
+class webGLcontext {
+    
     /**
-     *  @brief constructor of webGl context
-     *
-     *  @param [in] viewport - canvas id
+     * @constructor
+     * @param  {string} viewport canvas id
      */
     constructor(viewport) {
-        var canvas = document.getElementById(viewport);
-        this.context_ = canvas.getContext('webgl');
-        this.context_.viewport(0,
-            0,
-            canvas.width,
-            canvas.height);
-        this.context_.getExtension('OES_element_index_uint');
-        var tmp = mat4.create();
-        alert (tmp);
-        this.context_.clearColor(0.5, 1, 0, 200);
+        let canvas = document.getElementById(viewport);
+        let gl = canvas.getContext('webgl');
+
+        this.context_ = gl;
+        gl.viewport(0,
+                    0,
+                    canvas.width,
+                    canvas.height);
+
+        gl.getExtension('OES_element_index_uint');
+
+        gl.clearColor(glSettings.clearColor[0],
+                      glSettings.clearColor[1],
+                      glSettings.clearColor[2],
+                      glSettings.clearColor[3]);
+
+        gl.enable(gl.DEPTH_TEST);
+        gl.depthFunc(gl.LESS);
+        gl.clearDepth(1.0);
+
+        this.mat4Project_ = mat4.create();
+        mat4.perspective(this.mat4Project_, 
+                         Math.PI/1.5, 
+                         1, 
+                         glSettings.minDist, 
+                         glSettings.maxDist);
+
+        let camRotate = quat.fromEuler(quat.create(),
+                                       glSettings.camRotate[0],
+                                       glSettings.camRotate[1],
+                                       glSettings.camRotate[2]);
+
+        this.camera_ = new webGLcam(glSettings.camPosition,
+                                    camRotate);
     }
+
+    /**
+     * Create shader program from shaders
+     * @param  {object[]} shaders shaders for the created program. 
+     *                            (should contain one shader of each type).
+     * @return shader program
+     */
     getShaderProgram(shaders) {
-        var shaderProgram = this.context_.createProgram();
+        let gl = this.context_;
+        let shaderProgram = gl.createProgram();
 
         for (var i in shaders) {
-            this.context_.attachShader(shaderProgram,
-                shaders[i]);
-        }
+            gl.attachShader(shaderProgram,
+                            shaders[i]);
+        };
 
-        this.context_.linkProgram(shaderProgram);
+        gl.linkProgram(shaderProgram);
 
-        if (!this.context_.getProgramParameter(shaderProgram,
-                this.context_.LINK_STATUS)) {
+        if (!gl.getProgramParameter(shaderProgram,
+                                    gl.LINK_STATUS)) {
             alert("Can`t init shader program");
-        }
+            return;
+        };
+
         shaderProgram.vertexPositionAttribute_ = 
-            this.context_.getAttribLocation(shaderProgram, 
-                "aVertexPosition");
-        this.context_.enableVertexAttribArray(
-            shaderProgram.vertexPositionAttribute_);
+                gl.getAttribLocation(shaderProgram,
+                "aVec3_vertexPosition");
+
+        gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute_);
+
+        shaderProgram.matrix_ = {
+            mat4Project_: gl.getUniformLocation (shaderProgram, 
+                                                 "uMat4_project"),
+            mat4Cam_: gl.getUniformLocation (shaderProgram, 
+                                             "uMat4_cam"),
+            mat4ObjectPos_: gl.getUniformLocation (shaderProgram, 
+                                                   "uMat4_objectPos")
+        };
         return shaderProgram;
     }
     
     /**
-     *  @brief This function for compiled shader from
-     *         source in html block
-     *
-     *  @param [in] blockId - id of html block? where
-     *                        store source of sheder
-     *  @return return compiled shader
+     * This function for compiled shader from
+     * source in html block
+     * @param  {string} blockId id of html block where
+     *                          store source of sheder
+     * @return Shader used for create shader programm.
+     *         If an error occurs during compilation, it returns undefined.
      */
     getShader(blockId) {
-        var type;
-        const store = document.getElementById(blockId);
-        var storeType = store.getAttribute('type');
-        // define shader type
+        let gl = this.context_;
+        let type;
+        let store = document.getElementById(blockId);
+        let storeType = store.getAttribute('type');
+
         if (storeType == 'x-shader/x-vertex') {
-            type = this.context_.VERTEX_SHADER;
+            type = gl.VERTEX_SHADER;
         } else if (storeType == 'x-shader/x-fragment') {
-            type = this.context_.FRAGMENT_SHADER;
+            type = gl.FRAGMENT_SHADER;
         } else {
             alert("Unknown shader type :" + storeType);
-            return null;
+            return void(0);
         }
-        var source = store.innerHTML;
-        var shader = this.context_.createShader(type);
-        this.context_.shaderSource(shader, source);
-        this.context_.compileShader(shader);
 
-        // chek compile
-        if (!this.context_.getShaderParameter(shader,
-                this.context_.COMPILE_STATUS)) {
+        let source = store.innerHTML;
+        let shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+
+        if (!gl.getShaderParameter(shader,
+                gl.COMPILE_STATUS)) {
             alert("Error compile shader: " +
-                this.context_.getShaderInfoLog(shader));
-            this.context_.deleteShader(shader);
-            return null;
+                gl.getShaderInfoLog(shader));
+            gl.deleteShader(shader);
+            return void(0);
         }
         return shader;
     }
 
     /**
-     *  @brief load mesh into buffer
-     *
-     *  @param [in] vertex - array with vertex
-     *                       data (32bit format)
-     *  @param [in] indices - indices array (32bit format)
-     *  @return structure { vertexBuffer, indexBuffer }
+     * load object into buffer
+     * @param  {number[]} vertex array with vertex
+     *                        data (32bit format)
+     * @param  {number} vertexSize data size of 
+     *                             one vertex
+     * @param  {number[]} indices array of indices
+     * @param  {object} shaderProgram shader program 
+     *                                for rend object
+     * @param  {vec3} position object position
+     * @param  {quat} rotation object rotation
+     * @return {webGLobject} return added object
      */
-    loadMesh(vertex,
-        vertexSize,
-        indices) {
-        // init vertex data
-        var vertexBuffer = this.context_.createBuffer();
-        this.context_.bindBuffer(this.context_.ARRAY_BUFFER,
-            vertexBuffer);
-        this.context_.bufferData(this.context_.ARRAY_BUFFER,
-            new Float32Array(vertex),
-            this.context_.STATIC_DRAW);
+    loadObject(vertex,
+               vertexSize,
+               indices,
+               shaderProgram,
+               position,
+               rotation) {
+        let gl = this.context_;
+
+        let vertexBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER,
+                      vertexBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER,
+                      new Float32Array(vertex),
+                      gl.STATIC_DRAW);
         vertexBuffer.itemSize_ = vertexSize;
         vertexBuffer.countItems_ = vertex.length;
 
-        // init indices buffer
-        var indicesBuffer = this.context_.createBuffer();
-        this.context_.bindBuffer(
-            this.context_.ELEMENT_ARRAY_BUFFER,
-            indicesBuffer);
-        this.context_.bufferData(
-            this.context_.ELEMENT_ARRAY_BUFFER,
-            new Uint16Array(indices),
-            this.context_.STATIC_DRAW);
+        let indicesBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,
+                      indicesBuffer);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
+                      new Uint16Array(indices),
+                      gl.STATIC_DRAW);
         indicesBuffer.itemSize_ = 1;
         indicesBuffer.countItems_ = indices.length;
         
-        return {
-            vertexBuffer_: vertexBuffer,
-            indicesBuffer_: indicesBuffer
-        };
+        let newObject = new webGLobject(vertexBuffer,
+                                        indicesBuffer,
+                                        shaderProgram,
+                                        position,
+                                        rotation)
+        if (this.objectsList_ === (void(0))) {
+            this.objectsList_ = newObject;
+        } else {
+            this.objectsList_.addObject(newObject);
+        }
+
+        return newObject;
     }
 
     /**
-     *  @brief rend objects
-     *
-     *  @param [in] objects - an array of objects having
-     *                        a structure {vertexBuffer_,
-     *                                     indexBuffer_,
-     *                                     shaderProgram_}
+     * Rend objects.
      */
-    rend(objects) {
-        this.context_.clear(this.context_.COLOR_BUFFER_BIT);
-        for (var i in objects) {
-            // init program
-            this.context_.useProgram(objects[i].shaderProgram_);
-            // bind data
-            this.context_.bindBuffer(
-                this.context_.ARRAY_BUFFER, 
-                objects[i].vertexBuffer_);
-            this.context_.bindBuffer(
-                this.context_.ELEMENT_ARRAY_BUFFER,
-                objects[i].indicesBuffer_);
+    rend() {
+        let gl = this.context_;
+        let currentObject = this.objectsList_.getFirstObject();
+        let camMatrix = this.camera_.getMatrix();
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        while (currentObject !== void(0)) {
+            let shaderProgram = currentObject.shaderProgram_;
+            gl.useProgram(shaderProgram);
+            gl.uniformMatrix4fv(shaderProgram.matrix_.mat4Project_,
+                                false, 
+                                this.mat4Project_);
+            gl.uniformMatrix4fv(shaderProgram.matrix_.mat4Cam_,
+                                false, 
+                                camMatrix);
+            gl.uniformMatrix4fv(shaderProgram.matrix_.mat4ObjectPos_,
+                                false, 
+                                currentObject.getMatrix());
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, 
+                          currentObject.vertexBuffer_);
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,
+                          currentObject.indicesBuffer_);
                 
-            // set vertex attribute
-            this.context_.vertexAttribPointer(
-                objects[i].shaderProgram_.vertexPositionAttribute_, 
-                objects[i].vertexBuffer_.itemSize_, 
-                this.context_.FLOAT, 
-                false, 
-                0, 
-                0);
-            // rend
-            this.context_.drawElements(this.context_.TRIANGLES,
-                objects[i].indicesBuffer_.countItems_,
-                this.context_.UNSIGNED_SHORT,
-                0);
+            gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute_, 
+                                   currentObject.vertexBuffer_.itemSize_, 
+                                   gl.FLOAT, 
+                                   false, 
+                                   0, 
+                                   0);
+
+            gl.drawElements(gl.TRIANGLES,
+                            currentObject.indicesBuffer_.countItems_,
+                            gl.UNSIGNED_SHORT,
+                            0);
+            
+            currentObject = currentObject.nextObject_;
         }
     }
 
 }
-document.getElementById('test-button').onclick = function () {
-    var gl = new webGlContext('viewport');
-    var triangleVertices = [
-        0.0, 0.5, 0.0,
-        -0.5, -0.5, 0.0,
-        0.5, -0.5, 0.0,
-        0.5, 0.5, 0.0
-    ];
-    var indices = [0,1,3]; 
-    var shaders = [
-        gl.getShader('vertex-shader'),
-        gl.getShader('fragment-shader')];
+
+/**
+ * Get the context for testing.
+ * @return {webGLcontext} test context.
+ */
+function testWebGl() {
+    var gl = new webGLcontext('viewport');
+    var vertices =[
+        -0.5, -0.5, 0.5,
+        -0.5, 0.5, 0.5,
+         0.5, 0.5, 0.5,
+         0.5, -0.5, 0.5,
+        -0.5, -0.5, -0.5,
+        -0.5, 0.5, -0.5,
+         0.5, 0.5, -0.5,
+         0.5, -0.5, -0.5
+         ];
+          
+    var indices = [
+        0, 1, 2, 
+        2, 3, 0,
+        0, 4, 7, 
+        7, 3, 0,
+        0, 1, 5,
+        5, 4, 0, 
+        2, 3, 7, 
+        7, 6, 2,
+        2, 1, 6,
+        6, 5, 1,
+        4, 5, 6,
+        6, 7, 4,
+    ]; 
+    var shaders = [gl.getShader('vertex-shader'),
+                   gl.getShader('fragment-shader')];
     var program = gl.getShaderProgram(shaders);
-    
-    var objects = [gl.loadMesh(triangleVertices, 3,indices)];
-    objects[0].shaderProgram_ = gl.getShaderProgram(shaders);
-    gl.rend(objects);
-};
+    let object = gl.loadObject(vertices,
+                               3,
+                               indices,
+                               program,
+                               vec3.fromValues(0.0,0.0,-3.0),
+                               quat.create());
+    gl.rend();
+    return gl;
+}
+
+export {webGLcontext,testWebGl,webGLcam};
