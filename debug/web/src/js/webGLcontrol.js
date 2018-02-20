@@ -5,11 +5,13 @@ import {webGLcontext} from "./webGl.js";
 import {keys as ControlSittings} from "./defaultSettings/control.js" ;
 
 /**
- * @type {webGLcontext} context for control
+ * Context for control.
+ * @type {webGLcontext} 
  */
 var webGL;
 /**
- * @type {vec2} last mause pos
+ * Last mause pos.
+ * @type {vec2}
  */
 var lastMousePos;
 
@@ -39,7 +41,7 @@ function handleMouseMove(e) {
  * Handle press keyboard button.
  * @param  {event} e event.
  */
-function hendlePressButton(e) {
+function handlePressButton(e) {
     switch(e.keyCode){
         case ControlSittings.zoomUp:
             webGL.camera_.move( vec3.fromValues(0.0, 0.0, 1.0) );
@@ -72,7 +74,7 @@ function hendlePressButton(e) {
 export function initControlAera(elemId, context) {
     webGL = context;
     var element = document.getElementById(elemId);
-    addEventListener("keydown", hendlePressButton);
+    addEventListener("keydown", handlePressButton);
     element.onmousedown = function(e){
         lastMousePos = vec2.fromValues(e.pageX, e.pageY);
         element.onmousemove = handleMouseMove;

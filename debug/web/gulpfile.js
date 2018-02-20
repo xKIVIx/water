@@ -17,6 +17,13 @@ gulp.task('checkJS', function() {
                .pipe( jshint.reporter('default', {esversion: 6}) );
 });
 
+var jsdoc = require('gulp-jsdoc3');
+
+gulp.task('doc', function (cb) {
+    var config = require('./jsdoc.json');
+    gulp.src(['README.md', './src/js/*.js'], {read: false})
+        .pipe(jsdoc(config, cb));
+});
 
 // html compile
 const htmlmin = require('gulp-htmlmin');
