@@ -1,8 +1,14 @@
 cmake_minimum_required(VERSION 3.11)
 
+set(SOURCE
+    CNet.cpp
+    Handler/CNetHandlerWebSocket.cpp)
+
+
 if(${OS} STREQUAL "linux")
     set(SOURCE
-        CNetLinux.cpp)
+        ${SOURCE}
+        CNetSocketInterfaceLinux.cpp)
 endif()
 
 

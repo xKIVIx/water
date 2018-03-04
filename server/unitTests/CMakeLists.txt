@@ -2,21 +2,13 @@ cmake_minimum_required(VERSION 3.11)
 
 enable_testing()
 
-set(TESTS 
+set(TESTS
+    CNet.cpp
     main.cpp)
 
 set(LIBRES
     CNet
     gtest_main)
-
-if(${OS} STREQUAL "linux")
-    message("ggg")
-    set(TESTS
-        ${TESTS}
-        CNetLinux.cpp)
-else()
-endif()
-
 
 add_executable(serverTest 
                ${TESTS})
