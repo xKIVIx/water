@@ -8,11 +8,13 @@
 
 #include "CNet.hpp"
 
-Net::CNet::CNet() {
+Net::CNet::CNet(const int maxCon,
+                const char *ip,
+                const int port) {
 
-    listenSocket_ = CNetSocketInterface::createServerSocket(3,
-                                                            3000,
-                                                            "127.0.0.1");
+    listenSocket_ = CNetSocketInterface::createServerSocket(maxCon,
+                                                            port,
+                                                            ip);
     
     if(listenSocket_ == -1) {
         throw listenSocetInitError;
@@ -29,6 +31,10 @@ Net::CNet::~CNet() {
         ++iter) {
         delete *iter;
     }
+}
+
+void Net::CNet::close() {
+    CNetSocketInterface::closeSocket(listenSocket_);
 }
 
 Net::SToken Net::CNet::acceptClient() {
@@ -152,4 +158,9 @@ void Net::CNet::sendData(const SToken &clientToken,
     CNetSocketInterface::send(clientToken.socket_,
                               result.c_str(),
                               int ( result.size() ));
+}
+
+void Net::CNet::disconnect(SToken &clientToken) {
+    Net::CNetSocketInterface::closeSocket(clientToken.socket_);
+    clientToken.socket_ = -1;
 }

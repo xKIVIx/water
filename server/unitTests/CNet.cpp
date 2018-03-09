@@ -13,9 +13,9 @@
 
 
 TEST(CNet, connection) {
-    Net::CNet network;
+    Net::CNet network(3, ADRESS, PORT);
     std::thread server (&Net::CNet::acceptClient, &network);
-    
+    sleep(1);
     int sock = Net::CNetSocketInterface::createClientSocket(PORT,
                                                             ADRESS);
 
@@ -37,7 +37,7 @@ TEST(CNetWebSocket, package) {
     ASSERT_STREQ(handler.unpackData(expectResult).c_str(), data.c_str()) << "Test unpack data";
 }
 void serverWork () {
-    Net::CNet network;
+    Net::CNet network(3, ADRESS, PORT);
     Net::SToken client = network.acceptClient();
     if(client.socket_ == -1) {
         FAIL() << "accept client\n";
@@ -71,7 +71,7 @@ TEST(CNetWebSocket, connection) {
     actualAnswer += "WebSocket-Origin: http://localhost:6000\r\n";
     actualAnswer += "WebSocket-Location: ws://localhost:6000\r\n\r\n";
 
-    sleep(3);
+    sleep(1);
     int sock = Net::CNetSocketInterface::createClientSocket(PORT,
                                                             ADRESS);
     if(sock == -1) {
@@ -119,6 +119,7 @@ TEST(CNetWebSocket, connection) {
         }
         char answerMessage[484];
         int answerSize = 484;
+        answerMessage[483] = '\0';
         r = Net::CNetSocketInterface::recv(sock,
                                            answerMessage,
                                            answerSize);
@@ -132,4 +133,5 @@ TEST(CNetWebSocket, connection) {
     }
     Net::CNetSocketInterface::closeSocket(sock);
     server.join();
+    SUCCEED();
 }

@@ -1,5 +1,5 @@
 mkdir build
 cd build
-cmake .. -DUTest=1 -DOS=linux
+cmake .. -DUTest=0 -DOS=linux
 cmake --build .
-../debug/linux/serverTest
+#../debug/linux/serverTest

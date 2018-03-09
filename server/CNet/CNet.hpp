@@ -40,14 +40,33 @@ namespace Net {
          * @brief Constructor. In case of errors, he throws exceptions.
          * @see Exception
          * 
+         * @param maxCon Maximum number of connections.
+         * @param ip IPv4.
+         * @param port Port number.
+         * 
          */
-        CNet();
+        CNet(const int maxCon,
+             const char *ip,
+             const int port);
          
         /**
          * @brief Destructor.
          * 
          */
         ~CNet();
+
+        /**
+         * @brief Closing of clients' expectations.
+         * 
+         */
+        void close();
+
+        /**
+         * @brief Disconnect the client.
+         * 
+         * @param clientToken Client token.
+         */
+        void disconnect(SToken &clientToken);
 
         /**
          * @brief The function of connection waiting.
