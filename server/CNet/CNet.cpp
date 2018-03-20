@@ -9,17 +9,18 @@
 #include "CNet.hpp"
 
 Net::CNet::CNet(const int maxCon,
-                const char *ip,
+                const std::string &ip,
                 const int port) {
 
     listenSocket_ = CNetSocketInterface::createServerSocket(maxCon,
                                                             port,
-                                                            ip);
+                                                            ip.c_str());
     
     if(listenSocket_ == -1) {
         throw listenSocetInitError;
     }
-
+    ip_ = ip;
+    port_ = port;
     handlers_.push_back((CNetHandler *)new CNetHandlerWebSocket());
 
 }
@@ -34,6 +35,10 @@ Net::CNet::~CNet() {
 }
 
 void Net::CNet::close() {
+    int sock = CNetSocketInterface::createClientSocket(port_,
+                                                       ip_.c_str());
+    CNetSocketInterface::send(sock,"\r\n\r\n",5);
+    CNetSocketInterface::closeSocket(sock);
     CNetSocketInterface::closeSocket(listenSocket_);
 }
 
@@ -69,7 +74,7 @@ Net::SToken Net::CNet::acceptClient() {
         }
     }
 
-    std::cout << "Get head\n";
+    std::cout << "Get head\n" << head;
     for(uint i = 0; i < handlers_.size(); i++) {
         bool isSendAnswer = false;
         std::string answer = handlers_[i]->handle(head,
@@ -86,7 +91,7 @@ Net::SToken Net::CNet::acceptClient() {
                     result.socket_ = -1;
                     return result;
                 }
-                std::cout << "Send answer\n";
+                std::cout << "Send answer\n" << answer;
             }
             result.connectionType_ = i;
             return result;
@@ -98,69 +103,99 @@ Net::SToken Net::CNet::acceptClient() {
     return result;
 }
 
-void Net::CNet::getData (const SToken &clientToken,
-                         char **data,
-                         uint &dataSize) {
+bool Net::CNet::getData (const SToken &clientToken,
+                         std::string &data) {
     if(clientToken.socket_ == -1) {
-        dataSize = 0;
-        return;
+        return false;
     }
 
-    uint bufferSize = 256;
-    char *buffer = new char [bufferSize];
-    int r = CNetSocketInterface::recv(clientToken.socket_,
-                                      buffer,
-                                      bufferSize);
-    if(r <= 0) {
-        dataSize = 0;
-        return;
-    }
+    // get message
+    while(true) {
+        std::string packData;
+        uint headSize = handlers_[clientToken.connectionType_]
+                            ->getMessageHeadMaxSize();
+        char * buffer = new char [headSize];
 
-    std::string result;
-    result.insert(result.end(),
-                  buffer,
-                  buffer+r);
-    delete [] buffer;
-    bufferSize = handlers_[clientToken.connectionType_]->getSize(result);
-    if(uint(r) < bufferSize) {
-        buffer = new char [bufferSize];
         int r = CNetSocketInterface::recv(clientToken.socket_,
-                                          buffer,
-                                          bufferSize);
+                                        buffer,
+                                        int(headSize));
         if(r <= 0) {
-            dataSize = 0;
-            return;
+            return false;
         }
-        result.insert(result.end(),
-                      buffer,
-                      buffer+r);
+        packData.reserve(r);
+        packData.insert(packData.end(),
+                        buffer,
+                        buffer + r);
         delete [] buffer;
+        SMessageHead messageHead = handlers_[clientToken.connectionType_]
+                                    ->decodMessageHead(packData);
+        if(messageHead.type_ == MessageType::PING) {
+            std::string pong = handlers_[clientToken.connectionType_]
+                                ->pong();
+            r = CNetSocketInterface::send(clientToken.socket_,
+                                        pong.c_str(),
+                                        int(pong.size()));
+            if(r <= 0) {
+                std::cout << "Pong send error\n";
+                return false;
+            }
+            continue;
+        } else if(messageHead.type_ == MessageType::DISCONNECT) {
+            std::cout << "Disconnect\n";
+            return false;
+        } else if((messageHead.type_ == MessageType::DATA)||
+                  (messageHead.type_ == MessageType::DATA_FRAGMENT)) {
+            uint messageSize = messageHead.dataSize_ + 
+                               messageHead.headSize_;
+            if(messageSize > packData.size()) {
+                uint lastPartSize = messageSize - packData.size();
+                buffer = new char [lastPartSize];
+                r = CNetSocketInterface::recv(clientToken.socket_,
+                                              buffer,
+                                              int(lastPartSize));
+                packData.reserve(messageSize);
+                packData.insert(packData.end(),
+                                buffer,
+                                buffer + r);
+                delete [] buffer;
+            }
+            data += handlers_[clientToken.connectionType_]
+                        ->unpackData(messageHead, packData);
+            if(messageHead.type_ == MessageType::DATA) {
+                return true;
+            } else {
+                continue;
+            }
+        } else if(messageHead.type_ == MessageType::PONG) {
+            return true;
+        } else {
+            std::cout << "Unknown message\n";
+            return false;
+        }     
     }
-
-    result = handlers_[clientToken.connectionType_]->unpackData(result);
-
-    *data = new char [result.size()];
-    memcpy(*data,
-           result.c_str(),
-           result.size());
-    dataSize = result.size();
 }
 
 void Net::CNet::sendData(const SToken &clientToken,
-                         const char *data,
-                         const uint dataSize) {
-    std::string result;
-    result.insert(result.end(),
-                  data,
-                  data+dataSize);
-    result = handlers_[clientToken.connectionType_]->packData(result);
-    
+                         const std::string &data) {
+    std::cout << data;
+    if((clientToken.socket_ <= 0)||
+       (data.empty())) {
+        return;
+    }
+    std::string result = handlers_[clientToken.connectionType_]
+                            ->packData(data, true);
     CNetSocketInterface::send(clientToken.socket_,
                               result.c_str(),
                               int ( result.size() ));
 }
 
-void Net::CNet::disconnect(SToken &clientToken) {
+void Net::CNet::disconnect(SToken &clientToken,
+                           DisconnectReason reason) {
+    std::string disconnectMes = handlers_[clientToken.connectionType_]
+                            ->disconect(reason);
+    CNetSocketInterface::send(clientToken.socket_,
+                              disconnectMes.c_str(),
+                              disconnectMes.size());
     Net::CNetSocketInterface::closeSocket(clientToken.socket_);
     clientToken.socket_ = -1;
 }

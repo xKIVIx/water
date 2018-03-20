@@ -1,5 +1,4 @@
 mkdir build
 cd build
-cmake .. -DUTest=0 -DOS=linux
+cmake .. -DUTest=1 -DOS=linux -DCMAKE_BUILD_TYPE=Debug
 cmake --build .
-#../debug/linux/serverTest

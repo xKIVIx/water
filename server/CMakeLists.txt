@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.9)
 
 add_subdirectory(CNet)
 
@@ -12,6 +12,7 @@ endif()
 
 add_executable(server
                CReception.cpp
+               CServer.cpp
                main.cpp)
 
 target_link_libraries(server ${LIBRES})

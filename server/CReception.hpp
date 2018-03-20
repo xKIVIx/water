@@ -16,8 +16,7 @@
  */
 struct STask {
     Net::SToken token_;
-    uint dataSize_ = 0;
-    char * data_ = nullptr;
+    std::string data_;
 };
 
 /**
@@ -58,6 +57,12 @@ public:
      */
     void compliteTask(STask &task);
 
+    /**
+     * @brief The function of stopping the work of receiving clients.
+     * 
+     */
+    void stop();
+
 private:
     std::queue <STask> taskQueue;
 
@@ -72,10 +77,26 @@ private:
 
     bool endState_ = false;
 
+    /**
+     * @brief Thread-safe end of work test.
+     * 
+     * @return true Break work.
+     * @return false Continue work.
+     */
     bool isEnd();
 
+    /**
+     * @brief Thread-safe job verification.
+     * 
+     * @return true Have job.
+     * @return false Haven`t job.
+     */
     bool isEmptyQueue();
 
+    /**
+     * @brief Flow function.
+     * 
+     */
     void work();
 };
 

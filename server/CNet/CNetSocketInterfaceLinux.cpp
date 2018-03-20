@@ -62,7 +62,7 @@ int Net::CNetSocketInterface::createClientSocket(const int port,
     if( ::connect(result, 
                   (struct sockaddr *)&addr, 
                   sizeof(addr)) < 0) {
-        std::cout << "Connect error!";
+        std::cout << "Connect error!\n";
         closeSocket(result);
         return -1;
     }

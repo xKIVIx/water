@@ -8,22 +8,28 @@ CReception::CReception(const int maxCon,
                        const char *ip,
                        const int port) {
     connection_ = new Net::CNet(maxCon, ip, port);
-    workThread_ = new std::thread(&CReception::work, this);
-    
+    workThread_ = new std::thread(&CReception::work, this);   
 }
 
 void CReception::work() {
     Net::SToken clientToken;
     while( !isEnd() ) {
+        std::cout << "Wait client\n";
         clientToken = connection_->acceptClient();
         if(clientToken.socket_ == -1) {
             continue;
         }
         STask task;
-        connection_->getData(clientToken, 
-                            &task.data_, 
-                            task.dataSize_);
-        if(task.dataSize_ == 0) {
+        task.token_ = clientToken;
+        std::cout << "Wait task\n";
+        if( !connection_->getData(clientToken, task.data_) ) {
+            connection_->disconnect(clientToken,
+                                    Net::DisconnectReason::NORMAL);
+            continue;
+        }
+        if(task.data_.size() == 0) {
+            connection_->disconnect(clientToken,
+                                    Net::DisconnectReason::NORMAL);
             continue;
         }
         std::cout << "Get task\n";
@@ -45,27 +51,21 @@ bool CReception::isEmptyQueue() {
 }
 
 CReception::~CReception() {
-    mutexEndState_.lock();
-    endState_ = true;
-    mutexEndState_.unlock();
+    stop();
 
-    // close listen socket
-    connection_->close();
     workThread_->join();
     delete workThread_;
+
     
     // clear task queue
     mutexTaskQueue_.lock();
     while( !taskQueue.empty() ) {
-        delete [] taskQueue.front().data_;
-        connection_->disconnect(taskQueue.front().token_);
+        connection_->disconnect(taskQueue.front().token_,
+                                Net::DisconnectReason::SERVER_ERROR);
         taskQueue.pop();
     }
     mutexTaskQueue_.unlock();
     delete connection_;
-
-    // free waiting threads
-    comeQuestEvent_.notify_all();
 }
 
 STask CReception::getTask() {
@@ -84,11 +84,19 @@ STask CReception::getTask() {
 }
 
 void CReception::compliteTask(STask &task) {
-    std::cout << "Task complite\n";
     connection_->sendData(task.token_, 
-                          task.data_, 
-                          task.dataSize_);
-    connection_->disconnect(task.token_);
-    delete[] task.data_;
-    task.dataSize_ = 0;
+                          task.data_);
+    connection_->disconnect(task.token_,
+                            Net::DisconnectReason::NORMAL);
+    std::cout << "Task complite\n";
+}
+
+void CReception::stop() {
+    mutexEndState_.lock();
+    endState_ = true;
+    mutexEndState_.unlock();
+    // close listen socket
+    connection_->close();
+    // free waiting threads
+    comeQuestEvent_.notify_all();
 }

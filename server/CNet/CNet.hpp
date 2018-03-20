@@ -26,7 +26,7 @@ namespace Net {
      * 
      */
     struct SToken {
-        int socket_;
+        int socket_ = -1;
         uint connectionType_;
     };
 
@@ -46,7 +46,7 @@ namespace Net {
          * 
          */
         CNet(const int maxCon,
-             const char *ip,
+             const std::string &ip,
              const int port);
          
         /**
@@ -65,8 +65,10 @@ namespace Net {
          * @brief Disconnect the client.
          * 
          * @param clientToken Client token.
+         * @param reason The cause of the connection failure.
          */
-        void disconnect(SToken &clientToken);
+        void disconnect(SToken &clientToken,
+                        DisconnectReason reason);
 
         /**
          * @brief The function of connection waiting.
@@ -82,25 +84,23 @@ namespace Net {
          * 
          * @param clientToken Information about the client.
          * @param data Data.
-         * @param dataSize Size of data.
          */
-        void getData(const SToken &clientToken,
-                     char **data,
-                     uint &dataSize);
+        bool getData(const SToken &clientToken,
+                     std::string &data);
 
         /**
          * @brief Sending data to the client.
          * 
          * @param clientToken Information about the client.
          * @param data Data.
-         * @param dataSize Size of data.
          */
         void sendData(const SToken &clientToken,
-                      const char *data,
-                      const uint dataSize);
+                      const std::string &data);
     private:
         std::vector <CNetHandler *> handlers_;
         int listenSocket_ = -1;
+        int port_ = 0;
+        std::string ip_;
     };
 }
 

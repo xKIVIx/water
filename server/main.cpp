@@ -2,27 +2,19 @@
 
 #include <iostream>
 #include <string>
+#include <chrono>
 
-#include "CReception.hpp"
+#include "CServer.hpp"
 
 int main(int argc, char *argv[]) {
-	CReception * reception;
-	try {
-		reception = new CReception (10, "127.0.0.1", 3000);
-	} catch (Net::Exception ex) {
-		std::cout<<ex<<std::endl;
-		std::cin.get();;
-		return ex;
+	CServer server;
+	char command [256];
+	while(true) {
+		std::cin >> command;
+		if(std::string(command) == std::string("stop")) {
+			std::cout << "Server stop\n";
+			return 0;
+		}
 	}
-	STask quest = reception->getQuest();
-	std::string dataCome;
-	dataCome.reserve(quest.dataSize_);
-	dataCome.insert(dataCome.end(), 
-					quest.data_, 
-					quest.data_+ quest.dataSize_);
-	std::cout<<dataCome;
-	reception->compliteQuest(quest);
-	delete reception;
-	std::cin.get();
 	return 0;
 }
