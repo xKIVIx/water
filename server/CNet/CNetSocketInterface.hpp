@@ -10,6 +10,9 @@ typedef unsigned int uint;
 namespace Net {
     /**
      * @brief The interface for accessing sockets.
+     *        At the beginning of using the functions, 
+     *        you need to initialize. @see CNetSocketInterface::initInterface
+     *        At the end of work, call closeInterface.
      * 
      */
     class CNetSocketInterface {
@@ -50,8 +53,19 @@ namespace Net {
          * 
          * @param socket Socket.
          */
-
         static void closeSocket(const int socket);
+
+        /**
+         * @brief Interface initialization function.
+         * 
+         */
+        static void initInterface();
+
+        /**
+         * @brief Function of disabling the initialized interface.
+         * 
+         */
+        static void closeInterface();
 
         /**
          * @brief Sending data.

@@ -107,3 +107,11 @@ int Net::CNetSocketInterface::recv(const int socket,
                   0);
 }
 
+void Net::CNetSocketInterface::initInterface() {
+
+}
+
+void Net::CNetSocketInterface::closeInterface() {
+
+}
+

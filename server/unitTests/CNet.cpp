@@ -1,6 +1,8 @@
 /* Copyright (c) 2018, Aleksandrov Maksim */
 
 #include <thread>
+#include <chrono>
+#include <iostream>
 
 #include "gtest/gtest.h"
 
@@ -13,9 +15,10 @@
 
 
 TEST(CNet, connection) {
+    Net::CNetSocketInterface::initInterface();
     Net::CNet network(3, ADRESS, PORT);
     std::thread server (&Net::CNet::acceptClient, &network);
-    sleep(1);
+    //std::this_thread::sleep_for( std::chrono::seconds(1) );
     int sock = Net::CNetSocketInterface::createClientSocket(PORT,
                                                             ADRESS);
 
@@ -24,7 +27,7 @@ TEST(CNet, connection) {
     }
     Net::CNetSocketInterface::closeSocket(sock);
     server.join();
-	SUCCEED();
+    Net::CNetSocketInterface::closeInterface();
 }
 
 TEST(CNetWebSocket, package) {
@@ -74,7 +77,7 @@ void serverWork () {
     network.close();
 }
 TEST(CNetWebSocket, connection) {
-    
+    Net::CNetSocketInterface::initInterface();
     std::thread server (&serverWork);
     std::string head = "GET /setConnect HTTP/1.1\r\n";
     head += "Upgrade: websocket\r\n";
@@ -90,7 +93,7 @@ TEST(CNetWebSocket, connection) {
     actualAnswer += "Connection: Upgrade\r\n";
     actualAnswer += "Sec-WebSocket-Accept: hsBlbuDTkk24srzEOTBUlZAlC2g=\r\n\r\n";
 
-    sleep(1);
+    //std::this_thread::sleep_for( std::chrono::seconds(1) );
     int sock = Net::CNetSocketInterface::createClientSocket(PORT,
                                                             ADRESS);
     if(sock == -1) {
@@ -123,7 +126,7 @@ TEST(CNetWebSocket, connection) {
     std::string answer;
     answer.insert(answer.end(), tmp, tmp+r);
 
-    ASSERT_STREQ(answer.c_str(), actualAnswer.c_str()) << "Test head answer\n";
+    ASSERT_STREQ(answer.c_str(), actualAnswer.c_str()) << "Uncorrect test head answer\n";
     
     Net::CNetHandlerWebSocket handler;
     std::cout << "-------------PING TEST----------\n";
@@ -189,4 +192,5 @@ TEST(CNetWebSocket, connection) {
     std::cout << "--------------------------------\n";
     Net::CNetSocketInterface::closeSocket(sock);
     server.join();
+    Net::CNetSocketInterface::closeInterface();
 }

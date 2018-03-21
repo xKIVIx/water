@@ -5,10 +5,14 @@ set(SOURCE
     Handler/CNetHandlerWebSocket.cpp)
 
 
-if(${OS} STREQUAL "linux")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(SOURCE
         ${SOURCE}
         CNetSocketInterfaceLinux.cpp)
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+	set(SOURCE
+        ${SOURCE}
+        CNetSocketInterfaceWindows.cpp)
 endif()
 
 

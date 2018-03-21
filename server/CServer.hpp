@@ -43,6 +43,12 @@ class CServer {
      * 
      */
     void work();
+
+    /**
+     * @brief Stop processing.
+     * 
+     */
+    void stop();
 };
 
 #endif // CSERVER

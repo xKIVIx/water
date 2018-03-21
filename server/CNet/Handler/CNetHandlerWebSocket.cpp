@@ -71,7 +71,7 @@ std::string CNetHandlerWebSocket::handle(const std::string &head,
     std::smatch sreachMach;
     std::regex_search(head, sreachMach, regexFindKey);
     std::string key = sreachMach.str();
-    char answerHash[25];
+    char answerHash[28];
     WebSocketHandshake::generate(key.c_str(), answerHash);
 
     std::string answerHead;
@@ -79,8 +79,10 @@ std::string CNetHandlerWebSocket::handle(const std::string &head,
     answerHead += "Upgrade: websocket\r\n";
     answerHead += "Connection: Upgrade\r\n";
     answerHead += "Sec-WebSocket-Accept: ";
-    answerHead += answerHash;
-    answerHead += "\r\n\r\n";
+    answerHead.insert(answerHead.end(),
+                      answerHash,
+                      answerHash + 28);
+    answerHead += "\r\n\r\n\0";
     
     isSendAnswer = true;
     return answerHead;
