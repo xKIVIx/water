@@ -4,7 +4,7 @@
 #include <string>
 
 #include "CServer.hpp"
-#include "CNet\CNetSocketInterface.hpp"
+#include "CNet/CNetSocketInterface.hpp"
 
 int main(int argc, char *argv[]) {
     Net::CNetSocketInterface::initInterface();
