@@ -4,7 +4,8 @@
 #include <string>
 
 #include "CServer.hpp"
-#include "CNet\CNetSocketInterface.hpp"
+#include "CNet/CNetSocketInterface.hpp"
+#include "CSettingsManager.hpp"
 
 int main(int argc, char *argv[]) {
     Net::CNetSocketInterface::initInterface();
@@ -18,5 +19,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
     Net::CNetSocketInterface::closeInterface();
+    CSettingsManager::instance().saveParametrs();
+    CSettingsManager::instance().detach();
 	return 0;
 }

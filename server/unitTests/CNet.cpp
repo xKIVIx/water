@@ -18,7 +18,7 @@ TEST(CNet, connection) {
     Net::CNetSocketInterface::initInterface();
     Net::CNet network(3, ADRESS, PORT);
     std::thread server (&Net::CNet::acceptClient, &network);
-    //std::this_thread::sleep_for( std::chrono::seconds(1) );
+    std::this_thread::sleep_for( std::chrono::seconds(1) );
     int sock = Net::CNetSocketInterface::createClientSocket(PORT,
                                                             ADRESS);
 
@@ -93,7 +93,7 @@ TEST(CNetWebSocket, connection) {
     actualAnswer += "Connection: Upgrade\r\n";
     actualAnswer += "Sec-WebSocket-Accept: hsBlbuDTkk24srzEOTBUlZAlC2g=\r\n\r\n";
 
-    //std::this_thread::sleep_for( std::chrono::seconds(1) );
+    std::this_thread::sleep_for( std::chrono::seconds(1) );
     int sock = Net::CNetSocketInterface::createClientSocket(PORT,
                                                             ADRESS);
     if(sock == -1) {

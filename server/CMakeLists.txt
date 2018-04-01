@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.9)
 add_subdirectory(CNet)
 
 set(LIBRES
+    CSettingsManager
     CNet)
 
 project(server)
@@ -16,3 +17,5 @@ add_executable(server
                main.cpp)
 
 target_link_libraries(server ${LIBRES})
+target_include_directories(server PRIVATE
+						   ../settingsManager/include)

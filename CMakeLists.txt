@@ -45,5 +45,5 @@ if (UTest)
     
     
 endif()
-
+add_subdirectory(settingsManager/src)
 add_subdirectory(server)

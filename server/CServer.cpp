@@ -1,6 +1,7 @@
 /* Copyright (c) 2018, Aleksandrov Maksim */
 
 #include <iostream>
+#include "CSettingsManager.hpp"
 
 #include "CServer.hpp"
 
@@ -17,9 +18,40 @@ CServer::~CServer() {
 
 void CServer::work() {
     std::cout << "Creating server\n";
+
+    // Load parametrs
+    std::string ip;
+    int maxCon, port;
+    if(!CSettingsManager::instance().getParametr("server",
+                                                 "ip",
+                                                 ip)) {
+        ip = "127.0.0.1";
+        CSettingsManager::instance().setParametr("server",
+                                                 "ip",
+                                                 ip);
+    }
+    if(!CSettingsManager::instance().getParametr("server",
+                                                 "port",
+                                                 port)) {
+        port = 3000;
+        CSettingsManager::instance().setParametr("server",
+                                                 "port",
+                                                 "3000");
+    }
+    if(!CSettingsManager::instance().getParametr("server",
+                                                 "max_conections",
+                                                 maxCon)) {
+        maxCon = 10;
+        CSettingsManager::instance().setParametr("server",
+                                                 "max_conections",
+                                                 "10");
+    }
+
 	while(reception_ == nullptr) {
 		try {
-			reception_ = new CReception (10, "127.0.0.1", 3000);
+			reception_ = new CReception (maxCon,
+                                         ip.c_str(),
+                                         port);
 		} catch (Net::Exception ex) {
 			if( isEnd() ) {
 				return;
