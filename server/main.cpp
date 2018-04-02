@@ -5,10 +5,8 @@
 
 #include "CServer.hpp"
 #include "CNet/CNetSocketInterface.hpp"
-<<<<<<< HEAD
+
 #include "CSettingsManager.hpp"
-=======
->>>>>>> 5a961d3f4e90161e4a1a782ca65c44780368dfae
 
 int main(int argc, char *argv[]) {
     Net::CNetSocketInterface::initInterface();
