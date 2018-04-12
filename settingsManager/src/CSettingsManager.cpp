@@ -137,7 +137,8 @@ bool CSettingsManager::setParametr(const std::string &category,
         }
     }
 
-    iter->second.insert_or_assign( dataName, parametr );
+    iter->second.insert(pair<string, string> (dataName, 
+                                              parametr) );
     return true;
 
 }
