@@ -1,9 +1,9 @@
 /* Copyright (c) 2018, Aleksandrov Maksim */
 
-import {mat4,vec3,quat} from "./includes/GLMatrix/gl-matrix.js";
+import {mat4,vec3,quat} from "./../includes/GLMatrix/gl-matrix.js";
 import {webGLcam} from "./webGLcam.js";
 import {webGLobject} from "./webGLobject.js";
-import * as glSettings from "./defaultSettings/webGl.js";
+import * as glSettings from "./../defaultSettings/webGl.js";
 
 /** 
  * The webgl context class. 
@@ -173,14 +173,13 @@ class webGLcontext {
                                         indicesBuffer,
                                         shaderProgram,
                                         position,
-                                        rotation)
-        if (this.objectsList_ === (void(0))) {
-            this.objectsList_ = newObject;
-        } else {
-            this.objectsList_.addObject(newObject);
-        }
+                                        rotation);
 
-        return newObject;
+        return new webGLobject(vertexBuffer,
+                               indicesBuffer,
+                               shaderProgram,
+                               position,
+                               rotation);
     }
 
     /**
@@ -188,15 +187,15 @@ class webGLcontext {
      */
     rend() {
         let gl = this.context_;
-        let currentObject = this.objectsList_.getFirstObject();
         let camMatrix = this.camera_.getMatrix();
+        let mat4Project = this.mat4Project_;
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        while (currentObject !== void(0)) {
+        this.objects_.forEach( function (currentObject) {
             let shaderProgram = currentObject.shaderProgram_;
             gl.useProgram(shaderProgram);
             gl.uniformMatrix4fv(shaderProgram.matrix_.mat4Project_,
                                 false, 
-                                this.mat4Project_);
+                                mat4Project);
             gl.uniformMatrix4fv(shaderProgram.matrix_.mat4Cam_,
                                 false, 
                                 camMatrix);
@@ -220,19 +219,25 @@ class webGLcontext {
                             currentObject.indicesBuffer_.countItems_,
                             gl.UNSIGNED_SHORT,
                             0);
-            
-            currentObject = currentObject.nextObject_;
-        }
+        } );
+    }
+
+    /**
+     * Setting an array of rendered objects.
+     * @param {webGLobject[]} objects pointer to an array of objects for rendering
+     */
+    setObjectsList(objects) {
+        this.objects_ = objects;
     }
 
 }
 
 /**
- * Get the context for testing.
- * @return {webGLcontext} test context.
+ * Get the object for testing.
+ * @param {webGLcontext} gl context.
+ * @return {webGLobject} test object.
  */
-function testWebGl() {
-    var gl = new webGLcontext('viewport');
+function testWebGl(gl) {
     var vertices =[
         -0.5, -0.5, 0.5,
         -0.5, 0.5, 0.5,
@@ -267,8 +272,7 @@ function testWebGl() {
                                program,
                                vec3.fromValues(0.0,0.0,-3.0),
                                quat.create());
-    gl.rend();
-    return gl;
+    return object;
 }
 
 export {webGLcontext,testWebGl,webGLcam};

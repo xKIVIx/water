@@ -1,8 +1,9 @@
 /* Copyright (c) 2018, Aleksandrov Maksim */
 
-import {vec2, mat4, vec3} from "./includes/GLMatrix/gl-matrix.js";
+import {vec2, mat4, vec3} from "./../includes/GLMatrix/gl-matrix.js";
 import {webGLcontext} from "./webGl.js";
-import {keys as ControlSittings} from "./defaultSettings/control.js" ;
+import {keys as ControlSittings} from "./../defaultSettings/control.js" ;
+
 
 /**
  * Context for control.

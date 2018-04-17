@@ -1,7 +1,7 @@
 /* Copyright (c) 2018, Aleksandrov Maksim */
 
-import {mat4, vec3, quat} from "./includes/GLMatrix/gl-matrix";
-import * as glControlSetting from "./defaultSettings/control.js"
+import {mat4, vec3, quat} from "./../includes/GLMatrix/gl-matrix";
+import * as glControlSetting from "./../defaultSettings/control.js"
 
 /**
  * Class to create and manage the camera.

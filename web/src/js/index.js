@@ -1,25 +1,43 @@
 /* Copyright (c) 2018, Aleksandrov Maksim */
 
-import * as webGL from "./webGl.js";
+import * as webGL from "./webGl/webGl.js";
 import * as controlSetting from "./defaultSettings/control.js";
-import * as webGLcontrol from "./webGLcontrol.js";
-import * as NetWork from "./net.js";
+import * as webGLcontrol from "./webGl/webGLcontrol.js";
+import * as netWork from "./net.js";
+import * as parser from "./fileParser/parser.js";
+import {mat4,vec3,quat} from "./includes/GLMatrix/gl-matrix.js";
 
-var currentWebGL = webGL.testWebGl();
-
-var socket = new WebSocket('ws://localhost:3000/setConnect');
-
-socket.onmessage = function(mes) {
-  alert("Answer is come");
-}
-
-// Выводим сообщение при открытии WebSocket-соединения.
-socket.onopen = function(event) {
-  console.log('WebSocket is connected.'); 
-};
+var gl = new webGL.webGLcontext('viewport');
+var objects = new Array();
+gl.setObjectsList(objects);
+gl.rend();
+webGLcontrol.initControlAera('viewport', gl, objects);
 
 document.getElementById('test-net-button').onclick = function() {
-  socket.send("test");
+    netWork.sendMessage('hello');
 };
 
-webGLcontrol.initControlAera('viewport', currentWebGL);
+document.getElementById('start-button').onclick = function() {
+    var fileReader = new FileReader();
+    var file = document.getElementById('file-path').files[0];
+    fileReader.onload = function(e) {
+        var meshData = parser.parseFile('ply', e.target.result);
+        var shaders = [gl.getShader('vertex-shader'),
+        gl.getShader('fragment-shader')];
+        var program = gl.getShaderProgram(shaders);
+        let object = gl.loadObject(meshData.vertex,
+                                   3,
+                                   meshData.face,
+                                   program,
+                                   vec3.fromValues(0.0,0.0,-3.0),
+                                   quat.create());
+        objects.push(object);
+        gl.rend();
+    }
+    fileReader.onerror = function(e) {
+      alert('Error');
+    }
+    fileReader.readAsArrayBuffer(file);
+
+}
+

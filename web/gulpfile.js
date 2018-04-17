@@ -8,7 +8,7 @@ var webpack = require('webpack-stream');
 gulp.task('compileJS', ['checkJS'], function() {
     return gulp.src('src/js/index.js')
                .pipe( webpack( require("./webpack.config.js") ) )
-               .pipe( gulp.dest('compile') );
+               .pipe( gulp.dest('app') );
 });
 
 gulp.task('checkJS', function() {
@@ -21,7 +21,10 @@ var jsdoc = require('gulp-jsdoc3');
 
 gulp.task('doc', function (cb) {
     var config = require('./jsdoc.json');
-    gulp.src(['README.md', './src/js/*.js'], {read: false})
+    gulp.src(['README.md', 
+              './src/js/*.js', 
+              './src/js/webGl/*.js',
+              './src/js/fileParser/*.js'], {read: false})
         .pipe(jsdoc(config, cb));
 });
 
@@ -41,7 +44,7 @@ gulp.task('compileHTML', function() {
                             return file.contents.toString('utf8')
                         }}))
                .pipe( htmlmin({collapseWhitespace: true}) )
-               .pipe( gulp.dest('compile') );
+               .pipe( gulp.dest('app') );
 });
 
 // css compile
@@ -51,5 +54,5 @@ gulp.task('compileCSS', function() {
     return gulp.src('src/css/*.css')
                .pipe( concatCss('style.css') )
                .pipe( minCss() )
-               .pipe( gulp.dest('compile') );
+               .pipe( gulp.dest('app') );
 });
