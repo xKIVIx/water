@@ -16,8 +16,8 @@ webGLcontrol.initControlAera('viewport', gl, objects);
 document.getElementById('test-net-button').onclick = function() {
     netWork.sendMessage('hello');
 };
-
-document.getElementById('start-button').onclick = function() {
+document.getElementById('file-path').onchange = function() {
+    document.getElementById('load-massage').style.display = 'block';
     var fileReader = new FileReader();
     var file = document.getElementById('file-path').files[0];
     fileReader.onload = function(e) {
@@ -31,13 +31,20 @@ document.getElementById('start-button').onclick = function() {
                                    program,
                                    vec3.fromValues(0.0,0.0,-3.0),
                                    quat.create());
-        objects.push(object);
-        gl.rend();
+        if(object !== void(0)) {
+            objects[0] = object;
+            gl.rend();
+        }
+        document.getElementById('load-massage').style.display = 'none';
     }
     fileReader.onerror = function(e) {
-      alert('Error');
+      alert('Error load file');
+      document.getElementById('load-massage').style.display = 'none';
     }
     fileReader.readAsArrayBuffer(file);
+}
+document.getElementById('start-button').onclick = function() {
+    
 
 }
 
