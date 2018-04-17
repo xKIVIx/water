@@ -33,13 +33,13 @@ class webGLcontext {
                       glSettings.clearColor[3]);
 
         gl.enable(gl.DEPTH_TEST);
-        gl.depthFunc(gl.LESS);
+        gl.depthFunc(gl.LEQUAL);
         gl.clearDepth(1.0);
 
         this.mat4Project_ = mat4.create();
         mat4.perspective(this.mat4Project_, 
-                         Math.PI/1.5, 
-                         1, 
+                         Math.PI/2.0, 
+                         canvas.width/canvas.height,
                          glSettings.minDist, 
                          glSettings.maxDist);
 

@@ -29,7 +29,7 @@ document.getElementById('file-path').onchange = function() {
                                    3,
                                    meshData.face,
                                    program,
-                                   vec3.fromValues(0.0,0.0,-3.0),
+                                   vec3.fromValues(0.0,0.0, 0.0),
                                    quat.create());
         if(object !== void(0)) {
             objects[0] = object;

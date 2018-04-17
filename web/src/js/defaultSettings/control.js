@@ -6,7 +6,7 @@
 /** @type {number} camera movement sensitivity */
 export var transSensitivity = 0.5;
 /** @type {number} camera rotate sensitivity */
-export var rotateSensitivity = 0.005;
+export var rotateSensitivity = 0.003;
 
 // key
 /** control buttons */
