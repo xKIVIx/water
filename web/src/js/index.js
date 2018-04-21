@@ -7,6 +7,16 @@ import * as netWork from "./net.js";
 import * as parser from "./fileParser/parser.js";
 import {mat4,vec3,quat} from "./includes/GLMatrix/gl-matrix.js";
 
+var mesh;
+
+/**
+ * 
+ * @param {MessageEvent} result 
+ */
+function handleComeResult(result) {
+    console.log(result.data);
+}
+
 var gl = new webGL.webGLcontext('viewport');
 var objects = new Array();
 gl.setObjectsList(objects);
@@ -14,7 +24,7 @@ gl.rend();
 webGLcontrol.initControlAera('viewport', gl, objects);
 
 document.getElementById('test-net-button').onclick = function() {
-    netWork.sendMessage('hello');
+    netWork.sendMessage('hello', handleComeResult);
 };
 document.getElementById('file-path').onchange = function() {
     document.getElementById('load-massage').style.display = 'block';
@@ -33,6 +43,7 @@ document.getElementById('file-path').onchange = function() {
                                    quat.create());
         if(object !== void(0)) {
             objects[0] = object;
+            mesh = meshData;
             gl.rend();
         }
         document.getElementById('load-massage').style.display = 'none';
@@ -43,8 +54,17 @@ document.getElementById('file-path').onchange = function() {
     }
     fileReader.readAsArrayBuffer(file);
 }
-document.getElementById('start-button').onclick = function() {
-    
 
+
+document.getElementById('start-button').onclick = function() {;
+    let message = new Array();
+    // adding opcode;
+    message.push(0);
+    message.push(mesh.vertex.length);
+    message = message.concat(mesh.vertex);
+    message.push(mesh.face.length);
+    message = message.concat(mesh.face);
+    console.log(mesh.vertex.length);
+    netWork.sendMessage(new Uint32Array(message), handleComeResult);
 }
 
