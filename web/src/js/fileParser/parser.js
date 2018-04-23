@@ -10,7 +10,7 @@ const SupportedFormat = {
  * Parsing model file.
  * @param {string} format File format.
  * @param {ArrayBuffer} file  File data
- * @return {{vertex:number[], face:number[]}|void} Model data
+ * @return {{vertex:number[], normals:number[], face:number[]}|void} Model data
  *  or void if fail parse.
  */
 function parseFile(format, file) {
@@ -21,6 +21,7 @@ function parseFile(format, file) {
     }
     let returnStruct = {
         vertex: ['x', 'y', 'z'],
+        normals: ['nx', 'ny', 'nz'],
         face: ['vertex_indices']
     };
     return formatHandler(file, returnStruct);

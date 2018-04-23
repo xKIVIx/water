@@ -86,6 +86,9 @@ function parseDataACSII (elements, returnStruct, offset, file) {
      * @type {number[]}
      */
     let result = new Object();
+    for(let elemName in returnStruct) {
+        result[elemName] = new Array();
+    }
 
     /**
      * Decoded text.
@@ -98,10 +101,7 @@ function parseDataACSII (elements, returnStruct, offset, file) {
     elements.forEach( function(val) {
         let line = lastLine;
         lastLine = lastLine + val.count;
-        // check needs element
-        if(returnStruct[val.nameElem] === void(0)) {
-            return;
-        }
+
         result[val.nameElem] = new Array();
         for(; line < lastLine; line++) {
             let splitedString = splitedText[line].match(/[0-9.-]+/g);
@@ -109,7 +109,7 @@ function parseDataACSII (elements, returnStruct, offset, file) {
 
             // load data in struct
             for(let pName in val.struct) {
-                const valStruct = val.struct[pName];
+                let valStruct = val.struct[pName];
 
                 switch(valStruct.valType) {
                     case 'float':
@@ -136,12 +136,18 @@ function parseDataACSII (elements, returnStruct, offset, file) {
                 currentWord++;
             } // load data in struct
             
-            // load data in result array
-            returnStruct[val.nameElem].forEach( function (pName) {
-                result[val.nameElem] = result[val.nameElem].concat(val.struct[pName].data);
-            });  
-        }
-    } );
+            // load data in result struct
+            for(let elemName in returnStruct) {
+                for(let i in returnStruct[elemName]) {
+                    let propName = returnStruct[elemName][i];
+                    if(propName in val.struct) {
+                        let prop = val.struct[propName];
+                        result[elemName] = result[elemName].concat(prop.data);
+                    }
+                }
+            }
+        };
+    });
     return result;
 }
 

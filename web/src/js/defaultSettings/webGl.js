@@ -3,15 +3,19 @@
  */
 
 // Context
-/** @type {numder[]} background fill color [R,G,B,A] */
+/** @type {number[]} background fill color [R,G,B,A] */
 export var clearColor = [0.0, 0.0, 0.0, 1.0];
 
 // Camera
-/** @type {numder} minimal distance */
+/** @type {number} minimal distance */
 export var minDist = 0.1;
-/** @type {numder} maximal distance */
+/** @type {number} maximal distance */
 export var maxDist = 50;
-/** @type {numder[]} camera position [x,y,z] */
-export var camPosition = [0.0, 0.0, 0.0];
-/** @type {numder[]} camera rotate [axisX,axisY,axisZ] */
+/** @type {number[]} camera position [x,y,z] */
+export var camPosition = [0.0, 0.0, -2.0];
+/** @type {number[]} camera rotate [axisX,axisY,axisZ] */
 export var camRotate = [0.0, 0.0, 0.0];
+
+// Light
+/** @type {number[]} light direction */
+export var lightDir = [0.0, 0.0, 1.0];

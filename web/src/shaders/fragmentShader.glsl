@@ -1,5 +1,12 @@
 precision mediump float;
-varying float red_component;
+
+uniform vec3 uVec3_reverseLightDirection;
+
+varying vec3 vVec3_normal;
 void main() {
-    gl_FragColor = vec4(red_component, 0.66, 0.0, 1.0);
+    vec3 normal = normalize(vVec3_normal);
+    float light = max(dot(normal, uVec3_reverseLightDirection), 0.0);
+    light = min(light, 1.0);
+    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    gl_FragColor.rgb *= light;
 }

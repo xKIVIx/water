@@ -1,14 +1,17 @@
 attribute vec3 aVec3_vertexPosition;
-varying float red_component;
+attribute vec3 aVec3_normal;
+
+varying vec3 vVec3_normal;
 // matrix
 uniform mat4 uMat4_project,
              uMat4_cam,
              uMat4_objectPos;
+uniform mat3 uMat3_normalTrans;
 
 void main() {
     gl_Position = uMat4_project*
                   uMat4_cam*
                   uMat4_objectPos*
                   vec4 (aVec3_vertexPosition,1.0);
-    red_component = (1.0 + aVec3_vertexPosition[1]) / 2.0;
+    vVec3_normal = uMat3_normalTrans * aVec3_normal;
 }

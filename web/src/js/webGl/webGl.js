@@ -1,15 +1,48 @@
 /* Copyright (c) 2018, Aleksandrov Maksim */
 
-import {mat4,vec3,quat} from "./../includes/GLMatrix/gl-matrix.js";
+import {mat4,mat3,vec3,quat} from "./../includes/GLMatrix/gl-matrix.js";
 import {webGLcam} from "./webGLcam.js";
-import {webGLobject} from "./webGLobject.js";
 import * as glSettings from "./../defaultSettings/webGl.js";
+
+/**
+ * @typedef BufferInfo
+ * @type {object}
+ * @property {Object} buffer
+ * @property {number} bufferSize
+ * @property {number} elemSize
+ */
+
+ /**
+  * @typedef ShaderProgram
+  * @type {Object}
+  * @property {Object} program
+  * @property {number} unifLocProjectMat
+  * @property {number} unifLocCameraMat
+  * @property {number} unifLocObjectMat
+  * @property {number} unifLocNormalTrans
+  * @property {number} unifLocLightDirect
+  * @property {number} atrLocVertex
+  * @property {number} atrLocNormals
+  */
+
+/**
+ * @typedef WebGLobject
+ * @type {Object}
+ * @property {BufferInfo} vertexBuffer vertex data.
+ * @property {BufferInfo} normalsBuffer normals data.
+ * @property {BufferInfo} indicesBuffer indices data.
+ * @property {ShaderProgram} shaderProgram shader program.
+ * @property {vec3} position object position.
+ * @property {quat} rotation quaterion of rotation.
+ * 
+ */
+
 
 /** 
  * The webgl context class. 
  * When created, it is attached to the canvas element. 
  */
-class webGLcontext {
+class WebGLcontext {
     
     /**
      * @constructor
@@ -56,12 +89,12 @@ class webGLcontext {
      * Create shader program from shaders
      * @param  {object[]} shaders shaders for the created program. 
      *                            (should contain one shader of each type).
-     * @return shader program
+     * @return {ShaderProgram} shader program
      */
     getShaderProgram(shaders) {
         let gl = this.context_;
-        let shaderProgram = gl.createProgram();
 
+        let shaderProgram = gl.createProgram();
         for (var i in shaders) {
             gl.attachShader(shaderProgram,
                             shaders[i]);
@@ -75,21 +108,29 @@ class webGLcontext {
             return;
         };
 
-        shaderProgram.vertexPositionAttribute_ = 
-                gl.getAttribLocation(shaderProgram,
-                "aVec3_vertexPosition");
+        /**
+         * @type {ShaderProgram}
+         */
+        let result = new Object();
+        result.program = shaderProgram;
 
-        gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute_);
+        result.atrLocVertex = gl.getAttribLocation(shaderProgram,
+                                                   "aVec3_vertexPosition");
+        result.atrLocNormals = gl.getAttribLocation(shaderProgram,
+                                                   "aVec3_normal");
 
-        shaderProgram.matrix_ = {
-            mat4Project_: gl.getUniformLocation (shaderProgram, 
-                                                 "uMat4_project"),
-            mat4Cam_: gl.getUniformLocation (shaderProgram, 
-                                             "uMat4_cam"),
-            mat4ObjectPos_: gl.getUniformLocation (shaderProgram, 
-                                                   "uMat4_objectPos")
-        };
-        return shaderProgram;
+        result.unifLocProjectMat = gl.getUniformLocation (shaderProgram, 
+                                                          "uMat4_project");
+        result.unifLocCameraMat = gl.getUniformLocation (shaderProgram, 
+                                                         "uMat4_cam");
+        result.unifLocObjectMat = gl.getUniformLocation (shaderProgram, 
+                                                         "uMat4_objectPos");
+        result.unifLocNormalTrans = gl.getUniformLocation (shaderProgram, 
+                                                           "uMat3_normalTrans");
+        result.unifLocLightDirect = gl.getUniformLocation (shaderProgram, 
+                                                           "uVec3_reverseLightDirection");                                                   
+
+        return result;
     }
     
     /**
@@ -131,55 +172,76 @@ class webGLcontext {
     }
 
     /**
-     * load object into buffer
+     * Load object into buffers.
      * @param  {number[]} vertex array with vertex
-     *                        data (32bit format)
+     *                        data (32bit format).
      * @param  {number} vertexSize data size of 
-     *                             one vertex
-     * @param  {number[]} indices array of indices
+     *                             one vertex.
+     * @param  {number[]} normals array with normals data.
+     * @param  {number[]} indices array of indices.
      * @param  {object} shaderProgram shader program 
-     *                                for rend object
-     * @param  {vec3} position object position
-     * @param  {quat} rotation object rotation
-     * @return {webGLobject} return added object
+     *                                for rend object.
+     * @param  {vec3} position object position.
+     * @param  {quat} rotation object rotation.
+     * @return {WebGLobject} return added object.
      */
     loadObject(vertex,
                vertexSize,
+               normals,
+               normalSize,
                indices,
                shaderProgram,
                position,
                rotation) {
         let gl = this.context_;
+        /**
+         * @type {WebGLobject}
+         */
+        let result = {
+            position: position,
+            rotation: rotation,
+            shaderProgram: shaderProgram
+        };
 
-        let vertexBuffer = gl.createBuffer();
+        // load vertex
+        var vertexBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER,
                       vertexBuffer);
         gl.bufferData(gl.ARRAY_BUFFER,
                       new Float32Array(vertex),
                       gl.STATIC_DRAW);
-        vertexBuffer.itemSize_ = vertexSize;
-        vertexBuffer.countItems_ = vertex.length;
+        result.vertexBuffer = {
+            elemSize: vertexSize,
+            bufferSize: vertex.length,
+            buffer: vertexBuffer
+        }
 
+        // load normals
+        let normalsBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER,
+                      normalsBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER,
+                      new Float32Array(normals),
+                      gl.STATIC_DRAW);
+        result.normalsBuffer = {
+            elemSize: normalSize,
+            bufferSize: normals.length,
+            buffer: normalsBuffer
+        };
+        
+        // load indices
         let indicesBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,
                       indicesBuffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
                       new Uint16Array(indices),
                       gl.STATIC_DRAW);
-        indicesBuffer.itemSize_ = 1;
-        indicesBuffer.countItems_ = indices.length;
-        
-        let newObject = new webGLobject(vertexBuffer,
-                                        indicesBuffer,
-                                        shaderProgram,
-                                        position,
-                                        rotation);
-
-        return new webGLobject(vertexBuffer,
-                               indicesBuffer,
-                               shaderProgram,
-                               position,
-                               rotation);
+        result.indicesBuffer = {
+            elemSize: 1,
+            bufferSize: indices.length,
+            buffer: indicesBuffer
+        };
+        return result;
     }
 
     /**
@@ -191,32 +253,51 @@ class webGLcontext {
         let mat4Project = this.mat4Project_;
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         this.objects_.forEach( function (currentObject) {
-            let shaderProgram = currentObject.shaderProgram_;
-            gl.useProgram(shaderProgram);
-            gl.uniformMatrix4fv(shaderProgram.matrix_.mat4Project_,
+            let shaderProgram = currentObject.shaderProgram;
+            gl.useProgram(shaderProgram.program);
+            gl.uniformMatrix4fv(shaderProgram.unifLocProjectMat,
                                 false, 
                                 mat4Project);
-            gl.uniformMatrix4fv(shaderProgram.matrix_.mat4Cam_,
+            gl.uniformMatrix4fv(shaderProgram.unifLocCameraMat,
                                 false, 
                                 camMatrix);
-            gl.uniformMatrix4fv(shaderProgram.matrix_.mat4ObjectPos_,
+            gl.uniformMatrix4fv(shaderProgram.unifLocObjectMat,
                                 false, 
-                                currentObject.getMatrix());
-
+                                mat4.fromRotationTranslation (mat4.create(),
+                                                              currentObject.rotation,
+                                                              currentObject.position));
+            let normalMatrix = mat3.normalFromMat4(mat3.create(),
+                                                   camMatrix);
+            gl.uniformMatrix3fv(shaderProgram.unifLocNormalTrans, 
+                                false, 
+                                normalMatrix);
+            gl.uniform3fv(shaderProgram.unifLocLightDirect,
+                          glSettings.lightDir);
+                               
             gl.bindBuffer(gl.ARRAY_BUFFER, 
-                          currentObject.vertexBuffer_);
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,
-                          currentObject.indicesBuffer_);
-                
-            gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute_, 
-                                   currentObject.vertexBuffer_.itemSize_, 
-                                   gl.FLOAT, 
+                          currentObject.vertexBuffer.buffer); 
+            gl.enableVertexAttribArray(shaderProgram.atrLocVertex);  
+            gl.vertexAttribPointer(shaderProgram.atrLocVertex, 
+                                   currentObject.vertexBuffer.elemSize, 
+                                   gl.FLOAT,
+                                   false, 
+                                   0, 
+                                   0);
+            
+            gl.bindBuffer(gl.ARRAY_BUFFER, 
+                          currentObject.normalsBuffer.buffer); 
+            gl.enableVertexAttribArray(shaderProgram.atrLocNormals);  
+            gl.vertexAttribPointer(shaderProgram.atrLocNormals, 
+                                   currentObject.normalsBuffer.elemSize, 
+                                   gl.FLOAT,
                                    false, 
                                    0, 
                                    0);
 
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,
+                          currentObject.indicesBuffer.buffer);
             gl.drawElements(gl.TRIANGLES,
-                            currentObject.indicesBuffer_.countItems_,
+                            currentObject.indicesBuffer.bufferSize,
                             gl.UNSIGNED_SHORT,
                             0);
         } );
@@ -224,7 +305,7 @@ class webGLcontext {
 
     /**
      * Setting an array of rendered objects.
-     * @param {webGLobject[]} objects pointer to an array of objects for rendering
+     * @param {WebGLobject[]} objects pointer to an array of objects for rendering
      */
     setObjectsList(objects) {
         this.objects_ = objects;
@@ -232,47 +313,4 @@ class webGLcontext {
 
 }
 
-/**
- * Get the object for testing.
- * @param {webGLcontext} gl context.
- * @return {webGLobject} test object.
- */
-function testWebGl(gl) {
-    var vertices =[
-        -0.5, -0.5, 0.5,
-        -0.5, 0.5, 0.5,
-         0.5, 0.5, 0.5,
-         0.5, -0.5, 0.5,
-        -0.5, -0.5, -0.5,
-        -0.5, 0.5, -0.5,
-         0.5, 0.5, -0.5,
-         0.5, -0.5, -0.5
-         ];
-          
-    var indices = [
-        0, 1, 2, 
-        2, 3, 0,
-        0, 4, 7, 
-        7, 3, 0,
-        0, 1, 5,
-        5, 4, 0, 
-        2, 3, 7, 
-        7, 6, 2,
-        2, 1, 6,
-        6, 5, 1,
-        4, 5, 6,
-        6, 7, 4,
-    ]; 
-    var shaders = [gl.getShader('vertex-shader'),
-                   gl.getShader('fragment-shader')];
-    var program = gl.getShaderProgram(shaders);
-    let object = gl.loadObject(vertices,
-                               3,
-                               indices,
-                               program,
-                               vec3.fromValues(0.0,0.0,-3.0),
-                               quat.create());
-    return object;
-}
-
-export {webGLcontext,testWebGl,webGLcam};
+export {WebGLcontext, webGLcam};

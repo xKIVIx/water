@@ -17,7 +17,7 @@ function handleComeResult(result) {
     console.log(result.data);
 }
 
-var gl = new webGL.webGLcontext('viewport');
+var gl = new webGL.WebGLcontext('viewport');
 var objects = new Array();
 gl.setObjectsList(objects);
 gl.rend();
@@ -36,6 +36,8 @@ document.getElementById('file-path').onchange = function() {
         gl.getShader('fragment-shader')];
         var program = gl.getShaderProgram(shaders);
         let object = gl.loadObject(meshData.vertex,
+                                   3,
+                                   meshData.normals,
                                    3,
                                    meshData.face,
                                    program,

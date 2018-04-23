@@ -44,7 +44,9 @@ class webGLcam {
                                            angle);
         quat.multiply(this.quatRotate_,
                       this.quatRotate_,
-                      rotateQuat); 
+                      rotateQuat);
+        quat.normalize(this.quatRotate_,
+                       this.quatRotate_);
     }
     /**
      * Get camera matrix.
