@@ -154,7 +154,7 @@ function parseDataACSII (elements, returnStruct, offset, file) {
 /**
  * Parsing file.
  * @param {ArrayBuffer} file File data.
- * @param {{[name:string]:string[]}} returnStruct An object containing the output 
+ * @param {Object} returnStruct An object containing the output 
  *                             structure describing the structure. Structure: 
  *                             <element name>: <parameter name 1> <parameter name 2>...
  * @return {{vertex:number[], face:number[]}|void} Model data.

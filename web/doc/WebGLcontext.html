@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Class: webGLcam</title>
+	<title>Documentation Class: WebGLcontext</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -72,16 +72,17 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Class: webGLcam</h1>
+	<h1 class="page-title">Class: WebGLcontext</h1>
 <section>
 
 <header>
     
         <h2>
-        webGLcam
+        WebGLcontext
         </h2>
         
-            <div class="class-description">Class to create and manage the camera.</div>
+            <div class="class-description">The webgl context class. 
+When created, it is attached to the canvas element.</div>
         
     
 </header>
@@ -93,7 +94,7 @@
         
 <hr>
 <dt>
-    <h4 class="name" id="webGLcam"><span class="type-signature"></span>new webGLcam(position, rotate)</h4>
+    <h4 class="name" id="WebGLcontext"><span class="type-signature"></span>new WebGLcontext(viewport)</h4>
     
     
 </dt>
@@ -132,13 +133,13 @@
 
         <tr>
             
-                <td class="name"><code>position</code></td>
+                <td class="name"><code>viewport</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">vec3</span>
+<span class="param-type">string</span>
 
 
 
@@ -149,31 +150,7 @@
 
             
 
-            <td class="description last">vec3 camera position.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>rotate</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">quat</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">quat camera rotate.</td>
+            <td class="description last">canvas id</td>
         </tr>
 
     
@@ -259,7 +236,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="getMatrix"><span class="type-signature"></span>getMatrix()</h4>
+    <h4 class="name" id="getShader"><span class="type-signature"></span>getShader(blockId)</h4>
     
     
 </dt>
@@ -267,109 +244,8 @@
 
     
     <div class="description">
-        Get camera matrix.
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    camera matrix.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">mat4</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="move"><span class="type-signature"></span>move(moveVector)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Camera displacement in a certain direction.
+        This function for compiled shader from
+source in html block
     </div>
     
 
@@ -404,13 +280,13 @@
 
         <tr>
             
-                <td class="name"><code>moveVector</code></td>
+                <td class="name"><code>blockId</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">vec3</span>
+<span class="param-type">string</span>
 
 
 
@@ -421,7 +297,8 @@
 
             
 
-            <td class="description last">The camera position shift vector.</td>
+            <td class="description last">id of html block where
+                         store source of sheder</td>
         </tr>
 
     
@@ -481,6 +358,18 @@
     
 
     
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    Shader used for create shader programm.
+        If an error occurs during compilation, it returns undefined.
+</div>
+
+
+
+
+        
 
     
 </dd>
@@ -489,7 +378,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="rotate"><span class="type-signature"></span>rotate(rotateVector)</h4>
+    <h4 class="name" id="getShaderProgram"><span class="type-signature"></span>getShaderProgram(shaders)</h4>
     
     
 </dt>
@@ -497,8 +386,7 @@
 
     
     <div class="description">
-        Rotate the camera along the axis of the vector by a value depending
-on the length of the vector and the set sensitivity.
+        Create shader program from shaders
     </div>
     
 
@@ -533,7 +421,283 @@ on the length of the vector and the set sensitivity.
 
         <tr>
             
-                <td class="name"><code>rotateVector</code></td>
+                <td class="name"><code>shaders</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;object></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">shaders for the created program. 
+                           (should contain one shader of each type).</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    shader program
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="global.html#ShaderProgram">ShaderProgram</a></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="loadObject"><span class="type-signature"></span>loadObject(vertex, vertexSize, normals, indices, shaderProgram, position, rotation)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Load object into buffers.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>vertex</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">array with vertex
+                       data (32bit format).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vertexSize</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">data size of 
+                            one vertex.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>normals</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">array with normals data.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>indices</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">array of indices.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>shaderProgram</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">shader program 
+                               for rend object.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>position</code></td>
             
 
             <td class="type">
@@ -550,7 +714,261 @@ on the length of the vector and the set sensitivity.
 
             
 
-            <td class="description last">Vector of rotation.</td>
+            <td class="description last">object position.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>rotation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">quat</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">object rotation.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    return added object.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="global.html#WebGLobject">WebGLobject</a></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="rend"><span class="type-signature"></span>rend()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Rend objects.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="setObjectsList"><span class="type-signature"></span>setObjectsList(objects)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Setting an array of rendered objects.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>objects</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="global.html#WebGLobject">WebGLobject</a>></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">pointer to an array of objects for rendering</td>
         </tr>
 
     

@@ -33,14 +33,14 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="webGLcam.html">webGLcam</a></li><li><a href="webGLcontext.html">webGLcontext</a></li><li><a href="webGLobject.html">webGLobject</a></li>
+					<li><a href="webGLcam.html">webGLcam</a></li><li><a href="WebGLcontext.html">WebGLcontext</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="global.html#connect">connect</a></li><li><a href="global.html#disconnect">disconnect</a></li><li><a href="global.html#handleMouseMove">handleMouseMove</a></li><li><a href="global.html#handlePressButton">handlePressButton</a></li><li><a href="global.html#initControlAera">initControlAera</a></li><li><a href="global.html#lastMousePos">lastMousePos</a></li><li><a href="global.html#parse">parse</a></li><li><a href="global.html#parseDataACSII">parseDataACSII</a></li><li><a href="global.html#parseElemsStructs">parseElemsStructs</a></li><li><a href="global.html#parseFile">parseFile</a></li><li><a href="global.html#sendMessage">sendMessage</a></li><li><a href="global.html#setMessageHandler">setMessageHandler</a></li><li><a href="global.html#socket">socket</a></li><li><a href="global.html#testWebGl">testWebGl</a></li><li><a href="global.html#webGL">webGL</a></li>
+					<li><a href="global.html#handleComeResult">handleComeResult</a></li><li><a href="global.html#handleMouseMove">handleMouseMove</a></li><li><a href="global.html#handlePressButton">handlePressButton</a></li><li><a href="global.html#initControlAera">initControlAera</a></li><li><a href="global.html#lastMousePos">lastMousePos</a></li><li><a href="global.html#parse">parse</a></li><li><a href="global.html#parseDataACSII">parseDataACSII</a></li><li><a href="global.html#parseElemsStructs">parseElemsStructs</a></li><li><a href="global.html#parseFile">parseFile</a></li><li><a href="global.html#sendMessage">sendMessage</a></li><li><a href="global.html#socket">socket</a></li><li><a href="global.html#webGL">webGL</a></li>
 				</ul>
 			</li>
 			
@@ -293,7 +293,7 @@
             
 <hr>
 <dt class="name" id="webGL">
-    <h4 id="webGL"><span class="type-signature"></span>webGL<span class="type-signature"> :<a href="webGLcontext.html">webGLcontext</a></span></h4>
+    <h4 id="webGL"><span class="type-signature"></span>webGL<span class="type-signature"> :webGLcontext</span></h4>
 
     
 </dt>
@@ -309,7 +309,7 @@
         <ul>
             <li>
                 
-<span class="param-type"><a href="webGLcontext.html">webGLcontext</a></span>
+<span class="param-type">webGLcontext</span>
 
 
 
@@ -370,17 +370,13 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="connect"><span class="type-signature"></span>connect()</h4>
+    <h4 class="name" id="handleComeResult"><span class="type-signature"></span>handleComeResult(result)</h4>
     
     
 </dt>
 <dd>
 
     
-    <div class="description">
-        Set connetion to server.
-    </div>
-    
 
     
 
@@ -388,83 +384,55 @@
 
     
     
+        <h5>Parameters:</h5>
+        
 
-    
-<dl class="details">
-    
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
+        <th>Type</th>
 
         
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
             
-<hr>
-<dt>
-    <h4 class="name" id="disconnect"><span class="type-signature"></span>disconnect()</h4>
-    
-    
-</dt>
-<dd>
+                <td class="name"><code>result</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">MessageEvent</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
 
     
-    <div class="description">
-        Disconnect from server.
-    </div>
-    
+    </tbody>
+</table>
 
-    
-
-    
-
-    
     
 
     
@@ -855,7 +823,7 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="webGLcontext.html">webGLcontext</a></span>
+<span class="param-type">webGLcontext</span>
 
 
 
@@ -1006,13 +974,21 @@
 
             <td class="type">
             
+                
+<span class="param-type">Object</span>
+
+
+
+            
             </td>
 
             
 
             
 
-            <td class="description last"></td>
+            <td class="description last">An object containing the output 
+                            structure describing the structure. Structure: 
+                            <element name>: <parameter name 1> <parameter name 2>...</td>
         </tr>
 
     
@@ -1719,7 +1695,7 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Int8Array</span>
 
 
 
@@ -1790,286 +1766,6 @@
     
 
     
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="setMessageHandler"><span class="type-signature"></span>setMessageHandler(handler)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Set handler for coming message.
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>handler</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="testWebGl"><span class="type-signature"></span>testWebGl(gl)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Get the object for testing.
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>gl</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="webGLcontext.html">webGLcontext</a></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">context.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    test object.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="webGLobject.html">webGLobject</a></span>
-
-
-
-    </dd>
-</dl>
-
-
-        
 
     
 </dd>
@@ -2081,6 +1777,174 @@
         <h3 class="subsection-title">Type Definitions</h3>
 
         <dl>
+                
+<hr>
+<dt class="name" id="BufferInfo">
+    <h4 id="BufferInfo">BufferInfo</h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">object</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    <dl>
+
+<table class="props table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>buffer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>bufferSize</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>elemSize</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+</dl>
+
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+            
                 
 <hr>
 <dt class="name" id="element">
@@ -2470,6 +2334,534 @@
     
 </dd>
 
+            
+                
+<hr>
+<dt class="name" id="ShaderProgram">
+    <h4 id="ShaderProgram">ShaderProgram</h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    <dl>
+
+<table class="props table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>program</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>unifLocProjectMat</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>unifLocCameraMat</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>unifLocObjectMat</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>unifLocNormalTrans</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>unifLocLightDirect</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>atrLocVertex</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>atrLocNormals</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+</dl>
+
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+            
+                
+<hr>
+<dt class="name" id="WebGLobject">
+    <h4 id="WebGLobject">WebGLobject</h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    <dl>
+
+<table class="props table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>vertexBuffer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#BufferInfo">BufferInfo</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">vertex data.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>normalsBuffer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#BufferInfo">BufferInfo</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">normals data.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>indicesBuffer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#BufferInfo">BufferInfo</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">indices data.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>shaderProgram</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#ShaderProgram">ShaderProgram</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">shader program.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>position</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">vec3</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">object position.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>rotation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">quat</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">quaterion of rotation.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+</dl>
+
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
             </dl>
     
 
@@ -2518,7 +2910,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
 	
-		on April 17th 2018, 11:28:05 am
+		on April 23rd 2018, 6:01:06 pm
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
