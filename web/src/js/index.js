@@ -7,13 +7,18 @@ import * as netWork from "./net.js";
 import * as parser from "./fileParser/parser.js";
 import {mat4,vec3,quat} from "./includes/GLMatrix/gl-matrix.js";
 
-var mesh;
+var mesh,
+    waterMesh;
+
 
 /**
  * 
  * @param {MessageEvent} result 
  */
 function handleComeResult(result) {
+    waterMesh = new Object();
+    waterMesh.vertex = new Float32Array(result.data);
+
     console.log(result.data);
 }
 
@@ -23,24 +28,22 @@ gl.setObjectsList(objects);
 gl.rend();
 webGLcontrol.initControlAera('viewport', gl, objects);
 
-document.getElementById('test-net-button').onclick = function() {
-    netWork.sendMessage('hello', handleComeResult);
-};
 document.getElementById('file-path').onchange = function() {
     document.getElementById('load-massage').style.display = 'block';
-    var fileReader = new FileReader();
-    var file = document.getElementById('file-path').files[0];
+    let fileReader = new FileReader();
+    let file = document.getElementById('file-path').files[0];
     fileReader.onload = function(e) {
-        var meshData = parser.parseFile('ply', e.target.result);
-        var shaders = [gl.getShader('vertex-shader'),
+        let meshData = parser.parseFile('ply', e.target.result);
+        let shaders = [gl.getShader('vertex-shader'),
         gl.getShader('fragment-shader')];
-        var program = gl.getShaderProgram(shaders);
+        let program = gl.getShaderProgram(shaders);
         let object = gl.loadObject(meshData.vertex,
                                    3,
                                    meshData.normals,
                                    3,
                                    meshData.face,
                                    program,
+                                   [0.0, 0.6, 0.0, 1.0],
                                    vec3.fromValues(0.0,0.0, 0.0),
                                    quat.create());
         if(object !== void(0)) {
@@ -66,7 +69,6 @@ document.getElementById('start-button').onclick = function() {;
     message = message.concat(mesh.vertex);
     message.push(mesh.face.length);
     message = message.concat(mesh.face);
-    console.log(mesh.vertex.length);
     netWork.sendMessage(new Uint32Array(message), handleComeResult);
 }
 

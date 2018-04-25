@@ -17,12 +17,13 @@ void main() {
 }</script><script id="fragment-shader" type="x-shader/x-fragment">precision mediump float;
 
 uniform vec3 uVec3_reverseLightDirection;
+uniform vec4 uVec4_color;
 
 varying vec3 vVec3_normal;
 void main() {
     vec3 normal = normalize(vVec3_normal);
-    float light = max(dot(normal, uVec3_reverseLightDirection), 0.0);
+    float light = max(dot(normal, uVec3_reverseLightDirection), 0.05);
     light = min(light, 1.0);
-    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    gl_FragColor = uVec4_color;
     gl_FragColor.rgb *= light;
-}</script><div id="view"><canvas id="viewport"></canvas></div><div id="menu"><div><div><h2>Тесты</h2><input id="test-webGl-button" type="button" value="Test WebGL"> <input id="test-net-button" type="button" value="Test connection"></div><div><h2>Параметры</h2><input id="file-path" type="file" value="3d map"> <label for="file-path">Путь к файлу</label> <input id="start-button" type="button" value="Complite"></div></div></div><div id="load-massage"><p>Загрузка модели. Ожидайте.</p></div><script src="script.js"></script></body></html>
+}</script><div id="view"><canvas id="viewport"></canvas></div><div id="menu"><div><div><h2>Параметры</h2><input id="file-path" type="file" value="3d map"> <label for="file-path">Путь к файлу</label> <input id="start-button" type="button" value="Complite"></div></div></div><div id="load-massage"><p>Загрузка модели. Ожидайте.</p></div><script src="script.js"></script></body></html>

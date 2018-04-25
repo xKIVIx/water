@@ -21,6 +21,7 @@ import * as glSettings from "./../defaultSettings/webGl.js";
   * @property {number} unifLocObjectMat
   * @property {number} unifLocNormalTrans
   * @property {number} unifLocLightDirect
+  * @property {number} unifLocColor
   * @property {number} atrLocVertex
   * @property {number} atrLocNormals
   */
@@ -32,6 +33,7 @@ import * as glSettings from "./../defaultSettings/webGl.js";
  * @property {BufferInfo} normalsBuffer normals data.
  * @property {BufferInfo} indicesBuffer indices data.
  * @property {ShaderProgram} shaderProgram shader program.
+ * @property {number[]} color
  * @property {vec3} position object position.
  * @property {quat} rotation quaterion of rotation.
  * 
@@ -128,7 +130,9 @@ class WebGLcontext {
         result.unifLocNormalTrans = gl.getUniformLocation (shaderProgram, 
                                                            "uMat3_normalTrans");
         result.unifLocLightDirect = gl.getUniformLocation (shaderProgram, 
-                                                           "uVec3_reverseLightDirection");                                                   
+                                                           "uVec3_reverseLightDirection");
+        result.unifLocColor = gl.getUniformLocation (shaderProgram, 
+                                                     "uVec4_color");                                                 
 
         return result;
     }
@@ -181,6 +185,7 @@ class WebGLcontext {
      * @param  {number[]} indices array of indices.
      * @param  {object} shaderProgram shader program 
      *                                for rend object.
+     * @param  {number[]} color object color in RGBA format.
      * @param  {vec3} position object position.
      * @param  {quat} rotation object rotation.
      * @return {WebGLobject} return added object.
@@ -191,6 +196,7 @@ class WebGLcontext {
                normalSize,
                indices,
                shaderProgram,
+               color,
                position,
                rotation) {
         let gl = this.context_;
@@ -200,7 +206,8 @@ class WebGLcontext {
         let result = {
             position: position,
             rotation: rotation,
-            shaderProgram: shaderProgram
+            shaderProgram: shaderProgram,
+            color: color
         };
 
         // load vertex
@@ -273,6 +280,8 @@ class WebGLcontext {
                                 normalMatrix);
             gl.uniform3fv(shaderProgram.unifLocLightDirect,
                           glSettings.lightDir);
+            gl.uniform4fv(shaderProgram.unifLocColor,
+                          currentObject.color);
                                
             gl.bindBuffer(gl.ARRAY_BUFFER, 
                           currentObject.vertexBuffer.buffer); 
