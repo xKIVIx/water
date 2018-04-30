@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Class: webGLcontext</title>
+	<title>Documentation Class: WebGLcontext</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -33,14 +33,14 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="webGLcam.html">webGLcam</a></li><li><a href="webGLcontext.html">webGLcontext</a></li><li><a href="webGLobject.html">webGLobject</a></li>
+					<li><a href="webGLcam.html">webGLcam</a></li><li><a href="WebGLcontext.html">WebGLcontext</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="global.html#connect">connect</a></li><li><a href="global.html#disconnect">disconnect</a></li><li><a href="global.html#handleMouseMove">handleMouseMove</a></li><li><a href="global.html#handlePressButton">handlePressButton</a></li><li><a href="global.html#initControlAera">initControlAera</a></li><li><a href="global.html#lastMousePos">lastMousePos</a></li><li><a href="global.html#parse">parse</a></li><li><a href="global.html#parseDataACSII">parseDataACSII</a></li><li><a href="global.html#parseElemsStructs">parseElemsStructs</a></li><li><a href="global.html#parseFile">parseFile</a></li><li><a href="global.html#sendMessage">sendMessage</a></li><li><a href="global.html#setMessageHandler">setMessageHandler</a></li><li><a href="global.html#socket">socket</a></li><li><a href="global.html#testWebGl">testWebGl</a></li><li><a href="global.html#webGL">webGL</a></li>
+					<li><a href="global.html#handleComeResult">handleComeResult</a></li><li><a href="global.html#handleMouseMove">handleMouseMove</a></li><li><a href="global.html#handlePressButton">handlePressButton</a></li><li><a href="global.html#initControlAera">initControlAera</a></li><li><a href="global.html#lastMousePos">lastMousePos</a></li><li><a href="global.html#parse">parse</a></li><li><a href="global.html#parseDataACSII">parseDataACSII</a></li><li><a href="global.html#parseElemsStructs">parseElemsStructs</a></li><li><a href="global.html#parseFile">parseFile</a></li><li><a href="global.html#sendMessage">sendMessage</a></li><li><a href="global.html#socket">socket</a></li><li><a href="global.html#webGL">webGL</a></li>
 				</ul>
 			</li>
 			
@@ -72,13 +72,13 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Class: webGLcontext</h1>
+	<h1 class="page-title">Class: WebGLcontext</h1>
 <section>
 
 <header>
     
         <h2>
-        webGLcontext
+        WebGLcontext
         </h2>
         
             <div class="class-description">The webgl context class. 
@@ -94,7 +94,7 @@ When created, it is attached to the canvas element.</div>
         
 <hr>
 <dt>
-    <h4 class="name" id="webGLcontext"><span class="type-signature"></span>new webGLcontext(viewport)</h4>
+    <h4 class="name" id="WebGLcontext"><span class="type-signature"></span>new WebGLcontext(viewport)</h4>
     
     
 </dt>
@@ -508,6 +508,19 @@ source in html block
 
 
 
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="global.html#ShaderProgram">ShaderProgram</a></span>
+
+
+
+    </dd>
+</dl>
+
 
         
 
@@ -518,7 +531,7 @@ source in html block
             
 <hr>
 <dt>
-    <h4 class="name" id="loadObject"><span class="type-signature"></span>loadObject(vertex, vertexSize, indices, shaderProgram, position, rotation)</h4>
+    <h4 class="name" id="loadObject"><span class="type-signature"></span>loadObject(vertex, vertexSize, normals, indices, shaderProgram, position, rotation)</h4>
     
     
 </dt>
@@ -526,7 +539,7 @@ source in html block
 
     
     <div class="description">
-        load object into buffer
+        Load object into buffers.
     </div>
     
 
@@ -579,7 +592,7 @@ source in html block
             
 
             <td class="description last">array with vertex
-                       data (32bit format)</td>
+                       data (32bit format).</td>
         </tr>
 
     
@@ -604,7 +617,31 @@ source in html block
             
 
             <td class="description last">data size of 
-                            one vertex</td>
+                            one vertex.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>normals</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">array with normals data.</td>
         </tr>
 
     
@@ -628,7 +665,7 @@ source in html block
 
             
 
-            <td class="description last">array of indices</td>
+            <td class="description last">array of indices.</td>
         </tr>
 
     
@@ -653,7 +690,7 @@ source in html block
             
 
             <td class="description last">shader program 
-                               for rend object</td>
+                               for rend object.</td>
         </tr>
 
     
@@ -677,7 +714,7 @@ source in html block
 
             
 
-            <td class="description last">object position</td>
+            <td class="description last">object position.</td>
         </tr>
 
     
@@ -701,7 +738,7 @@ source in html block
 
             
 
-            <td class="description last">object rotation</td>
+            <td class="description last">object rotation.</td>
         </tr>
 
     
@@ -765,7 +802,7 @@ source in html block
     
             
 <div class="param-desc">
-    return added object
+    return added object.
 </div>
 
 
@@ -776,7 +813,7 @@ source in html block
     </dt>
     <dd>
         
-<span class="param-type"><a href="webGLobject.html">webGLobject</a></span>
+<span class="param-type"><a href="global.html#WebGLobject">WebGLobject</a></span>
 
 
 
@@ -920,7 +957,7 @@ source in html block
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;<a href="webGLobject.html">webGLobject</a>></span>
+<span class="param-type">Array.&lt;<a href="global.html#WebGLobject">WebGLobject</a>></span>
 
 
 
@@ -1045,7 +1082,7 @@ source in html block
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
 	
-		on April 17th 2018, 11:28:05 am
+		on April 23rd 2018, 6:01:06 pm
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

@@ -182,7 +182,7 @@ void Net::CNet::sendData(const SToken &clientToken,
         return;
     }
     std::string result = handlers_[clientToken.connectionType_]
-                            ->packData(data, true);
+                            ->packData(data, false);
     CNetSocketInterface::send(clientToken.socket_,
                               result.c_str(),
                               int ( result.size() ));
