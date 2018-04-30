@@ -46,7 +46,7 @@ function parseElemsStructs(elements) {
         newElem.nameElem = elements[i];
         newElem.count = Number.parseInt(elements[i + 1]);
         newElem.struct = new Object();
-        let propertys = elements[i+2].split('\n');
+        let propertys = elements[i+2].split(/\r\n|\n/g);
 
         propertys.forEach( function (val) {
             if(val.length !== 0) {
