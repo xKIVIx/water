@@ -129,16 +129,16 @@ SMessageHead CNetHandlerWebSocket::decodMessageHead(const std::string &messageHe
             std::cout << "Not support 64bit size.\n";
             return result;
         }
-        *((char *)&result.dataSize_) = messageHead.c_str()[6];
-        *((char *)&result.dataSize_ + 1) = messageHead.c_str()[7];
-        *((char *)&result.dataSize_ + 2) = messageHead.c_str()[8];
-        *((char *)&result.dataSize_ + 3) = messageHead.c_str()[9];
+        *((char *)&result.dataSize_) = messageHead[6];
+        *((char *)&result.dataSize_ + 1) = messageHead[7];
+        *((char *)&result.dataSize_ + 2) = messageHead[8];
+        *((char *)&result.dataSize_ + 3) = messageHead[9];
         result.headSize_ += headSizeVBD;
         return result;
     }
     if(sizeFlag == 0x7e) {
-        *((char *)&result.dataSize_) = messageHead.c_str()[2];
-        *((char *)&result.dataSize_ + 1) = messageHead.c_str()[3];
+        *(((char *)&result.dataSize_) + 1) = messageHead[2];
+        *((char *)&result.dataSize_) = messageHead[3];
         result.headSize_ += headSizeBD;
         return result;
     }
@@ -176,16 +176,15 @@ std::string CNetHandlerWebSocket::packData(const std::string &data,
         result.insert(result.end(), 
                       empty, 
                       empty + 4);
-
-        result.insert(result.end(),
-                      (char *)&dataSize,
-                      (char *)&dataSize + 4);
+        result += *(((char *)&dataSize)+3);
+        result += *(((char *)&dataSize)+2);
+        result += *(((char *)&dataSize)+1);
+        result += *((char *)&dataSize);
 
     } else if(dataSize > 125) {
         result += char(0x7e);
-        result.insert(result.end(),
-                      (char *)&dataSize,
-                      (char *)&dataSize + 2);
+        result += *(((char *)&dataSize)+1);
+        result += *((char *)&dataSize); 
     } else {
         result += char(dataSize);
     }
@@ -207,7 +206,7 @@ std::string CNetHandlerWebSocket::packData(const std::string &data,
     } else {
         result += data;
     }
-    
+
     return result;
 }
 

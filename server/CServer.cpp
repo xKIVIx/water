@@ -1,6 +1,7 @@
 /* Copyright (c) 2018, Aleksandrov Maksim */
 
 #include <iostream>
+#include <vector>
 #include "CSettingsManager.hpp"
 
 #include "CServer.hpp"
@@ -66,7 +67,17 @@ void CServer::work() {
         if(task.token_.socket_ == -1) {
             continue;
         }
-        // TODO
+        std::vector <float> vertex;
+        uint size = *( (size_t *)&(task.data_.c_str()[1]) );
+        vertex.reserve(size/4);
+        vertex.insert(vertex.end(),
+                      (float *)&(task.data_.c_str()[9]),
+                      (float *)&(task.data_.c_str()[9]) + size / 4);
+        task.data_.clear();
+        task.data_.reserve(size);
+        task.data_.insert(task.data_.end(),
+                          (char *)vertex.data(),
+                          ((char *)vertex.data()) + size);
 	    reception_->compliteTask(task);
     }	
 }

@@ -26,4 +26,32 @@ void main() {
     light = min(light, 1.0);
     gl_FragColor = uVec4_color;
     gl_FragColor.rgb *= light;
+}</script><script id="vertex-water-shader" type="x-shader/x-vertex">attribute vec3 aVec3_vertexPosition;
+
+varying vec3 vVec3_normal;
+// matrix
+uniform mat4 uMat4_project,
+             uMat4_cam,
+             uMat4_objectPos;
+uniform mat3 uMat3_normalTrans;
+
+void main() {
+    vec3 vec3_normal = vec3(0.0, 1.0, 0.0);
+    gl_Position = uMat4_project*
+                  uMat4_cam*
+                  uMat4_objectPos*
+                  vec4 (aVec3_vertexPosition,1.0);
+    vVec3_normal = uMat3_normalTrans * vec3_normal;
+}</script><script id="fragment-water-shader" type="x-shader/x-fragment">precision mediump float;
+
+uniform vec3 uVec3_reverseLightDirection;
+uniform vec4 uVec4_color;
+
+varying vec3 vVec3_normal;
+void main() {
+    vec3 normal = normalize(vVec3_normal);
+    float light = max(dot(normal, uVec3_reverseLightDirection), 0.05);
+    light = min(light, 1.0);
+    gl_FragColor = uVec4_color;
+    gl_FragColor.rgb *= light;
 }</script><div id="view"><canvas id="viewport"></canvas></div><div id="menu"><div><div><h2>Параметры</h2><input id="file-path" type="file" value="3d map"> <label for="file-path">Путь к файлу</label> <input id="start-button" type="button" value="Complite"></div></div></div><div id="load-massage"><p>Загрузка модели. Ожидайте.</p></div><script src="script.js"></script></body></html>

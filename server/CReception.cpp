@@ -25,11 +25,13 @@ void CReception::work() {
         if( !connection_->getData(clientToken, task.data_) ) {
             connection_->disconnect(clientToken,
                                     Net::DisconnectReason::NORMAL);
+            std::cout << "Cann`t get data from message\n";
             continue;
         }
         if(task.data_.size() == 0) {
             connection_->disconnect(clientToken,
                                     Net::DisconnectReason::NORMAL);
+            std::cout << "Empty data\n";
             continue;
         }
         std::cout << "Get task\n";

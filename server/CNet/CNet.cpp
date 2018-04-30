@@ -177,7 +177,6 @@ bool Net::CNet::getData (const SToken &clientToken,
 
 void Net::CNet::sendData(const SToken &clientToken,
                          const std::string &data) {
-    std::cout << data;
     if((clientToken.socket_ <= 0)||
        (data.empty())) {
         return;

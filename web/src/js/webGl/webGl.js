@@ -30,7 +30,7 @@ import * as glSettings from "./../defaultSettings/webGl.js";
  * @typedef WebGLobject
  * @type {Object}
  * @property {BufferInfo} vertexBuffer vertex data.
- * @property {BufferInfo} normalsBuffer normals data.
+ * @property {BufferInfo} [normalsBuffer] normals data.
  * @property {BufferInfo} indicesBuffer indices data.
  * @property {ShaderProgram} shaderProgram shader program.
  * @property {number[]} color
@@ -181,7 +181,7 @@ class WebGLcontext {
      *                        data (32bit format).
      * @param  {number} vertexSize data size of 
      *                             one vertex.
-     * @param  {number[]} normals array with normals data.
+     * @param  {number[]|void} normals array with normals data.
      * @param  {number[]} indices array of indices.
      * @param  {object} shaderProgram shader program 
      *                                for rend object.
@@ -224,17 +224,19 @@ class WebGLcontext {
         }
 
         // load normals
-        let normalsBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER,
-                      normalsBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER,
-                      new Float32Array(normals),
-                      gl.STATIC_DRAW);
-        result.normalsBuffer = {
-            elemSize: normalSize,
-            bufferSize: normals.length,
-            buffer: normalsBuffer
-        };
+        if(normals !== void(0)) {
+            let normalsBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER,
+                          normalsBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER,
+                          new Float32Array(normals),
+                          gl.STATIC_DRAW);
+            result.normalsBuffer = {
+                elemSize: normalSize,
+                bufferSize: normals.length,
+                buffer: normalsBuffer
+            };
+        }
         
         // load indices
         let indicesBuffer = gl.createBuffer();
@@ -293,15 +295,17 @@ class WebGLcontext {
                                    0, 
                                    0);
             
-            gl.bindBuffer(gl.ARRAY_BUFFER, 
+            if(currentObject.normalsBuffer !== void(0)) {
+                gl.bindBuffer(gl.ARRAY_BUFFER, 
                           currentObject.normalsBuffer.buffer); 
-            gl.enableVertexAttribArray(shaderProgram.atrLocNormals);  
-            gl.vertexAttribPointer(shaderProgram.atrLocNormals, 
-                                   currentObject.normalsBuffer.elemSize, 
-                                   gl.FLOAT,
-                                   false, 
-                                   0, 
-                                   0);
+                gl.enableVertexAttribArray(shaderProgram.atrLocNormals);  
+                gl.vertexAttribPointer(shaderProgram.atrLocNormals, 
+                                       currentObject.normalsBuffer.elemSize, 
+                                       gl.FLOAT,
+                                       false, 
+                                       0, 
+                                       0);
+            }
 
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,
                           currentObject.indicesBuffer.buffer);

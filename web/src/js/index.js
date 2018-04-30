@@ -16,10 +16,30 @@ var mesh,
  * @param {MessageEvent} result 
  */
 function handleComeResult(result) {
-    waterMesh = new Object();
-    waterMesh.vertex = new Float32Array(result.data);
-
-    console.log(result.data);
+    var fileReader = new FileReader();
+    fileReader.onload = function() {
+        var arrayBuffer = this.result;
+        waterMesh = new Object();
+        waterMesh.vertex = new Float32Array(arrayBuffer);
+        waterMesh.face = mesh.face;
+        let shaders = [gl.getShader('vertex-shader'),
+                       gl.getShader('fragment-shader')];
+        let program = gl.getShaderProgram(shaders);
+        let object = gl.loadObject(waterMesh.vertex,
+                                   3,
+                                   waterMesh.normals,
+                                   3,
+                                   waterMesh.face,
+                                   program,
+                                   [0.0, 0.0, 0.6, 1.0],
+                                   vec3.fromValues(0.0,0.0, 0.0),
+                                   quat.create());
+        if(object !== void(0)) {
+            objects[1] = object;
+            gl.rend();
+        }
+    };
+    fileReader.readAsArrayBuffer(result.data);
 }
 
 var gl = new webGL.WebGLcontext('viewport');
@@ -35,7 +55,7 @@ document.getElementById('file-path').onchange = function() {
     fileReader.onload = function(e) {
         let meshData = parser.parseFile('ply', e.target.result);
         let shaders = [gl.getShader('vertex-shader'),
-        gl.getShader('fragment-shader')];
+                       gl.getShader('fragment-shader')];
         let program = gl.getShaderProgram(shaders);
         let object = gl.loadObject(meshData.vertex,
                                    3,
@@ -60,15 +80,34 @@ document.getElementById('file-path').onchange = function() {
     fileReader.readAsArrayBuffer(file);
 }
 
-
-document.getElementById('start-button').onclick = function() {;
-    let message = new Array();
+/**
+ * 
+ * @param {Object[]} data 
+ * @return {Uint8Array}
+ */
+function packData(data) {
+    let size = data.reduce(function(sumSizes, curr){
+        return sumSizes + curr.byteLength;
+    }, 0);
+    let result = new Uint8Array(size);
+    let offset = 0;
+    for(let i in data) {
+        let buffer = new Uint8Array(data[i].buffer);
+        result.set(buffer,
+                   offset);
+        offset += buffer.byteLength;
+    }
+    return result;
+}
+document.getElementById('start-button').onclick = function() {
+    let data = [new Uint8Array([0]), // opcode
+                // blocks sizes
+                new Uint32Array([mesh.vertex.length * 4,
+                                 mesh.face.length * 4]),
+                new Float32Array(mesh.vertex),
+                new Uint32Array(mesh.face)];
+    let message = packData(data);
     // adding opcode;
-    message.push(0);
-    message.push(mesh.vertex.length);
-    message = message.concat(mesh.vertex);
-    message.push(mesh.face.length);
-    message = message.concat(mesh.face);
-    netWork.sendMessage(new Uint32Array(message), handleComeResult);
+    netWork.sendMessage(message, handleComeResult);
 }
 
