@@ -68,16 +68,33 @@ void CServer::work() {
             continue;
         }
         std::vector <float> vertex;
-        uint size = *( (size_t *)&(task.data_.c_str()[1]) );
-        vertex.reserve(size/4);
+        uint sizeVertexBlock = *( (size_t *)&(task.data_.c_str()[1]) );
+        vertex.reserve(sizeVertexBlock/4);
         vertex.insert(vertex.end(),
                       (float *)&(task.data_.c_str()[9]),
-                      (float *)&(task.data_.c_str()[9]) + size / 4);
+                      (float *)&(task.data_.c_str()[9]) + sizeVertexBlock / 4);
+        
+        std::vector <uint> face;
+        uint sizeFaceBlock = *( (size_t *)&(task.data_.c_str()[5]) );
+        face.reserve(sizeVertexBlock/4);
+        face.insert(face.end(),
+                    (uint *)&(task.data_.c_str()[9 + sizeVertexBlock]),
+                    (uint *)&(task.data_.c_str()[9 + sizeVertexBlock]) + sizeFaceBlock / 4);
+        
         task.data_.clear();
-        task.data_.reserve(size);
+        task.data_.reserve(sizeVertexBlock + sizeFaceBlock + 8);
+        uint sizes [] = {sizeVertexBlock,
+                         sizeFaceBlock
+        };
+        task.data_.insert(task.data_.end(),
+                          (char *)sizes,
+                          ((char *)sizes) + 8);
         task.data_.insert(task.data_.end(),
                           (char *)vertex.data(),
-                          ((char *)vertex.data()) + size);
+                          ((char *)vertex.data()) + sizeVertexBlock);
+        task.data_.insert(task.data_.end(),
+                          (char *)face.data(),
+                          ((char *)face.data()) + sizeFaceBlock);
 	    reception_->compliteTask(task);
     }	
 }

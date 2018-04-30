@@ -20,14 +20,19 @@ function handleComeResult(result) {
     fileReader.onload = function() {
         var arrayBuffer = this.result;
         waterMesh = new Object();
-        waterMesh.vertex = new Float32Array(arrayBuffer);
-        waterMesh.face = mesh.face;
-        let shaders = [gl.getShader('vertex-shader'),
-                       gl.getShader('fragment-shader')];
+        let sizes = new Uint32Array(arrayBuffer, 0, 2);
+        waterMesh.vertex = new Float32Array(arrayBuffer, 
+                                            8, 
+                                            sizes[0]/4);
+        waterMesh.face = new Uint32Array(arrayBuffer, 
+                                         8 + sizes[0], 
+                                         sizes[1]/4);
+        let shaders = [gl.getShader('vertex-water-shader'),
+                       gl.getShader('fragment-water-shader')];
         let program = gl.getShaderProgram(shaders);
         let object = gl.loadObject(waterMesh.vertex,
                                    3,
-                                   waterMesh.normals,
+                                   void(0),
                                    3,
                                    waterMesh.face,
                                    program,
@@ -45,7 +50,7 @@ function handleComeResult(result) {
 var gl = new webGL.WebGLcontext('viewport');
 var objects = new Array();
 gl.setObjectsList(objects);
-gl.rend();
+//gl.rend();
 webGLcontrol.initControlAera('viewport', gl, objects);
 
 document.getElementById('file-path').onchange = function() {
