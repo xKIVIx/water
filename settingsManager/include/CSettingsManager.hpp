@@ -93,6 +93,27 @@
                       const std::string &parametr);
 
      /**
+     *
+     * @brief Parameter entry function.
+     * @detail Looks for among the loaded categories and looks 
+     *         for the required parameter. If the category is not found, 
+     *         it tries to load the <category>.conf file.
+     *         Thread safe function.
+     * 
+     * @param [in] category The name of the category (File name) 
+     *                      that contains the parameter.
+     * @param [in] dataName Parametr name.
+     * @param [in] parametr New data.
+     * 
+     * @return true Returns true if the parameter 
+     *              was set successfully, otherwise false.
+     * 
+     */
+     bool setParametr(const std::string &category,
+                      const std::string &dataName,
+                      const int &parametr);
+
+     /**
       *
       * @brief Get instance.
       * @detail Not a thread-safe function.

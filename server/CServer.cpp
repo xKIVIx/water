@@ -2,7 +2,9 @@
 
 #include <iostream>
 #include <vector>
+
 #include "CSettingsManager.hpp"
+#include "CWaterOpenCL.hpp"
 
 #include "CServer.hpp"
 
@@ -62,6 +64,7 @@ void CServer::work() {
 		}
 	}
 	std::cout << "Server is create.\n";
+    CWaterOpenCL waterCompute;
     while( !isEnd() ) {
         STask task = reception_->getTask();
         if(task.token_.socket_ == -1) {
@@ -81,6 +84,8 @@ void CServer::work() {
                     (uint *)&(task.data_.c_str()[9 + sizeVertexBlock]),
                     (uint *)&(task.data_.c_str()[9 + sizeVertexBlock]) + sizeFaceBlock / 4);
         
+        waterCompute.loadData(vertex, face);
+
         task.data_.clear();
         task.data_.reserve(sizeVertexBlock + sizeFaceBlock + 8);
         uint sizes [] = {sizeVertexBlock,

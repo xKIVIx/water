@@ -45,5 +45,18 @@ if (UTest)
     
     
 endif()
-add_subdirectory(settingsManager/src)
+
+
+find_package( OpenCL )
+if( NOT ${OpenCL_FOUND} )
+	set(OpenCL_PATH ${CMAKE_CURRENT_SOURCE_DIR}/OpenCL/Nvidia/Win32)
+	set(OpenCL_INCLUDE_DIRS ${OpenCL_PATH}/include)
+	set(OpenCL_LIBRARIES ${OpenCL_PATH}/lib/OpenCl.lib)
+endif()
+
+set(settingManager_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/settingsManager/include)
+set(waterCompute_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/waterCompute/include)
+
+add_subdirectory(settingsManager)
+add_subdirectory(waterCompute)
 add_subdirectory(server)

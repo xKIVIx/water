@@ -3,7 +3,8 @@ cmake_minimum_required(VERSION 3.9)
 add_subdirectory(CNet)
 
 set(LIBRES
-    CSettingsManager
+	WaterCompute
+    SettingsManager
     CNet)
 
 project(server)
@@ -18,4 +19,5 @@ add_executable(server
 
 target_link_libraries(server ${LIBRES})
 target_include_directories(server PRIVATE
-						   ../settingsManager/include)
+						   ${settingManager_INCLUDE_DIRS}
+						   ${waterCompute_INCLUDE_DIRS})

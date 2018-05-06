@@ -112,6 +112,13 @@ bool CSettingsManager::saveParametrs() {
     return true;
 }
 
+bool CSettingsManager::setParametr(const std::string &category,
+                                   const std::string &dataName,
+                                   const int &parametr) {
+    std::string data = std::to_string(parametr);
+    return setParametr(category, dataName, data);
+}
+
 void CSettingsManager::setPath(const std::string &path) {
     lock_guard<mutex> lock(manegerMutex_);
     path_ = path;
@@ -140,23 +147,28 @@ bool CSettingsManager::setParametr(const std::string &category,
     iter->second.insert(pair<string, string> (dataName, 
                                               parametr) );
     return true;
-
 }
+
+
+
 CSettingsManager &CSettingsManager::instance() {
     if(manegerPtr_ == nullptr) {
         manegerPtr_ = new CSettingsManager();
     }
     return *manegerPtr_;
 }
+
 void CSettingsManager::detach() {
     if(manegerPtr_ != nullptr) {
         delete manegerPtr_;
         manegerPtr_ = nullptr;
     }
 }
+
 CSettingsManager::CSettingsManager() {
 
 };
-CSettingsManager::~CSettingsManager() {
 
+CSettingsManager::~CSettingsManager() {
+    saveParametrs();
 };

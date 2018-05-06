@@ -7,7 +7,7 @@ set(TESTS
     main.cpp)
 
 set(LIBRES
-	CSettingsManager
+	SettingsManager
     gtest_main)
 
 add_executable(settingManagerTest 

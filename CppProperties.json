@@ -7,9 +7,9 @@
       "name": "x86-Debug",
       "includePath": [
         "${env.INCLUDE}",
-        "D:\\WATER\\SETTINGSMANAGER\\SRC",
-        "D:\\WATER\\SETTINGSMANAGER\\SRC\\UNITTESTS",
         "${workspaceRoot}\\settingsManager\\include",
+        "${workspaceRoot}\\OpenCL\\Nvidia\\Win32\\include",
+        "${workspaceRoot}\\waterCompute\\include",
         "${workspaceRoot}\\build\\x86-Debug-UTest\\gtest\\src\\googletest\\include"
       ],
       "defines": [
@@ -27,49 +27,9 @@
       "name": "x86-Release",
       "includePath": [
         "${env.INCLUDE}",
-        "D:\\WATER\\SETTINGSMANAGER\\SRC",
-        "D:\\WATER\\SETTINGSMANAGER\\SRC\\UNITTESTS",
-        "D:\\WATER\\SETTINGSMANAGER\\INCLUDE"
-      ],
-      "defines": [
-        "WIN32",
-        "NDEBUG",
-        "UNICODE",
-        "_UNICODE"
-      ],
-      "intelliSenseMode": "windows-msvc-x86"
-    },
-    {
-      "inheritEnvironments": [
-        "msvc_x64"
-      ],
-      "name": "x64-Debug",
-      "includePath": [
-        "${env.INCLUDE}",
-        "D:\\WATER\\SETTINGSMANAGER\\SRC",
-        "D:\\WATER\\SETTINGSMANAGER\\SRC\\UNITTESTS",
-        "D:\\WATER\\SETTINGSMANAGER\\INCLUDE",
-        "${workspaceRoot}\\build\\x64-Debug-UTest\\gtest\\src\\googletest\\include"
-
-      ],
-      "defines": [
-        "WIN32",
-        "_DEBUG",
-        "UNICODE",
-        "_UNICODE"
-      ],
-      "intelliSenseMode": "windows-msvc-x86"
-    },
-    {
-      "inheritEnvironments": [
-        "msvc_x64"
-      ],
-      "name": "x64-Release",
-      "includePath": [
-        "${env.INCLUDE}",
-        "D:\\WATER\\SETTINGSMANAGER\\SRC",
-        "D:\\WATER\\SETTINGSMANAGER\\SRC\\UNITTESTS",
-        "D:\\WATER\\SETTINGSMANAGER\\INCLUDE"
+        "${workspaceRoot}\\OpenCL\\Nvidia\\Win32\\include",
+        "${workspaceRoot}\\waterCompute\\include",
+        "${workspaceRoot}\\settingsManager\\include"
       ],
       "defines": [
         "WIN32",
