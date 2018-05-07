@@ -49,3 +49,64 @@ __kernel void findBorderEdges(__global __read_only unsigned int  *edgesRaw,
         facesBorder[writePos] = idEdge / 3;
     }
 }
+
+unsigned int getThirdFacePoint (__global __read_only unsigned int  *face,
+                                __global __read_only unsigned int  *edge) {
+    for(char i = 0; i < 3; i++) {
+        if((edge[0] != face[i])&&(edge[1] != face[i])) {
+            return face[i];
+        }
+    }
+    return 0xffffffff;
+}
+
+__kernel void findFractureEdges(__global __read_only float        *vertex,
+								__global __read_only unsigned int *faces,
+                                __global __read_only unsigned int *edgesInner,
+								__global __read_only unsigned int *facesInner,
+                                __global             unsigned int *edgesFracture,
+                                __global             unsigned int *countEdgesFracture,
+                                __global float *secVert) {
+    unsigned int posEdge = get_global_id(0) * 2,
+                 posVertex1 = edgesInner[posEdge] * 3,
+                 posVertex2 = edgesInner[posEdge + 1] * 3,
+                 posFace1 = facesInner[posEdge] * 3,
+                 posFace2 = facesInner[posEdge + 1] * 3;
+                 
+    float3 vert1 = (float3){vertex[posVertex1],
+                            vertex[posVertex1 + 1],
+                            vertex[posVertex1 + 2]},
+           vert2 = (float3){vertex[posVertex2],
+                            vertex[posVertex2 + 1],
+                            vertex[posVertex2 + 2]};
+                            
+    if((vert1.x == vert2.x)&&(vert1.z == vert2.z)) {
+        return;
+    }
+    
+    float3 vector1 = vert2 - vert1,
+           vector2 = (float3){0.0f,
+                              vert2.y, 
+                              0.0f};
+    float3 vector3 = cross(vector1, vector2);
+    float A = vector1.y * vector3.z - vector1.z * vector3.y,
+          B = vector1.z * vector3.x - vector1.x * vector3.z,
+          C = vector1.x * vector3.y - vector1.y * vector3.x,
+          D =  vert1.x * A + vert1.y * B + vert1.z * C;
+    
+    // check first point
+    unsigned int posVertex3 = getThirdFacePoint(&faces[posFace1], &edgesInner[posEdge]) * 3;
+    float yCup = (D - A * vertex[posVertex3] - C * vertex[posVertex3 + 2]) / B;
+    if(yCup <= vertex[posVertex3 + 1]) {
+        return;
+    }
+    
+    // chek second point
+    posVertex3 = getThirdFacePoint(&faces[posFace2], &edgesInner[posEdge]) * 3;
+    yCup = (D - A * vertex[posVertex3] - C * vertex[posVertex3 + 2]) / B;
+    if(yCup <= vertex[posVertex3 + 1]) {
+        return;
+    }
+    unsigned int writePos = atomic_inc(countEdgesFracture);
+    edgesFracture[writePos] = posEdge / 2;
+}

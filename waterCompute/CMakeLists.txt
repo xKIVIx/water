@@ -20,14 +20,14 @@ target_include_directories(WaterCompute PRIVATE
 
 target_link_libraries(WaterCompute ${LIBRES})
 
-file(WRITE ${CMAKE_BINARY_DIR}/program.cl.in "")
+file(WRITE ${CMAKE_BINARY_DIR}/program.cl "")
 
 foreach(PACKAGE_CL_FILE ${PACKAGE_CL_FILES})
 	file(READ ${PACKAGE_CL_FILE} CONTENTS)
-	file(APPEND ${CMAKE_BINARY_DIR}/program.cl.in "${CONTENTS}")
+	file(APPEND ${CMAKE_BINARY_DIR}/program.cl "${CONTENTS}")
 endforeach()
 configure_file(
-	${CMAKE_BINARY_DIR}/program.cl.in
+	${CMAKE_BINARY_DIR}/program.cl
 	${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/program.cl
 	COPYONLY)
 

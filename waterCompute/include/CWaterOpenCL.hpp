@@ -35,18 +35,25 @@ public:
                  const std::vector <uint32_t> &faces);
 
     /*
-    * @brief Preparation of internal polygons.
-    * @param faces Result buffer.
-    * @return 0 if sucsses, else OpenCl error code.
-    */
+     * @brief Preparation of internal polygons.
+     * @param faces Result buffer.
+     * @return 0 if sucsses, else OpenCl error code.
+     */
     int getInnerFaces(std::vector <uint32_t> &faces) const;
 
     /*
-    * @brief Preparation of border polygons.
-    * @param faces Result buffer.
-    * @return 0 if sucsses, else OpenCl error code.
-    */
+     * @brief Preparation of border polygons.
+     * @param faces Result buffer.
+     * @return 0 if sucsses, else OpenCl error code.
+     */
     int getBorderFaces(std::vector <uint32_t> &faces) const;
+
+    /*
+     * @brief Get edges fracture.
+     * @param edges Result buffer.
+     * @return 0 if sucsses, else OpenCl error code.
+     */
+    int getFractureEdges(std::vector <uint32_t> &edges) const;
 private:
     // To store OpenCL pointers.
     typedef void* CLdescriptor;
@@ -238,7 +245,7 @@ private:
      * @param bufferMarkNoneBorder A buffer with the notation that the 
      *                             edge is already inside. It is necessary 
      *                             for the calculation of edges - boundaries.
-     *  @return 0 if sucsses, else OpenCl error code.
+     * @return 0 if sucsses, else OpenCl error code.
      */
     int computeInnerEdges(const CMemObject &bufferEdges,
                           const CMemObject &bufferMarkNoneBorder);
@@ -250,24 +257,35 @@ private:
      * @param bufferEdges Buffer with data on the edges.
      * @param bufferMarkNoneBorder A buffer with the notation that the 
      *                             edge is already inside.
-     *  @return 0 if sucsses, else OpenCl error code.
+     * @return 0 if sucsses, else OpenCl error code.
      */
     int computeBorderEdges(const CMemObject &bufferEdges,
                            const CMemObject &bufferMarkNoneBorder);
+    /*
+     * @brief Calculation of fracture edges.
+     * @detail The result is filling the data with the following changes:
+     *         bufferFractureEdges_, countFractureEdges_.
+     * @return 0 if sucsses, else OpenCl error code.
+     */
+    int computeFractureEdges();
 
     CMemObject bufferVertex_,
                bufferFaces_,
                bufferInnerEdges_,
                bufferInnerEdgeFaces_,
                bufferBorderEdges_,
-               bufferBorderEdgeFaces_;
+               bufferBorderEdgeFaces_,
+               // ids inner edges
+               bufferFractureEdges_;
 
     CKernel kernelFindEdges,
             kernelFindInnerEdges,
-            kernelFindBorderEdges;
+            kernelFindBorderEdges,
+            kernelFindFractureEdges;
 
     uint32_t countInnerEdges_ = 0,
-             countBorderEdges_ = 0;
+             countBorderEdges_ = 0,
+             countFractureEdges_ = 0;
 
     CLdescriptor program_ = nullptr,
                  commandQueue_ = nullptr,
