@@ -5,12 +5,12 @@
 
 #include <vector>
 
-
+#include "CWaterOpenCL.hpp"
 /**
 *
 * TODO
 */
-class CWaterCompute {
+class CWaterCompute:public CWaterOpenCL {
 
 };
 

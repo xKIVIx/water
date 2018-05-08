@@ -52,16 +52,6 @@ bool eqVector(const std::vector<uint32_t> &v1,
     return true;
 }
 
-TEST(CWaterOpenCL, innerFaces) {
-    std::vector<uint32_t> result = {0, 6},
-                          testResult;
-    int err;
-    ASSERT_NO_THROW(err = waterOpenCL->getInnerFaces(testResult));
-    ASSERT_EQ(err, 0);
-    ASSERT_EQ(result.size(), testResult.size());
-    ASSERT_TRUE(eqVector(result, testResult));
-}
-
 TEST(CWaterOpenCL, borderFaces) {
     std::vector<uint32_t> result = {1, 2, 3, 4, 5, 7},
                           testResult;
@@ -69,7 +59,7 @@ TEST(CWaterOpenCL, borderFaces) {
     ASSERT_NO_THROW(err = waterOpenCL->getBorderFaces(testResult));
     ASSERT_EQ(err, 0);
     ASSERT_EQ(result.size(), testResult.size());
-    ASSERT_TRUE(eqVector(result, testResult));
+    ASSERT_TRUE(eqVector(testResult, result));
 }
 
 TEST(CWaterOpenCL, fractureEdges) {

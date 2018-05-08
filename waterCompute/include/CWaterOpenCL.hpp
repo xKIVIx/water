@@ -54,6 +54,20 @@ public:
      * @return 0 if sucsses, else OpenCl error code.
      */
     int getFractureEdges(std::vector <uint32_t> &edges) const;
+
+    /*
+     * @brief Get inner edges.
+     * @param edges Result buffer.
+     * @return 0 if sucsses, else OpenCl error code.
+     */
+    int getBorderEdges(std::vector <uint32_t> &edges) const;
+
+    /*
+     * @brief Get border edges.
+     * @param edges Result buffer.
+     * @return 0 if sucsses, else OpenCl error code.
+     */
+    int getInnerEdges(std::vector <uint32_t> &edges) const;
 private:
     // To store OpenCL pointers.
     typedef void* CLdescriptor;

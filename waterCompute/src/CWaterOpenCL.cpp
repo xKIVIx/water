@@ -244,42 +244,38 @@ int CWaterOpenCL::loadData(const std::vector<float>& vertex,
     return computeData();
 }
 
-int CWaterOpenCL::getInnerFaces(std::vector<uint32_t>& face) const
-{
-    std::vector<uint32_t> result;
-    int err = bufferInnerEdgeFaces_.getData(commandQueue_, result);
-    result.resize(countInnerEdges_ * 2);
-    if(err != CL_SUCCESS) {
-        return err;
-    }
-    std::sort(result.begin(), result.end());
-    face.reserve(countInnerEdges_ * 2);
-    char counter = 0;
-    uint32_t last = UINT32_MAX;
-    for(auto iter = result.begin(); iter != result.end(); ++iter) {
-        if(*iter == last) {
-            counter++;
-            if(counter == 2) {
-                face.push_back(*iter);
-                counter = 0;
-            }
-        } else {
-            counter = 0;
-        }
-        last = *iter;
-    }
-    return CL_SUCCESS;
+int CWaterOpenCL::getInnerFaces(std::vector<uint32_t> &face) const {
+    int err = bufferInnerEdgeFaces_.getData(commandQueue_, face);
+    clFinish((cl_command_queue)commandQueue_);
+    face.resize(countInnerEdges_ * 2);
+    return err;
 }
 
-int CWaterOpenCL::getBorderFaces(std::vector<uint32_t>& face) const {
-    return bufferBorderEdgeFaces_.getData(commandQueue_, face);
+int CWaterOpenCL::getBorderFaces(std::vector<uint32_t> &face) const {
+    int err = bufferBorderEdgeFaces_.getData(commandQueue_, face);
+    clFinish((cl_command_queue)commandQueue_);
+    face.resize(countBorderEdges_);
+    return err;
 }
 
 int CWaterOpenCL::getFractureEdges(std::vector <uint32_t> &edges) const {
-    std::vector <uint32_t> result;
-    int err = bufferFractureEdges_.getData(commandQueue_, result);
-    result.resize(countFractureEdges_ * 2);
-    edges.swap(result);
+    int err = bufferFractureEdges_.getData(commandQueue_, edges);
+    clFinish((cl_command_queue)commandQueue_);
+    edges.resize(countFractureEdges_ * 2);
+    return err;
+}
+
+int CWaterOpenCL::getBorderEdges(std::vector<uint32_t>& edges) const {
+    int err = bufferBorderEdges_.getData(commandQueue_, edges);
+    clFinish((cl_command_queue)commandQueue_);
+    edges.resize(countBorderEdges_ * 2);
+    return err;
+}
+
+int CWaterOpenCL::getInnerEdges(std::vector<uint32_t>& edges) const {
+    int err = bufferInnerEdges_.getData(commandQueue_, edges);
+    clFinish((cl_command_queue)commandQueue_);
+    edges.resize(countInnerEdges_ * 2);
     return err;
 }
 
@@ -397,7 +393,7 @@ int CWaterOpenCL::computeInnerEdges(const CMemObject &bufferEdges,
         errorMessage("Fail get count inner edges", err);
         return err;
     }
-
+    
     return clFinish((cl_command_queue)commandQueue_);;
 }
 
