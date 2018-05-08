@@ -332,7 +332,7 @@ int CWaterOpenCL::computeData() {
         return err;
     }
 
-    return CL_SUCCESS;
+    return clFinish((cl_command_queue)commandQueue_);;
 }
 
 int CWaterOpenCL::computeInnerEdges(const CMemObject &bufferEdges,
@@ -397,12 +397,8 @@ int CWaterOpenCL::computeInnerEdges(const CMemObject &bufferEdges,
         errorMessage("Fail get count inner edges", err);
         return err;
     }
-    err = clFinish((cl_command_queue)commandQueue_);
-    if(err != CL_SUCCESS) {
-        errorMessage("Fail wait finish", err);
-        return err;
-    }
-    return CL_SUCCESS;
+
+    return clFinish((cl_command_queue)commandQueue_);;
 }
 
 int CWaterOpenCL::computeBorderEdges(const CMemObject &bufferEdges,
@@ -457,7 +453,12 @@ int CWaterOpenCL::computeBorderEdges(const CMemObject &bufferEdges,
 
     uint32_t workSize = bufferEdges.getSize() / (2 * sizeof(uint32_t));
     err = kernelFindBorderEdges.complite(commandQueue_, &workSize, 1);
-    return CL_SUCCESS;
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail complite find border edges", err);
+        return err;
+    }
+    
+    return clFinish((cl_command_queue)commandQueue_);;
 }
 
 int CWaterOpenCL::computeFractureEdges() {
@@ -527,12 +528,5 @@ int CWaterOpenCL::computeFractureEdges() {
         errorMessage("Fail get count fracture edges", err);
         return err;
     }
-    std::vector<uint32_t> tt, ll, mm;
-    std::vector<float> kk;
-    bufferInnerEdges_.getData(commandQueue_, ll);
-    bufferInnerEdgeFaces_.getData(commandQueue_, mm);
-    bufferFractureEdges_.getData(commandQueue_, tt);
-    buffe.getData(commandQueue_, kk);
-    clFinish((cl_command_queue)commandQueue_);
-    return CL_SUCCESS;
+    return clFinish((cl_command_queue)commandQueue_);;
 }
