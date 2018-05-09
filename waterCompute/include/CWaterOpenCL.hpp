@@ -160,11 +160,24 @@ private:
         /*
          * @brief Set new size of memory object.
          * @detail If you specify a size that differs from the current object, 
-         *         it will be recreated. All data will be lost.
+         *         it will be recreated.
          * @param context The context for which the memory object is created.
+         * @param commandQueue The command queue for transfer data.
          * @param size New size.
          * @return 0 if sucsses, else OpenCl error code.
          */
+        int resize(const CLdescriptor context,
+                   const CLdescriptor commandQueue,
+                   const uint32_t size);
+
+        /*
+        * @brief Set new size of memory object.
+        * @detail If you specify a size that differs from the current object, 
+        *         it will be recreated. All data will be lost.
+        * @param context The context for which the memory object is created.
+        * @param size New size.
+        * @return 0 if sucsses, else OpenCl error code.
+        */
         int resize(const CLdescriptor context,
                    const uint32_t size);
         friend CKernel;

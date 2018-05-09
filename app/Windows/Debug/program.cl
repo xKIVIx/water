@@ -65,8 +65,7 @@ __kernel void findFractureEdges(__global __read_only float        *vertex,
                                 __global __read_only unsigned int *edgesInner,
 								__global __read_only unsigned int *facesInner,
                                 __global             unsigned int *edgesFracture,
-                                __global             unsigned int *countEdgesFracture,
-                                __global float *secVert) {
+                                __global             unsigned int *countEdgesFracture) {
     unsigned int posEdge = get_global_id(0) * 2,
                  posVertex1 = edgesInner[posEdge] * 3,
                  posVertex2 = edgesInner[posEdge + 1] * 3,

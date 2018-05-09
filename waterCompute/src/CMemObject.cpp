@@ -15,7 +15,9 @@ CWaterOpenCL::CMemObject::CMemObject(const CLdescriptor context,
                                      const int flag) {
     flag_ = flag;
     mem_ = nullptr;
-    resize(context, size);
+    size_ = 0;
+    resize(context,
+           size);
 }
 
 CWaterOpenCL::CMemObject::~CMemObject() {
@@ -33,7 +35,8 @@ int CWaterOpenCL::CMemObject::loadData(const CLdescriptor context,
                                        const char *data,
                                        const uint32_t size) {
     if(size_ < size) {
-        resize(context, size);
+        resize(context,
+               size);
     }
     return clEnqueueWriteBuffer((cl_command_queue)commandQueue,
                                 (cl_mem)mem_,
@@ -65,12 +68,54 @@ int CWaterOpenCL::CMemObject::getData(const CLdescriptor commandQueue,
                               0,
                               NULL,
                               NULL);
-    return err;
+    if(err != CL_SUCCESS) {
+        return err;
+    }
+    return clFinish((cl_command_queue)commandQueue);
 }
 
 
 uint32_t CWaterOpenCL::CMemObject::getSize() const {
     return size_;
+}
+
+int CWaterOpenCL::CMemObject::resize(const CLdescriptor context,
+                                     const CLdescriptor commandQueue,
+                                     const uint32_t size) {
+    int err = CL_SUCCESS;
+    if(size_ == size) {
+        return err;
+    }
+    size_ = size;
+    
+    if(mem_ == nullptr) {
+        mem_ = clCreateBuffer((cl_context)context,
+                              flag_,
+                              size_,
+                              NULL,
+                              &err);
+    } else {
+        CLdescriptor newMem = clCreateBuffer((cl_context)context,
+                                             flag_,
+                                             size_,
+                                             NULL,
+                                             &err);
+        if(err != CL_SUCCESS) {
+            return err;
+        }
+        clEnqueueCopyBuffer((cl_command_queue)commandQueue,
+                            (cl_mem)mem_,
+                            (cl_mem)newMem,
+                            0,
+                            0,
+                            size_,
+                            0,
+                            nullptr,
+                            nullptr);
+        clReleaseMemObject((cl_mem)mem_);
+        mem_ = newMem;
+    }
+    return err;
 }
 
 int CWaterOpenCL::CMemObject::resize(const CLdescriptor context,
@@ -96,6 +141,7 @@ int CWaterOpenCL::CMemObject::resize(const CLdescriptor context,
     }
     return err;
 }
+
 
 int CWaterOpenCL::CMemObject::getData(const CLdescriptor commandQueue,
                                       std::vector<float> &data) const {
