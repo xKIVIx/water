@@ -35,11 +35,12 @@ public:
                  const std::vector <uint32_t> &faces);
 
     /*
-     * @brief Preparation of internal polygons.
+     * @brief Returns an array with the id of the polygons 
+     *        adjacent to the inner edges.
      * @param faces Result buffer.
      * @return 0 if sucsses, else OpenCl error code.
      */
-    int getInnerFaces(std::vector <uint32_t> &faces) const;
+    int getInnerEdgesFaces(std::vector <uint32_t> &faces) const;
 
     /*
      * @brief Preparation of border polygons.
@@ -99,7 +100,7 @@ private:
          * @destructor
          */
         ~CMemObject();
-        
+
         /*
          * @brief Loading data into an object.
          * @param context The context for which the memory object is created.
@@ -291,7 +292,7 @@ private:
     /*
      * @brief Calculation of fracture edges.
      * @detail The result is filling the data with the following changes:
-     *         bufferFractureEdges_, countFractureEdges_.
+     *         bufferIdsFractureEdges_, countFractureEdges_.
      * @return 0 if sucsses, else OpenCl error code.
      */
     int computeFractureEdges();
@@ -303,7 +304,7 @@ private:
                bufferBorderEdges_,
                bufferBorderEdgeFaces_,
                // ids inner edges
-               bufferFractureEdges_;
+               bufferIdsFractureEdges_;
 
     CKernel kernelFindEdges,
             kernelFindInnerEdges,

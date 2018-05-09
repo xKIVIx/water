@@ -244,34 +244,40 @@ int CWaterOpenCL::loadData(const std::vector<float>& vertex,
     return computeData();
 }
 
-int CWaterOpenCL::getInnerFaces(std::vector<uint32_t> &face) const {
-    int err = bufferInnerEdgeFaces_.getData(commandQueue_, face);
-    clFinish((cl_command_queue)commandQueue_);
-    return err;
+int CWaterOpenCL::getInnerEdgesFaces(std::vector<uint32_t> &face) const {
+    return bufferInnerEdgeFaces_.getData(commandQueue_, face);
 }
 
 int CWaterOpenCL::getBorderFaces(std::vector<uint32_t> &face) const {
-    int err = bufferBorderEdgeFaces_.getData(commandQueue_, face);
-    clFinish((cl_command_queue)commandQueue_);
-    return err;
+    return  bufferBorderEdgeFaces_.getData(commandQueue_, face);
 }
 
 int CWaterOpenCL::getFractureEdges(std::vector <uint32_t> &edges) const {
-    int err = bufferFractureEdges_.getData(commandQueue_, edges);
-    clFinish((cl_command_queue)commandQueue_);
+    std::vector <uint32_t> innerEdges,
+                           idsFractureEdges;
+    int err = CL_SUCCESS;
+    err = bufferInnerEdges_.getData(commandQueue_, innerEdges);
+    if(err != CL_SUCCESS) {
+        return err;
+    }
+    err = bufferIdsFractureEdges_.getData(commandQueue_, idsFractureEdges);
+    edges.reserve(idsFractureEdges.size() * 2);
+    if(err != CL_SUCCESS) {
+        return err;
+    }
+    for(auto iter = idsFractureEdges.begin(); iter != idsFractureEdges.end(); ++iter) {
+        edges.push_back(innerEdges[*iter * 2]);
+        edges.push_back(innerEdges[*iter * 2 + 1]);
+    }
     return err;
 }
 
 int CWaterOpenCL::getBorderEdges(std::vector<uint32_t>& edges) const {
-    int err = bufferBorderEdges_.getData(commandQueue_, edges);
-    clFinish((cl_command_queue)commandQueue_);
-    return err;
+    return bufferBorderEdges_.getData(commandQueue_, edges);
 }
 
 int CWaterOpenCL::getInnerEdges(std::vector<uint32_t>& edges) const {
-    int err = bufferInnerEdges_.getData(commandQueue_, edges);
-    clFinish((cl_command_queue)commandQueue_);
-    return err;
+    return bufferInnerEdges_.getData(commandQueue_, edges);
 }
 
 int CWaterOpenCL::computeData() {
@@ -496,13 +502,13 @@ int CWaterOpenCL::computeFractureEdges() {
         return err;
     }
 
-    err = bufferFractureEdges_.resize(context_,
+    err = bufferIdsFractureEdges_.resize(context_,
                                       countInnerEdges_ * sizeof(uint32_t));
     if(err != CL_SUCCESS) {
         errorMessage("Fail set size bufferFractureEdges", err);
         return err;
     }
-    err = kernelFindFractureEdges.bindParametr(bufferFractureEdges_, 4);
+    err = kernelFindFractureEdges.bindParametr(bufferIdsFractureEdges_, 4);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind bufferFractureEdges", err);
         return err;
@@ -529,8 +535,8 @@ int CWaterOpenCL::computeFractureEdges() {
         return err;
     }
 
-    err = bufferFractureEdges_.resize(context_,
+    err = bufferIdsFractureEdges_.resize(context_,
                                       commandQueue_,
-                                      countFractureEdges_ * sizeof(uint32_t) * 2);
+                                      countFractureEdges_ * sizeof(uint32_t));
     return err;
 }
