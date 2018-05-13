@@ -47,6 +47,33 @@ function handleComeResult(result) {
     fileReader.readAsArrayBuffer(result.data);
 }
 
+function handleComeTestResult(result) {
+    var fileReader = new FileReader();
+    fileReader.onload = function() {
+        var arrayBuffer = this.result;
+        waterMesh.vertex = mesh.vertex;
+        waterMesh.face = new Uint32Array(arrayBuffer);
+        let shaders = [gl.getShader('vertex-water-shader'),
+                       gl.getShader('fragment-water-shader')];
+        let program = gl.getShaderProgram(shaders);
+        let object = gl.loadObject(waterMesh.vertex,
+                                   3,
+                                   void(0),
+                                   3,
+                                   waterMesh.face,
+                                   program,
+                                   [0.0, 0.0, 0.6, 1.0],
+                                   vec3.fromValues(0.0,0.0, 0.0),
+                                   quat.create());
+        if(object !== void(0)) {
+            objects[1] = object;
+            gl.rend();
+        }
+    };
+    fileReader.readAsArrayBuffer(result.data);
+}
+
+
 var gl = new webGL.WebGLcontext('viewport');
 var objects = new Array();
 gl.setObjectsList(objects);
@@ -104,6 +131,7 @@ function packData(data) {
     }
     return result;
 }
+
 document.getElementById('start-button').onclick = function() {
     let data = [new Uint8Array([0]), // opcode
                 // blocks sizes
@@ -114,5 +142,29 @@ document.getElementById('start-button').onclick = function() {
     let message = packData(data);
     // adding opcode;
     netWork.sendMessage(message, handleComeResult);
+}
+
+document.getElementById('border-faces-button').onclick = function() {
+    let data = [new Uint8Array([1]), // opcode
+                // blocks sizes
+                new Uint32Array([mesh.vertex.length * 4,
+                                 mesh.face.length * 4]),
+                new Float32Array(mesh.vertex),
+                new Uint32Array(mesh.face)];
+    let message = packData(data);
+    // adding opcode;
+    netWork.sendMessage(message, handleComeTestResult);
+}
+
+document.getElementById('fruct-faces-button').onclick = function() {
+    let data = [new Uint8Array([2]), // opcode
+                // blocks sizes
+                new Uint32Array([mesh.vertex.length * 4,
+                                 mesh.face.length * 4]),
+                new Float32Array(mesh.vertex),
+                new Uint32Array(mesh.face)];
+    let message = packData(data);
+    // adding opcode;
+    netWork.sendMessage(message, handleComeTestResult);
 }
 
