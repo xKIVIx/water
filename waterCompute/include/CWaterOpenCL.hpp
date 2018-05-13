@@ -69,6 +69,10 @@ public:
      * @return 0 if sucsses, else OpenCl error code.
      */
     int getInnerEdges(std::vector <uint32_t> &edges) const;
+
+protected:
+    int computeRoadMatrix(std::vector <bool> &roadMatrix,
+                          std::vector <uint32_t> &countsRoads) const;
 private:
     // To store OpenCL pointers.
     typedef void* CLdescriptor;
@@ -101,6 +105,11 @@ private:
          */
         ~CMemObject();
 
+        int concat(const CLdescriptor context,
+                   const CLdescriptor commandQueue,
+                   const CMemObject &obj1,
+                   const CMemObject &obj2);
+
         /*
          * @brief Loading data into an object.
          * @param context The context for which the memory object is created.
@@ -122,6 +131,14 @@ private:
          */
         int getData(const CLdescriptor commandQueue,
                     std::vector<float> &data) const;
+        /*
+         * @brief Get data from object.
+         * @param commandQueue  The command queue for uploading data.
+         * @param data Output buffer.
+         * @return 0 if sucsses, else OpenCl error code.
+         */
+        int getData(const CLdescriptor commandQueue,
+                    std::vector<bool> &data) const;
 
         /*
          * @brief Get data from object.
@@ -236,7 +253,7 @@ private:
          * @return 0 if sucsses, else OpenCl error code.
          */
         int bindParametr(const CMemObject &memObject,
-                         const uint32_t paramId);
+                         const uint32_t paramId) const;
 
         /*
          * @brief Complite function.
@@ -247,7 +264,7 @@ private:
          */
         int complite(const CLdescriptor commandQueue,
                      const uint32_t *workSizes,
-                     const uint32_t countWorkSizes);
+                     const uint32_t countWorkSizes) const;
     private:
         CLdescriptor kernel_;
     };
@@ -306,10 +323,11 @@ private:
                // ids inner edges
                bufferIdsFractureEdges_;
 
-    CKernel kernelFindEdges,
-            kernelFindInnerEdges,
-            kernelFindBorderEdges,
-            kernelFindFractureEdges;
+    CKernel kernelFindEdges_,
+            kernelFindInnerEdges_,
+            kernelFindBorderEdges_,
+            kernelFindFractureEdges_,
+            kernelComputeRoadMatrix_;
 
     uint32_t countInnerEdges_ = 0,
              countBorderEdges_ = 0,

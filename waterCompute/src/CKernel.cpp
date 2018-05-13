@@ -15,7 +15,7 @@ CWaterOpenCL::CKernel::~CKernel() {
 }
 
 int CWaterOpenCL::CKernel::bindParametr(const CMemObject &memObject,
-                                        const uint32_t paramId) {
+                                        const uint32_t paramId) const {
     return clSetKernelArg((cl_kernel)kernel_, 
                           paramId, 
                           sizeof(cl_mem),
@@ -24,7 +24,7 @@ int CWaterOpenCL::CKernel::bindParametr(const CMemObject &memObject,
 
 int CWaterOpenCL::CKernel::complite(const CLdescriptor commandQueue,
                                     const uint32_t *workSizes,
-                                    const uint32_t countWorkSizes) {
+                                    const uint32_t countWorkSizes) const{
     return clEnqueueNDRangeKernel((cl_command_queue)commandQueue,
                                   (cl_kernel)kernel_,
                                   countWorkSizes,

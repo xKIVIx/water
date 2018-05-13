@@ -24,6 +24,38 @@ CWaterOpenCL::CMemObject::~CMemObject() {
     clReleaseMemObject((cl_mem)mem_);
 }
 
+int CWaterOpenCL::CMemObject::concat(const CLdescriptor context, 
+                                     const CLdescriptor commandQueue, 
+                                     const CMemObject &obj1, 
+                                     const CMemObject &obj2) {
+    int err = resize(context, obj1.size_ + obj2.size_);
+    if(err != CL_SUCCESS) {
+        return err;
+    }
+    err = clEnqueueCopyBuffer((cl_command_queue)commandQueue,
+                              (cl_mem)obj1.mem_,
+                              (cl_mem)mem_,
+                              0,
+                              0,
+                              obj1.size_,
+                              0,
+                              nullptr,
+                              nullptr);
+    if(err != CL_SUCCESS) {
+        return err;
+    }
+    err = clEnqueueCopyBuffer((cl_command_queue)commandQueue,
+                              (cl_mem)obj2.mem_,
+                              (cl_mem)mem_,
+                              0,
+                              obj1.size_,
+                              obj2.size_,
+                              0,
+                              nullptr,
+                              nullptr);
+    return err;
+}
+
 CWaterOpenCL::CMemObject & CWaterOpenCL::CMemObject::operator=(const CMemObject & sec)
 {
     return *this;
@@ -153,14 +185,34 @@ int CWaterOpenCL::CMemObject::getData(const CLdescriptor commandQueue,
         return err;
     }
     if(sizeData != 0) {
-        data.reserve(sizeData / sizeof(float));
+        data.reserve(data.size() + sizeData / sizeof(float));
         data.insert(data.end(),
                     (float *)buffer,
-                    (float *)&buffer[sizeData]);
+                    (float *)(buffer + sizeData));
         delete[] buffer;
     }
     return err;
 }
+
+int CWaterOpenCL::CMemObject::getData(const CLdescriptor commandQueue,
+                                      std::vector<bool> &data) const {
+    char *buffer = nullptr;
+    uint32_t sizeData = 0;
+    int err = getData(commandQueue, &buffer, sizeData);
+    if(err != CL_SUCCESS) {
+        delete[] buffer;
+        return err;
+    }
+    if(sizeData != 0) {
+        data.reserve(data.size() + sizeData / sizeof(bool));
+        data.insert(data.end(),
+                    (bool *)buffer,
+                    (bool *)(buffer + sizeData));
+        delete[] buffer;
+    }
+    return err;
+}
+
 int CWaterOpenCL::CMemObject::getData(const CLdescriptor commandQueue,
                                       std::vector<uint32_t> &data) const {
     char *buffer = nullptr;
@@ -171,10 +223,10 @@ int CWaterOpenCL::CMemObject::getData(const CLdescriptor commandQueue,
         return err;
     }
     if(sizeData != 0) {
-        data.reserve(sizeData / sizeof(uint32_t));
+        data.reserve(data.size() + sizeData / sizeof(uint32_t));
         data.insert(data.end(),
                     (uint32_t *)buffer,
-                    (uint32_t *)&buffer[sizeData]);
+                    (uint32_t *)(buffer + sizeData));
         delete[] buffer;
     }
     return err;

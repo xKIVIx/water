@@ -109,3 +109,21 @@ __kernel void findFractureEdges(__global __read_only float        *vertex,
     unsigned int writePos = atomic_inc(countEdgesFracture);
     edgesFracture[writePos] = posEdge / 2;
 }
+
+__kernel void computeRoadMatrix(__global __read_only unsigned int *edges,
+                                __global             bool         *roadMatrix,
+                                __global             unsigned int *countRoad) {
+    unsigned posChekedEdge = get_global_id(0) * 2,
+             posSecondEdge = get_global_id(1) * 2,
+             countIter = get_global_size(0);
+    if(posChekedEdge != posSecondEdge) {
+            if((edges[posChekedEdge] == edges[posSecondEdge])||
+           (edges[posChekedEdge] == edges[posSecondEdge + 1])||
+           (edges[posChekedEdge + 1] == edges[posSecondEdge])||
+           (edges[posChekedEdge + 1] == edges[posSecondEdge + 1])) {
+            roadMatrix[countIter*posChekedEdge + posSecondEdge] = true;
+            atomic_inc(&countRoad[posChekedEdge]);
+        }
+    }
+    roadMatrix[countIter*posChekedEdge + posSecondEdge] = false;
+}                             
