@@ -50,6 +50,7 @@ function handleComeResult(result) {
 function handleComeTestResult(result) {
     var fileReader = new FileReader();
     fileReader.onload = function() {
+        waterMesh = new Object();
         var arrayBuffer = this.result;
         waterMesh.vertex = mesh.vertex;
         waterMesh.face = new Uint32Array(arrayBuffer);
