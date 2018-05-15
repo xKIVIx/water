@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.9)
 
 set(PACKAGE_CL_FILES
-	src/cl/edgeCompute.cl)
+	src/cl/edgeCompute.cl
+	src/cl/prepareData.cl)
 
 set(LIBRES
 	${OpenCL_LIBRARIES}

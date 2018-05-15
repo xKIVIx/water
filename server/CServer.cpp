@@ -59,11 +59,11 @@ void CServer::work() {
 			if( isEnd() ) {
 				return;
 			}
-			std::cout << ".\n";
+			std::cout << ".";
 			std::this_thread::sleep_for( std::chrono::seconds(5) );
 		}
 	}
-	std::cout << "Server is create.\n";
+	std::cout << "\nServer is create.\n";
     CWaterOpenCL waterCompute;
     while( !isEnd() ) {
         STask task = reception_->getTask();
@@ -71,35 +71,22 @@ void CServer::work() {
             continue;
         }
         std::vector <float> vertex;
-        uint sizeVertexBlock = *( (size_t *)&(task.data_.c_str()[1]) );
+        uint sizeVertexBlock = *( (size_t *)(task.data_.c_str() + 1) );
         vertex.reserve(sizeVertexBlock/4);
         vertex.insert(vertex.end(),
                       (float *)&(task.data_.c_str()[9]),
                       (float *)&(task.data_.c_str()[9]) + sizeVertexBlock / 4);
         
         std::vector <uint> face;
-        uint sizeFaceBlock = *( (size_t *)&(task.data_.c_str()[5]) );
+        uint sizeFaceBlock = *( (size_t *)(task.data_.c_str() + 5) );
         face.reserve(sizeVertexBlock/4);
         face.insert(face.end(),
                     (uint *)&(task.data_.c_str()[9 + sizeVertexBlock]),
                     (uint *)&(task.data_.c_str()[9 + sizeVertexBlock]) + sizeFaceBlock / 4);
         
         waterCompute.loadData(vertex, face);
-
+        
         task.data_.clear();
-        task.data_.reserve(sizeVertexBlock + sizeFaceBlock + 8);
-        uint sizes [] = {sizeVertexBlock,
-                         sizeFaceBlock
-        };
-        task.data_.insert(task.data_.end(),
-                          (char *)sizes,
-                          ((char *)sizes) + 8);
-        task.data_.insert(task.data_.end(),
-                          (char *)vertex.data(),
-                          ((char *)vertex.data()) + sizeVertexBlock);
-        task.data_.insert(task.data_.end(),
-                          (char *)face.data(),
-                          ((char *)face.data()) + sizeFaceBlock);
 	    reception_->compliteTask(task);
     }	
 }

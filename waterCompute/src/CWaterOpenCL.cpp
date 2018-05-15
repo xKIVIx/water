@@ -214,6 +214,13 @@ int CWaterOpenCL::initKernels() {
         return err;
     }
 
+    err = kernelDeleteDoubleVert_.setFunction(program_,
+                                              "deleteDoubleVert");
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail init deleteDoubleVert", err);
+        return err;
+    }
+
     return CL_SUCCESS;
 }
 
@@ -236,8 +243,6 @@ int CWaterOpenCL::loadData(const std::vector<float>& vertex,
         errorMessage("Fail load vertex", err);
         return err;
     }
-    err = bufferFaces_.setFlag(context_,
-                               CL_MEM_READ_ONLY);
     err = bufferFaces_.loadData(context_,
                                 commandQueue_,
                                 (char*)face.data(),
@@ -245,6 +250,27 @@ int CWaterOpenCL::loadData(const std::vector<float>& vertex,
     
     if(err != CL_SUCCESS) {
         errorMessage("Fail load faces", err);
+        return err;
+    }
+
+    err = kernelDeleteDoubleVert_.bindParametr(bufferVertex_, 0);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind buffer vertex to kernelDeleteDoubleVert_", err);
+        return err;
+    }
+
+    err = kernelDeleteDoubleVert_.bindParametr(bufferFaces_, 1);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind buffer faces to kernelDeleteDoubleVert", err);
+        return err;
+    }
+
+    uint32_t workSize = face.size();
+    err = kernelDeleteDoubleVert_.complite(commandQueue_,
+                                           &workSize,
+                                           1);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail complite kernelDeleteDoubleVert", err);
         return err;
     }
     return computeData();
@@ -278,6 +304,26 @@ int CWaterOpenCL::getFractureEdges(std::vector <uint32_t> &edges) const {
     return err;
 }
 
+int CWaterOpenCL::getFractureFaces(std::vector<uint32_t>& faces) const {
+    std::vector <uint32_t> fractureEdges,
+                           innerFaces;
+    int err = bufferIdsFractureEdges_.getData(commandQueue_, fractureEdges);
+    if(err != CL_SUCCESS) {
+        return err;
+    }
+    err = bufferInnerEdgeFaces_.getData(commandQueue_, innerFaces);
+    if(err != CL_SUCCESS) {
+        return err;
+    }
+
+    faces.reserve(faces.capacity() + fractureEdges.size() * 2);
+    for(auto iter = fractureEdges.begin(); iter != fractureEdges.end(); ++iter) {
+        faces.push_back(innerFaces[*iter * 2]);
+        faces.push_back(innerFaces[*iter * 2 + 1]);
+    }
+    return CL_SUCCESS;
+}
+
 int CWaterOpenCL::getBorderEdges(std::vector<uint32_t>& edges) const {
     return bufferBorderEdges_.getData(commandQueue_, edges);
 }
@@ -292,12 +338,12 @@ int CWaterOpenCL::computeRoadMatrix(std::vector<bool>& roadMatrix,
     int err = CL_SUCCESS;
     err = getBorderEdges(chekedEdges);
     if(err != CL_SUCCESS) {
-        std::cout << "Fail get border edges\n";
+        errorMessage("Fail get border edges", err);
         return err;
     }
     err = getFractureEdges(chekedEdges);
     if(err != CL_SUCCESS) {
-        std::cout << "Fail get fracture edges\n";
+        errorMessage("Fail get fracture edges", err);
         return err;
     }
     CMemObject bufferChekedEdges(context_,
@@ -308,49 +354,49 @@ int CWaterOpenCL::computeRoadMatrix(std::vector<bool>& roadMatrix,
                                      (char *)chekedEdges.data(),
                                      bufferChekedEdges.getSize());
     if(err != CL_SUCCESS) {
-        std::cout << "Fail load cheked edges\n";
+        errorMessage("Fail load cheked edges", err);
         return err;
     }
     err = kernelComputeRoadMatrix_.bindParametr(bufferChekedEdges, 0);
     if(err != CL_SUCCESS) {
-        std::cout << "Fail bind cheked edges\n";
+        errorMessage("Fail bind bufferChekedEdges", err);
         return err;
     }
 
     CMemObject bufferRoadMatrix(context_,
-                                chekedEdges.size()/2,
+                                (((chekedEdges.size() / 2 - 1) * chekedEdges.size() / 2) / 2),
                                 CL_MEM_READ_WRITE);
-    err = kernelComputeRoadMatrix_.bindParametr(bufferChekedEdges, 0);
+    err = kernelComputeRoadMatrix_.bindParametr(bufferRoadMatrix, 1);
     if(err != CL_SUCCESS) {
-        std::cout << "Fail bind buffer road matrix\n";
+        errorMessage("Fail bind bufferChekedEdges", err);
         return err;
     }
 
     CMemObject bufferCountsRoads(context_,
                                  bufferChekedEdges.getSize() / 2,
                                  CL_MEM_READ_WRITE);
-    err = kernelComputeRoadMatrix_.bindParametr(bufferCountsRoads, 1);
+    err = kernelComputeRoadMatrix_.bindParametr(bufferCountsRoads, 2);
     if(err != CL_SUCCESS) {
-        std::cout << "Fail bind buffer road matrix\n";
+        errorMessage("Fail bind bufferCountsRoads", err);
         return err;
     }
-    uint32_t workSizes[2] = {chekedEdges.size() / 2,
-                             chekedEdges.size() / 2};
+    uint32_t workSizes[2] = {chekedEdges.size() / 2 - 1,
+                             chekedEdges.size() / 2 - 1};
     err = kernelComputeRoadMatrix_.complite(commandQueue_,
                                             workSizes,
                                             2);
     if(err != CL_SUCCESS) {
-        std::cout << "Fail complite kernelComputeRoadMatrix\n";
+        errorMessage("Fail complite kernelComputeRoadMatrix", err);
         return err;
     }
     err = bufferRoadMatrix.getData(commandQueue_, roadMatrix);
     if(err != CL_SUCCESS) {
-        std::cout << "Fail get road matrix\n";
+        errorMessage("Fail get road matrix", err);
         return err;
     }
     err = bufferCountsRoads.getData(commandQueue_, countsRoads);
     if(err != CL_SUCCESS) {
-        std::cout << "Fail get counts road\n";
+        errorMessage("Fail get counts road", err);
         return err;
     }
     return CL_SUCCESS;
@@ -381,10 +427,10 @@ int CWaterOpenCL::computeData() {
         errorMessage("Fail complite findEdges kernel", err);
         return err;
     }
-    
     CMemObject bufferMarkNoneBorder(context_,
                                     bufferEdges.getSize() / (2 * sizeof(uint32_t)),
                                     CL_MEM_READ_WRITE);
+   
     err = computeInnerEdges(bufferEdges,
                             bufferMarkNoneBorder);
     if(err != CL_SUCCESS) {
@@ -404,7 +450,9 @@ int CWaterOpenCL::computeData() {
         errorMessage("Fail compute fracture edges", err);
         return err;
     }
-
+    std::vector<bool> one;
+    std::vector<uint32_t> two;
+    err = computeRoadMatrix(one, two);
     return err;
 }
 

@@ -57,6 +57,13 @@ public:
     int getFractureEdges(std::vector <uint32_t> &edges) const;
 
     /*
+     * @brief Get faces make fracture.
+     * @param edges Result buffer.
+     * @return 0 if sucsses, else OpenCl error code.
+     */
+    int getFractureFaces(std::vector <uint32_t> &faces) const;
+
+    /*
      * @brief Get inner edges.
      * @param edges Result buffer.
      * @return 0 if sucsses, else OpenCl error code.
@@ -323,7 +330,8 @@ private:
                // ids inner edges
                bufferIdsFractureEdges_;
 
-    CKernel kernelFindEdges_,
+    CKernel kernelDeleteDoubleVert_,
+            kernelFindEdges_,
             kernelFindInnerEdges_,
             kernelFindBorderEdges_,
             kernelFindFractureEdges_,
