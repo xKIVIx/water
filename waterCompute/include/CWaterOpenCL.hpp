@@ -78,8 +78,7 @@ public:
     int getInnerEdges(std::vector <uint32_t> &edges) const;
 
 protected:
-    int computeRoadMatrix(std::vector <bool> &roadMatrix,
-                          std::vector <uint32_t> &countsRoads) const;
+
 private:
     // To store OpenCL pointers.
     typedef void* CLdescriptor;
