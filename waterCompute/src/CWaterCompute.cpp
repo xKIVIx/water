@@ -140,13 +140,13 @@ int CWaterCompute::findHoles() {
             if(isFind) break;
             statesEdges[cycle.back()] |= state;
             cycle.pop_back();
-            if(cycle.size() != 0) {
-                idFrontVert = edges[(idFrontVert == edges[cycle.back() * 2]) ?
-                                     cycle.back() * 2 + 1 :
-                                     cycle.back() * 2];
-            } else {
+            if(cycle.empty()) {
                 clearStatesEdges(statesEdges);
                 break;
+            } else {
+                idFrontVert = edges[(idFrontVert == edges[cycle.back() * 2]) ?
+                    cycle.back() * 2 + 1 :
+                    cycle.back() * 2];               
             }
         }
     }

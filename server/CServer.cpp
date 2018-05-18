@@ -67,7 +67,8 @@ void CServer::work() {
     CWaterCompute waterCompute;
     while( !isEnd() ) {
         STask task = reception_->getTask();
-        if(task.token_.socket_ == -1) {
+        if((task.token_.socket_ == -1) || 
+           (task.data_.empty())) {
             continue;
         }
         std::vector <float> vertex;
