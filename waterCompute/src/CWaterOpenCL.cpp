@@ -16,7 +16,7 @@
 
 #define errorMessage(message, failCode) std::cout << message << ": " << failCode << std::endl
 
-void chek( const cl_int  stat ) {
+inline void chek( const cl_int  stat ) {
     if ( stat != CL_SUCCESS ) {
         errorMessage("Fail", stat);
         throw stat;
@@ -218,6 +218,7 @@ int CWaterOpenCL::initKernels() {
 }
 
 CWaterOpenCL::~CWaterOpenCL() {
+    clearOpenCl();
     clReleaseProgram((cl_program)program_);
     clReleaseCommandQueue((cl_command_queue)commandQueue_);
     clReleaseContext((cl_context)context_);
@@ -458,6 +459,17 @@ int CWaterOpenCL::computeInnerEdges(const CMemObject &bufferEdges,
     }
 
     return err;
+}
+
+void CWaterOpenCL::clearOpenCl() {
+    bufferBorderEdgeFaces_.resize(context_, 0);
+    bufferBorderEdges_.resize(context_, 0);
+    bufferFaces_.resize(context_, 0);
+    bufferIdsFractureEdges_.resize(context_, 0);
+    bufferInnerEdgeFaces_.resize(context_, 0);
+    bufferInnerEdges_.resize(context_, 0);
+    bufferVertex_.resize(context_, 0);
+    clFinish((cl_command_queue)commandQueue_);
 }
 
 int CWaterOpenCL::computeBorderEdges(const CMemObject &bufferEdges,

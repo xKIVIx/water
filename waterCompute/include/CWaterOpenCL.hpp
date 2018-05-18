@@ -78,7 +78,10 @@ public:
     int getInnerEdges(std::vector <uint32_t> &edges) const;
 
 protected:
-
+    /**
+     * Cleaning of internal data.
+     */
+    void clearOpenCl();
 private:
     // To store OpenCL pointers.
     typedef void* CLdescriptor;
