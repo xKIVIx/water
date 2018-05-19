@@ -30,7 +30,7 @@ private:
         std::vector<uint32_t> faces_;
     };
     CHole hole_;
-    int findHoles();
+    int findBorderHoles(std::vector <std::vector<uint32_t>> &borders);
 };
 
 

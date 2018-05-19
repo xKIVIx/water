@@ -22,7 +22,15 @@ const char MASK_BEGIN_EDGE = TIME_USED | USED,
 
 int CWaterCompute::computeWaterLvl(std::vector <float> &vertex,
                                    std::vector <uint32_t> &faces) {
-    findHoles();
+    std::vector <std::vector<uint32_t>> borders,
+                                        innerFaces;
+    findBorderHoles(borders);
+    innerFaces.resize(borders.size());
+    for(auto iter = borders.begin(); iter != borders.end(); ++iter) {
+        innerFaces.emplace_back();
+        computeInnerFaces(*iter, innerFaces.back());
+    }
+    
     // todo
     return 0;
 }
@@ -76,8 +84,7 @@ inline void roadMatOut(const std::vector<uint32_t> &edges) {
     }
 }
 
-int CWaterCompute::findHoles() {
-    std::vector <std::vector<uint32_t>> cycles;
+int CWaterCompute::findBorderHoles(std::vector <std::vector<uint32_t>> &cycles) {
     std::vector <uint32_t> cycle,
                            edges;
     std::vector <char> statesEdges;

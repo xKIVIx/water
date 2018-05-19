@@ -82,6 +82,9 @@ protected:
      * Cleaning of internal data.
      */
     void clearOpenCl();
+
+    int computeInnerFaces(const std::vector<uint32_t> &border,
+                          std::vector<uint32_t> &faces);
 private:
     // To store OpenCL pointers.
     typedef void* CLdescriptor;
@@ -265,6 +268,15 @@ private:
                          const uint32_t paramId) const;
 
         /*
+         * @brief Bind parametr to function.
+         * @param param Uint parametr.
+         * @param paramId Position of parametr.
+         * @return 0 if sucsses, else OpenCl error code.
+         */
+        int bindParametr(const uint32_t param,
+                         const uint32_t paramId) const;
+
+        /*
          * @brief Complite function.
          * @param commandQueue The command queue for uploading data.
          * @param workSizes Count iteration array. workSizes[0] * workSizes[1] *...
@@ -315,6 +327,11 @@ private:
      */
     int computeBorderEdges(const CMemObject &bufferEdges,
                            const CMemObject &bufferMarkNoneBorder);
+
+    int computeInnerVertex(const CMemObject &bufferBorder,
+                           const CMemObject &buferInnerVertex,
+                           uint32_t &countInnerVertex);
+
     /*
      * @brief Calculation of fracture edges.
      * @detail The result is filling the data with the following changes:
@@ -337,7 +354,7 @@ private:
             kernelFindInnerEdges_,
             kernelFindBorderEdges_,
             kernelFindFractureEdges_,
-            kernelComputeRoadMatrix_;
+            kernelFindInnerVertex;
 
     uint32_t countInnerEdges_ = 0,
              countBorderEdges_ = 0,

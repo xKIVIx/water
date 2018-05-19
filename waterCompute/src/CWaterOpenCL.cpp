@@ -182,38 +182,44 @@ int CWaterOpenCL::initKernels() {
     err = kernelFindEdges_.setFunction(program_,
                                       "findEdges");
     if(err != CL_SUCCESS) {
-        errorMessage("Fail init findEdges", err);
+        errorMessage("Fail init kernelFindEdges", err);
         return err;
     }
 
     err = kernelFindInnerEdges_.setFunction(program_,
                                            "findInnerEdges");
     if(err != CL_SUCCESS) {
-        errorMessage("Fail init findInnerEdges", err);
+        errorMessage("Fail init kernelFindInnerEdges", err);
         return err;
     }
 
     err = kernelFindBorderEdges_.setFunction(program_,
                                             "findBorderEdges");
     if(err != CL_SUCCESS) {
-        errorMessage("Fail init findBorderEdges", err);
+        errorMessage("Fail init kernelFindBorderEdges", err);
         return err;
     }
 
     err = kernelFindFractureEdges_.setFunction(program_,
                                             "findFractureEdges");
     if(err != CL_SUCCESS) {
-        errorMessage("Fail init findFractureEdges", err);
+        errorMessage("Fail init kernelFindFractureEdges", err);
         return err;
     }
 
     err = kernelDeleteDoubleVert_.setFunction(program_,
                                               "deleteDoubleVert");
     if(err != CL_SUCCESS) {
-        errorMessage("Fail init deleteDoubleVert", err);
+        errorMessage("Fail init kernelDeleteDoubleVert", err);
         return err;
     }
 
+    err = kernelFindInnerVertex.setFunction(program_,
+                                            "findInnerVertex");
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail init kernelFindInnerVertex", err);
+        return err;
+    }
     return CL_SUCCESS;
 }
 
@@ -459,6 +465,101 @@ int CWaterOpenCL::computeInnerEdges(const CMemObject &bufferEdges,
     }
 
     return err;
+}
+
+int CWaterOpenCL::computeInnerFaces(const std::vector<uint32_t>& border, 
+                                    std::vector<uint32_t>& faces) {
+    CMemObject bufferBorder(context_,
+                            border.size() * sizeof(uint32_t),
+                            CL_MEM_READ_ONLY);
+    int err = bufferBorder.loadData(context_,
+                                    commandQueue_,
+                                    (char *)border.data(),
+                                    border.size() * sizeof(uint32_t));
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail load data into bufferBorder", err);
+        return err;
+    }
+    CMemObject buferInnerVertex(context_,
+                                bufferVertex_.getSize() / 3,
+                                CL_MEM_READ_ONLY);
+    uint32_t countVertex = 0;
+    err = computeInnerVertex(bufferBorder, buferInnerVertex, countVertex);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail computeInnerVertex", err);
+        return err;
+    }
+
+    return CL_SUCCESS;
+}
+
+int CWaterOpenCL::computeInnerVertex(const CMemObject &bufferBorder,
+                                     const CMemObject &buferInnerVertex,
+                                     uint32_t &countInnerVertex) {
+    int err = kernelFindInnerVertex.bindParametr(bufferInnerEdges_, 0);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferInnerEdges", err);
+        return err;
+    }
+
+    err = kernelFindInnerVertex.bindParametr(countInnerEdges_, 1);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind countInnerEdges", err);
+        return err;
+    }
+
+    err = kernelFindInnerVertex.bindParametr(bufferBorderEdges_, 2);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferBorderEdges", err);
+        return err;
+    }
+
+    err = kernelFindInnerVertex.bindParametr(bufferBorder, 3);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferBorder", err);
+        return err;
+    }
+
+    err = kernelFindInnerVertex.bindParametr(bufferBorder.getSize() / sizeof(uint32_t), 4);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind border size", err);
+        return err;
+    }
+
+    err = kernelFindInnerVertex.bindParametr(bufferVertex_, 5);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferVertex_", err);
+        return err;
+    }
+
+    err = kernelFindInnerVertex.bindParametr(buferInnerVertex, 6);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind buferInnerVertex", err);
+        return err;
+    }
+    CMemObject bufferCountInnerVertex(context_,
+                                      sizeof(uint32_t),
+                                      CL_MEM_READ_WRITE);
+    err = kernelFindInnerVertex.bindParametr(bufferCountInnerVertex, 7);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferCountInnerVertex", err);
+        return err;
+    }
+
+    uint32_t workSize = bufferVertex_.getSize() / sizeof(float) / 3;
+
+    err = kernelFindInnerVertex.complite(commandQueue_, &workSize, 1);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail complite kernelComputeInnerFaces", err);
+        return err;
+    }
+
+    err = bufferCountInnerVertex.getData(commandQueue_, countInnerVertex);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail get data bufferCountInnerVertex", err);
+        return err;
+    }
+    return CL_SUCCESS;
 }
 
 void CWaterOpenCL::clearOpenCl() {
