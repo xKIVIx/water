@@ -45,14 +45,12 @@ __kernel void findInnerEdges(__global __read_only unsigned int  *edgesRaw,
 __kernel void findBorderEdges(__global __read_only unsigned int  *edgesRaw,
                               __global __read_only bool          *edgesNoneBorderMark,
                               __global             unsigned int  *edgesBorder,
-                              __global             unsigned int  *facesBorder,
                               __global             unsigned int  *countEdgesBorder) {
     unsigned int idEdge = get_global_id(0);
     if(edgesNoneBorderMark[idEdge] == false) {
         unsigned int writePos = atomic_inc(countEdgesBorder);
         edgesBorder[writePos * 2] = edgesRaw[idEdge * 2];
         edgesBorder[writePos * 2 + 1] = edgesRaw[idEdge * 2 + 1];
-        facesBorder[writePos] = idEdge / 3;
     }
 }
 
@@ -116,6 +114,7 @@ __kernel void findFractureEdges(__global __read_only float        *vertex,
         return;
     }
     unsigned int writePos = atomic_inc(countEdgesFracture);
-    edgesFracture[writePos] = posEdge / 2;
+    edgesFracture[writePos * 2] = edgesInner[posEdge];
+    edgesFracture[writePos * 2 + 1] = edgesInner[posEdge + 1];
 }
                 

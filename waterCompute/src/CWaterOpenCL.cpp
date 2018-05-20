@@ -16,6 +16,26 @@
 
 #define errorMessage(message, failCode) std::cout << message << ": " << failCode << std::endl
 
+inline void roadMatOut(const std::vector<uint32_t> &edges) {
+    for(uint32_t i = 0; i < edges.size(); i+=2) {
+        for(uint32_t j = 0; j < edges.size(); j += 2) {
+            if(i == j) {
+                std::cout << "0, ";
+                continue;
+            }
+            if((edges[i] == edges[j]) ||
+                (edges[i] == edges[j + 1]) ||
+               (edges[i + 1] == edges[j]) ||
+               (edges[i + 1] == edges[j + 1])) {
+                std::cout << "1, ";
+            } else {
+                std::cout << "0, ";
+            }
+        }
+        std::cout << std::endl;
+    }
+}
+
 inline void chek( const cl_int  stat ) {
     if ( stat != CL_SUCCESS ) {
         errorMessage("Fail", stat);
@@ -277,59 +297,40 @@ int CWaterOpenCL::loadData(const std::vector<float>& vertex,
 }
 
 int CWaterOpenCL::getInnerEdgesFaces(std::vector<uint32_t> &face) const {
-    return bufferInnerEdgeFaces_.getData(commandQueue_, face);
+    face.insert(face.end(),
+                facesIn_.begin(),
+                facesIn_.end());
+    return CL_SUCCESS;
 }
 
 int CWaterOpenCL::getBorderFaces(std::vector<uint32_t> &face) const {
-    return  bufferBorderEdgeFaces_.getData(commandQueue_, face);
+    std::vector <uint32_t> counts;
+    counts.resize(bufferFaces_.getSize() / sizeof(uint32_t) / 3);
+    for(auto iter = facesIn_.begin(); iter != facesIn_.end(); ++iter) {
+        counts[*iter] ++;
+    }
+    for(uint32_t i = 0; i < counts.size(); i++) {
+        if(counts[i] < 3) {
+            face.push_back(i);
+        }
+    }
+    return  CL_SUCCESS;
 }
 
 int CWaterOpenCL::getFractureEdges(std::vector <uint32_t> &edges) const {
-    std::vector <uint32_t> innerEdges,
-                           idsFractureEdges;
-    int err = CL_SUCCESS;
-    err = bufferInnerEdges_.getData(commandQueue_, innerEdges);
-    if(err != CL_SUCCESS) {
-        return err;
-    }
-    err = bufferIdsFractureEdges_.getData(commandQueue_, idsFractureEdges);
-    edges.reserve(idsFractureEdges.size() * 2);
-    if(err != CL_SUCCESS) {
-        return err;
-    }
-    for(auto iter = idsFractureEdges.begin(); iter != idsFractureEdges.end(); ++iter) {
-        edges.push_back(innerEdges[*iter * 2]);
-        edges.push_back(innerEdges[*iter * 2 + 1]);
-    }
-    return err;
-}
-
-int CWaterOpenCL::getFractureFaces(std::vector<uint32_t>& faces) const {
-    std::vector <uint32_t> fractureEdges,
-                           innerFaces;
-    int err = bufferIdsFractureEdges_.getData(commandQueue_, fractureEdges);
-    if(err != CL_SUCCESS) {
-        return err;
-    }
-    err = bufferInnerEdgeFaces_.getData(commandQueue_, innerFaces);
-    if(err != CL_SUCCESS) {
-        return err;
-    }
-
-    faces.reserve(faces.capacity() + fractureEdges.size() * 2);
-    for(auto iter = fractureEdges.begin(); iter != fractureEdges.end(); ++iter) {
-        faces.push_back(innerFaces[*iter * 2]);
-        faces.push_back(innerFaces[*iter * 2 + 1]);
-    }
+    edges.reserve(countFractureEdges_ * 2);
+    edges.insert(edges.end(),
+                 edgesHoleBorders_.data(),
+                 &edgesHoleBorders_.data()[countFractureEdges_  * 2]);
     return CL_SUCCESS;
 }
 
 int CWaterOpenCL::getBorderEdges(std::vector<uint32_t>& edges) const {
-    return bufferBorderEdges_.getData(commandQueue_, edges);
-}
-
-int CWaterOpenCL::getInnerEdges(std::vector<uint32_t>& edges) const {
-    return bufferInnerEdges_.getData(commandQueue_, edges);
+    edges.reserve(countBorderEdges_ * 2);
+    edges.insert(edges.end(),
+                 &edgesHoleBorders_.data()[countFractureEdges_ * 2],
+                 &edgesHoleBorders_.data()[(countFractureEdges_ + countBorderEdges_) * 2]);
+    return CL_SUCCESS;
 }
 
 int CWaterOpenCL::computeData() {
@@ -360,31 +361,49 @@ int CWaterOpenCL::computeData() {
     CMemObject bufferMarkNoneBorder(context_,
                                     bufferEdges.getSize() / (2 * sizeof(uint32_t)),
                                     CL_MEM_READ_WRITE);
-   
+    CMemObject bufferInnerFaces(context_,
+                                bufferEdges.getSize(),
+                                CL_MEM_READ_WRITE);
+    CMemObject bufferInnerEdges(context_,
+                                bufferEdges.getSize(),
+                                CL_MEM_READ_WRITE);
     err = computeInnerEdges(bufferEdges,
-                            bufferMarkNoneBorder);
+                            bufferMarkNoneBorder,
+                            bufferInnerEdges,
+                            bufferInnerFaces);
     if(err != CL_SUCCESS) {
         errorMessage("Fail compute inner edges", err);
         return err;
     }
 
+    err = computeFractureEdges(bufferInnerFaces,
+                               bufferInnerEdges);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail compute fracture edges", err);
+        return err;
+    }
+    edgesHoleBorders_.resize(countFractureEdges_ * 2);
+    roadMatOut(edgesHoleBorders_);
+    err = bufferInnerFaces.getData(commandQueue_, facesIn_);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail get data from bufferInnerFaces", err);
+        return err;
+    }
+    facesIn_.resize(countInnerEdges_ * 2);
     err = computeBorderEdges(bufferEdges,
                              bufferMarkNoneBorder);
     if(err != CL_SUCCESS) {
         errorMessage("Fail compute border edges", err);
         return err;
     }
-
-    err = computeFractureEdges();
-    if(err != CL_SUCCESS) {
-        errorMessage("Fail compute fracture edges", err);
-        return err;
-    }
+    edgesHoleBorders_.resize((countFractureEdges_ + countBorderEdges_) * 2);
     return err;
 }
 
 int CWaterOpenCL::computeInnerEdges(const CMemObject &bufferEdges,
-                                    const CMemObject &bufferMarkNoneBorder) {
+                                    const CMemObject &bufferMarkNoneBorder,
+                                    const CMemObject &bufferInnerEdges,
+                                    const CMemObject &bufferInnerFaces) {
     std::cout << "Find inner edges\n";
     int err;
     err = kernelFindInnerEdges_.bindParametr(bufferEdges, 0);
@@ -393,13 +412,7 @@ int CWaterOpenCL::computeInnerEdges(const CMemObject &bufferEdges,
         return err;
     }
 
-    err = bufferInnerEdges_.resize(context_,
-                                   bufferEdges.getSize());
-    if(err != CL_SUCCESS) {
-        errorMessage("Fail set memmory for inner edges", err);
-        return err;
-    }
-    err = kernelFindInnerEdges_.bindParametr(bufferInnerEdges_, 1);
+    err = kernelFindInnerEdges_.bindParametr(bufferInnerEdges, 1);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind inner edges buffer", err);
         return err;
@@ -415,19 +428,22 @@ int CWaterOpenCL::computeInnerEdges(const CMemObject &bufferEdges,
     CMemObject bufferCountInnerEdges(context_,
                                      sizeof(uint32_t),
                                      CL_MEM_READ_WRITE);
+    countInnerEdges_ = 0;
+    err = bufferCountInnerEdges.loadData(context_,
+                                         commandQueue_,
+                                         (char *)&countInnerEdges_,
+                                         sizeof(uint32_t));
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail zeroing bufferCountInnerEdges", err);
+        return err;
+    }
     err = kernelFindInnerEdges_.bindParametr(bufferCountInnerEdges, 3);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind count inner edges buffer", err);
         return err;
     }
 
-    bufferInnerEdgeFaces_.resize(context_,
-                                 bufferEdges.getSize());
-    if(err != CL_SUCCESS) {
-        errorMessage("Fail set memmory for inner edges", err);
-        return err;
-    }
-    err = kernelFindInnerEdges_.bindParametr(bufferInnerEdgeFaces_, 4);
+    err = kernelFindInnerEdges_.bindParametr(bufferInnerFaces, 4);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind inner edges buffer", err);
         return err;
@@ -448,99 +464,91 @@ int CWaterOpenCL::computeInnerEdges(const CMemObject &bufferEdges,
         return err;
     }
 
-    err = bufferInnerEdges_.resize(context_,
-                                   commandQueue_,
-                                   countInnerEdges_ * sizeof(uint32_t) * 2);
-    if(err != CL_SUCCESS) {
-        errorMessage("Fail resize inner edges buffer", err);
-        return err;
-    }
-
-    err = bufferInnerEdgeFaces_.resize(context_,
-                                       commandQueue_,
-                                       countInnerEdges_ * sizeof(uint32_t) * 2);
-    if(err != CL_SUCCESS) {
-        errorMessage("Fail resize inner edge faces buffer", err);
-        return err;
-    }
-
     return err;
 }
 
-int CWaterOpenCL::computeInnerFaces(const std::vector<uint32_t>& border, 
-                                    std::vector<uint32_t>& faces) {
-    CMemObject bufferBorder(context_,
-                            border.size() * sizeof(uint32_t),
-                            CL_MEM_READ_ONLY);
-    int err = bufferBorder.loadData(context_,
-                                    commandQueue_,
-                                    (char *)border.data(),
-                                    border.size() * sizeof(uint32_t));
-    if(err != CL_SUCCESS) {
-        errorMessage("Fail load data into bufferBorder", err);
-        return err;
+int CWaterOpenCL::computeInnerFaces(const std::vector<std::vector<uint32_t>> &borders, 
+                                    std::vector<std::vector<uint32_t>> &faces) {
+    uint32_t maxSize = 0;
+    for(auto iter = borders.begin(); iter != borders.end(); ++iter) {
+        maxSize = (iter->size() > maxSize) ? iter->size() : maxSize;
     }
+    CMemObject bufferBorder(context_,
+                            maxSize * sizeof(uint32_t),
+                            CL_MEM_READ_ONLY);
     CMemObject buferInnerVertex(context_,
                                 bufferVertex_.getSize() / 3,
-                                CL_MEM_READ_ONLY);
-    uint32_t countVertex = 0;
-    err = computeInnerVertex(bufferBorder, buferInnerVertex, countVertex);
+                                CL_MEM_READ_WRITE);
+    CMemObject bufferEdges(context_,
+                           edgesHoleBorders_.size() * sizeof(uint32_t),
+                           CL_MEM_READ_ONLY);
+    int err = bufferEdges.loadData(context_,
+                                   commandQueue_,
+                                   (char *)edgesHoleBorders_.data(),
+                                   bufferEdges.getSize());
     if(err != CL_SUCCESS) {
-        errorMessage("Fail computeInnerVertex", err);
+        errorMessage("Fail load data into bufferEdges", err);
         return err;
     }
-
+    for(auto iter = borders.begin(); iter != borders.end(); ++iter) {
+        err = bufferBorder.loadData(context_,
+                                        commandQueue_,
+                                        (char *)iter->data(),
+                                        iter->size() * sizeof(uint32_t));
+        if(err != CL_SUCCESS) {
+            errorMessage("Fail load data into bufferBorder", err);
+            return err;
+        }
+        uint32_t countVertex = 0;
+        err = computeInnerVertex(bufferEdges, 
+                                 bufferBorder, 
+                                 buferInnerVertex,
+                                 countVertex);
+        if(err != CL_SUCCESS) {
+            errorMessage("Fail computeInnerVertex", err);
+            return err;
+        }
+    }
     return CL_SUCCESS;
 }
 
-int CWaterOpenCL::computeInnerVertex(const CMemObject &bufferBorder,
+int CWaterOpenCL::computeInnerVertex(const CMemObject &edges,
+                                     const CMemObject &bufferBorder,
                                      const CMemObject &buferInnerVertex,
                                      uint32_t &countInnerVertex) {
-    int err = kernelFindInnerVertex.bindParametr(bufferInnerEdges_, 0);
+    int err = kernelFindInnerVertex.bindParametr(edges, 0);
     if(err != CL_SUCCESS) {
-        errorMessage("Fail bind bufferInnerEdges", err);
+        errorMessage("Fail bind edges", err);
         return err;
     }
 
-    err = kernelFindInnerVertex.bindParametr(countInnerEdges_, 1);
-    if(err != CL_SUCCESS) {
-        errorMessage("Fail bind countInnerEdges", err);
-        return err;
-    }
-
-    err = kernelFindInnerVertex.bindParametr(bufferBorderEdges_, 2);
-    if(err != CL_SUCCESS) {
-        errorMessage("Fail bind bufferBorderEdges", err);
-        return err;
-    }
-
-    err = kernelFindInnerVertex.bindParametr(bufferBorder, 3);
+    err = kernelFindInnerVertex.bindParametr(bufferBorder, 1);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind bufferBorder", err);
         return err;
     }
 
-    err = kernelFindInnerVertex.bindParametr(bufferBorder.getSize() / sizeof(uint32_t), 4);
+    err = kernelFindInnerVertex.bindParametr(bufferBorder.getSize() / sizeof(uint32_t), 2);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind border size", err);
         return err;
     }
 
-    err = kernelFindInnerVertex.bindParametr(bufferVertex_, 5);
+    err = kernelFindInnerVertex.bindParametr(buferInnerVertex, 3);
     if(err != CL_SUCCESS) {
-        errorMessage("Fail bind bufferVertex_", err);
+        errorMessage("Fail bind buferInnerVertex", err);
         return err;
     }
 
-    err = kernelFindInnerVertex.bindParametr(buferInnerVertex, 6);
+    err = kernelFindInnerVertex.bindParametr(bufferVertex_, 4);
     if(err != CL_SUCCESS) {
-        errorMessage("Fail bind buferInnerVertex", err);
+        errorMessage("Fail bind bufferVertex_", err);
         return err;
     }
     CMemObject bufferCountInnerVertex(context_,
                                       sizeof(uint32_t),
                                       CL_MEM_READ_WRITE);
-    err = kernelFindInnerVertex.bindParametr(bufferCountInnerVertex, 7);
+    err = kernelFindInnerVertex.bindParametr(bufferCountInnerVertex, 5);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind bufferCountInnerVertex", err);
         return err;
@@ -553,8 +561,8 @@ int CWaterOpenCL::computeInnerVertex(const CMemObject &bufferBorder,
         errorMessage("Fail complite kernelComputeInnerFaces", err);
         return err;
     }
-
-    err = bufferCountInnerVertex.getData(commandQueue_, countInnerVertex);
+    uint32_t l = 0;
+    err = bufferCountInnerVertex.getData(commandQueue_, l);
     if(err != CL_SUCCESS) {
         errorMessage("Fail get data bufferCountInnerVertex", err);
         return err;
@@ -563,12 +571,9 @@ int CWaterOpenCL::computeInnerVertex(const CMemObject &bufferBorder,
 }
 
 void CWaterOpenCL::clearOpenCl() {
-    bufferBorderEdgeFaces_.resize(context_, 0);
-    bufferBorderEdges_.resize(context_, 0);
+    facesIn_.clear();
+    edgesHoleBorders_.clear();
     bufferFaces_.resize(context_, 0);
-    bufferIdsFractureEdges_.resize(context_, 0);
-    bufferInnerEdgeFaces_.resize(context_, 0);
-    bufferInnerEdges_.resize(context_, 0);
     bufferVertex_.resize(context_, 0);
     clFinish((cl_command_queue)commandQueue_);
 }
@@ -588,36 +593,24 @@ int CWaterOpenCL::computeBorderEdges(const CMemObject &bufferEdges,
         return err;
     }
     
-    countBorderEdges_ = bufferEdges.getSize() / (2 * sizeof(uint32_t)) - countInnerEdges_ * 2;
-    
-    err = bufferBorderEdges_.resize(context_,
-                                    countBorderEdges_ * 2 * sizeof(uint32_t));
-    if(err != CL_SUCCESS) {
-        errorMessage("Fail init border edges buffer", err);
-        return err;
-    }
-    err = kernelFindBorderEdges_.bindParametr(bufferBorderEdges_, 2);
+    CMemObject bufferBorderEdges(context_,
+                                 bufferEdges.getSize(),
+                                 CL_MEM_READ_WRITE);
+    err = kernelFindBorderEdges_.bindParametr(bufferBorderEdges, 2);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind border edges buffer", err);
-        return err;
-    }
-
-    err = bufferBorderEdgeFaces_.resize(context_,
-                                        countBorderEdges_ * sizeof(uint32_t));
-    if(err != CL_SUCCESS) {
-        errorMessage("Fail init border face buffer", err);
-        return err;
-    }
-    err = kernelFindBorderEdges_.bindParametr(bufferBorderEdgeFaces_, 3);
-    if(err != CL_SUCCESS) {
-        errorMessage("Fail bind border face buffer", err);
         return err;
     }
 
     CMemObject bufferCountBorderEdges(context_,
                                       sizeof(uint32_t),
                                       CL_MEM_READ_WRITE);
-    err = kernelFindBorderEdges_.bindParametr(bufferCountBorderEdges, 4);
+    countBorderEdges_ = 0;
+    err = bufferCountBorderEdges.loadData(context_,
+                                          commandQueue_,
+                                          (char *)&countBorderEdges_,
+                                          sizeof(uint32_t));
+    err = kernelFindBorderEdges_.bindParametr(bufferCountBorderEdges, 3);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind count border edges buffer", err);
         return err;
@@ -630,10 +623,23 @@ int CWaterOpenCL::computeBorderEdges(const CMemObject &bufferEdges,
         return err;
     }
     
+    err = bufferCountBorderEdges.getData(commandQueue_, countBorderEdges_);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail complite get countBorderEdges", err);
+        return err;
+    }
+
+    err = bufferBorderEdges.getData(commandQueue_, edgesHoleBorders_);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail complite get BorderEdges", err);
+        return err;
+    }
+
     return err;
 }
 
-int CWaterOpenCL::computeFractureEdges() {
+int CWaterOpenCL::computeFractureEdges(const CMemObject &bufferInnerFaces,
+                                       const CMemObject &bufferInnerEdges) {
     std::cout << "Find fracture edges\n";
     int err = kernelFindFractureEdges_.bindParametr(bufferVertex_, 0);
     if(err != CL_SUCCESS) {
@@ -647,25 +653,21 @@ int CWaterOpenCL::computeFractureEdges() {
         return err;
     }
 
-    err = kernelFindFractureEdges_.bindParametr(bufferInnerEdges_, 2);
+    err = kernelFindFractureEdges_.bindParametr(bufferInnerEdges, 2);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind inner edges buffer", err);
         return err;
     }
 
-    err = kernelFindFractureEdges_.bindParametr(bufferInnerEdgeFaces_, 3);
+    err = kernelFindFractureEdges_.bindParametr(bufferInnerFaces, 3);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind inner edge faces buffer", err);
         return err;
     }
-
-    err = bufferIdsFractureEdges_.resize(context_,
-                                      countInnerEdges_ * sizeof(uint32_t));
-    if(err != CL_SUCCESS) {
-        errorMessage("Fail set size bufferFractureEdges", err);
-        return err;
-    }
-    err = kernelFindFractureEdges_.bindParametr(bufferIdsFractureEdges_, 4);
+    CMemObject bufferFractureEdges(context_,
+                                   bufferInnerEdges.getSize(),
+                                   CL_MEM_READ_WRITE);
+    err = kernelFindFractureEdges_.bindParametr(bufferFractureEdges, 4);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind bufferFractureEdges", err);
         return err;
@@ -674,6 +676,16 @@ int CWaterOpenCL::computeFractureEdges() {
     CMemObject bufferCountFractureEdges(context_,
                                         sizeof(uint32_t), 
                                         CL_MEM_READ_WRITE);
+    countFractureEdges_ = 0;
+    err = bufferCountFractureEdges.loadData(context_,
+                                            commandQueue_,
+                                            (char *)&countFractureEdges_,
+                                            sizeof(uint32_t));
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail zeroing bufferCountFractureEdges", err);
+        return err;
+    }
+
     err = kernelFindFractureEdges_.bindParametr(bufferCountFractureEdges, 5);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind bufferFractureEdges", err);
@@ -692,11 +704,9 @@ int CWaterOpenCL::computeFractureEdges() {
         return err;
     }
 
-    err = bufferIdsFractureEdges_.resize(context_,
-                                         commandQueue_,
-                                         countFractureEdges_ * sizeof(uint32_t));
+    err = bufferFractureEdges.getData(commandQueue_, edgesHoleBorders_);
     if(err != CL_SUCCESS) {
-        errorMessage("Fail resize bufferIdsFractureEdges", err);
+        errorMessage("Fail get data from bufferFractureEdges", err);
         return err;
     }
     return err;

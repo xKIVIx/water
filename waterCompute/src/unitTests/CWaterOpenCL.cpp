@@ -62,16 +62,6 @@ TEST(CWaterOpenCL, borderFaces) {
     ASSERT_TRUE(eqVector(testResult, result));
 }
 
-TEST(CWaterOpenCL, fractureEdges) {
-    std::vector<uint32_t> result = {2, 4, 1, 5},
-                          testResult;
-    int err;
-    ASSERT_NO_THROW(err = waterOpenCL->getFractureEdges(testResult));
-    ASSERT_EQ(err, 0);
-    ASSERT_EQ(result.size(), testResult.size());
-    ASSERT_TRUE(eqVector(result, testResult));
-}
-
 // must last test
 TEST(CWaterOpenCL, destruct) {
     ASSERT_NO_THROW(delete waterOpenCL) << "Fail delete waterOpenCL\n";

@@ -25,11 +25,7 @@ int CWaterCompute::computeWaterLvl(std::vector <float> &vertex,
     std::vector <std::vector<uint32_t>> borders,
                                         innerFaces;
     findBorderHoles(borders);
-    innerFaces.resize(borders.size());
-    for(auto iter = borders.begin(); iter != borders.end(); ++iter) {
-        innerFaces.emplace_back();
-        computeInnerFaces(*iter, innerFaces.back());
-    }
+    computeInnerFaces(borders, innerFaces);
     
     // todo
     return 0;
@@ -85,39 +81,30 @@ inline void roadMatOut(const std::vector<uint32_t> &edges) {
 }
 
 int CWaterCompute::findBorderHoles(std::vector <std::vector<uint32_t>> &cycles) {
-    std::vector <uint32_t> cycle,
-                           edges;
+    roadMatOut(edgesHoleBorders_);
+    std::vector <uint32_t> cycle;
     std::vector <char> statesEdges;
     uint32_t sizeFractureEdges;
-    int err = getFractureEdges(edges);
-    if(err != 0) {
-        return err;
-    }
-    sizeFractureEdges = edges.size();
-    err = getBorderEdges(edges);
-    if(err != 0) {
-        return err;
-    }
-    statesEdges.resize(edges.size() / 2);
-    cycle.reserve(edges.size() / 2);
-    for(uint32_t idEdge = 0; idEdge < edges.size() / 2; idEdge++) {
+    statesEdges.resize(edgesHoleBorders_.size() / 2);
+    cycle.reserve(edgesHoleBorders_.size() / 2);
+    for(uint32_t idEdge = 0; idEdge < edgesHoleBorders_.size() / 2; idEdge++) {
         if(statesEdges[idEdge] != 0) {
             continue;
         }
         cycle.push_back(idEdge);
-        uint32_t idBackVert = edges[idEdge * 2],
-                 idFrontVert = edges[idEdge * 2 + 1];
+        uint32_t idBackVert = edgesHoleBorders_[idEdge * 2],
+                 idFrontVert = edgesHoleBorders_[idEdge * 2 + 1];
         statesEdges[idEdge] |= MASK_BEGIN_EDGE;
         while(true) {
             StateEdge state = END;
             bool isFind = false;
-            for(uint32_t i = 0; i < edges.size(); i++) {
+            for(uint32_t i = 0; i < edgesHoleBorders_.size(); i++) {
                 if(i / 2 == idEdge) {
                     continue;
                 }
-                if((idFrontVert == edges[i]) && (cycle.back() != (i / 2))) {
+                if((idFrontVert == edgesHoleBorders_[i]) && (cycle.back() != (i / 2))) {
                     if((statesEdges[i / 2] & MASK_CHEK_NEXT_EDGE) == 0) {
-                        uint32_t chekedVert = edges[((i % 2) == 1) ? i - 1: i + 1];
+                        uint32_t chekedVert = edgesHoleBorders_[((i % 2) == 1) ? i - 1: i + 1];
 
                         if(chekedVert == idBackVert) {
                             cycle.push_back(i / 2);
@@ -129,7 +116,7 @@ int CWaterCompute::findBorderHoles(std::vector <std::vector<uint32_t>> &cycles) 
                             break;
                         }
 
-                        if(isNotRepertVert(edges, cycle, chekedVert)) {
+                        if(isNotRepertVert(edgesHoleBorders_, cycle, chekedVert)) {
                             idFrontVert = chekedVert;
                             statesEdges[i / 2] |= TIME_USED;
                             cycle.push_back(i / 2);
@@ -151,7 +138,7 @@ int CWaterCompute::findBorderHoles(std::vector <std::vector<uint32_t>> &cycles) 
                 clearStatesEdges(statesEdges);
                 break;
             } else {
-                idFrontVert = edges[(idFrontVert == edges[cycle.back() * 2]) ?
+                idFrontVert = edgesHoleBorders_[(idFrontVert == edgesHoleBorders_[cycle.back() * 2]) ?
                     cycle.back() * 2 + 1 :
                     cycle.back() * 2];               
             }

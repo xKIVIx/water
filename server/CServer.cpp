@@ -89,8 +89,8 @@ void CServer::work() {
         waterCompute.computeWaterLvl(vertex, face);
         task.data_.clear();
         std::vector <uint32_t> gg;
-        waterCompute.getFractureFaces(gg);
-        waterCompute.getBorderFaces(gg);
+        //waterCompute.getFractureFaces(gg);
+        waterCompute.getInnerEdgesFaces(gg);
         task.data_.reserve(gg.size() * 3);
         for(auto iter = gg.begin(); iter != gg.end(); ++iter) {
             task.data_.insert(task.data_.end(),

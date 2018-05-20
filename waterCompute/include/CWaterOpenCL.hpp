@@ -57,25 +57,11 @@ public:
     int getFractureEdges(std::vector <uint32_t> &edges) const;
 
     /*
-     * @brief Get faces make fracture.
-     * @param edges Result buffer.
-     * @return 0 if sucsses, else OpenCl error code.
-     */
-    int getFractureFaces(std::vector <uint32_t> &faces) const;
-
-    /*
      * @brief Get inner edges.
      * @param edges Result buffer.
      * @return 0 if sucsses, else OpenCl error code.
      */
     int getBorderEdges(std::vector <uint32_t> &edges) const;
-
-    /*
-     * @brief Get border edges.
-     * @param edges Result buffer.
-     * @return 0 if sucsses, else OpenCl error code.
-     */
-    int getInnerEdges(std::vector <uint32_t> &edges) const;
 
 protected:
     /**
@@ -83,8 +69,14 @@ protected:
      */
     void clearOpenCl();
 
-    int computeInnerFaces(const std::vector<uint32_t> &border,
-                          std::vector<uint32_t> &faces);
+    int computeInnerFaces(const std::vector<std::vector<uint32_t>> &borders, 
+                          std::vector<std::vector<uint32_t>> &faces);
+
+    std::vector <uint32_t> facesIn_,
+                           edgesHoleBorders_;
+    uint32_t countInnerEdges_ = 0,
+             countBorderEdges_ = 0,
+             countFractureEdges_ = 0;
 private:
     // To store OpenCL pointers.
     typedef void* CLdescriptor;
@@ -314,7 +306,9 @@ private:
      * @return 0 if sucsses, else OpenCl error code.
      */
     int computeInnerEdges(const CMemObject &bufferEdges,
-                          const CMemObject &bufferMarkNoneBorder);
+                          const CMemObject &bufferMarkNoneBorder,
+                          const CMemObject &bufferInnerEdges,
+                          const CMemObject &bufferInnerFaces);
 
     /*
      * @brief Calculation of edges on the edge.
@@ -328,7 +322,8 @@ private:
     int computeBorderEdges(const CMemObject &bufferEdges,
                            const CMemObject &bufferMarkNoneBorder);
 
-    int computeInnerVertex(const CMemObject &bufferBorder,
+    int computeInnerVertex(const CMemObject &edges,
+                           const CMemObject &bufferBorder,
                            const CMemObject &buferInnerVertex,
                            uint32_t &countInnerVertex);
 
@@ -338,16 +333,13 @@ private:
      *         bufferIdsFractureEdges_, countFractureEdges_.
      * @return 0 if sucsses, else OpenCl error code.
      */
-    int computeFractureEdges();
+    int computeFractureEdges(const CMemObject &bufferInnerFaces,
+                             const CMemObject &bufferInnerEdges);
+
+   
 
     CMemObject bufferVertex_,
-               bufferFaces_,
-               bufferInnerEdges_,
-               bufferInnerEdgeFaces_,
-               bufferBorderEdges_,
-               bufferBorderEdgeFaces_,
-               // ids inner edges
-               bufferIdsFractureEdges_;
+               bufferFaces_;
 
     CKernel kernelDeleteDoubleVert_,
             kernelFindEdges_,
@@ -355,10 +347,6 @@ private:
             kernelFindBorderEdges_,
             kernelFindFractureEdges_,
             kernelFindInnerVertex;
-
-    uint32_t countInnerEdges_ = 0,
-             countBorderEdges_ = 0,
-             countFractureEdges_ = 0;
 
     CLdescriptor program_ = nullptr,
                  commandQueue_ = nullptr,
