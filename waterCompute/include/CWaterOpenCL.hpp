@@ -13,7 +13,7 @@ public:
     /*
      * @constructor
      * @breaf default constructor.
-     * @detail In case of an error, it throws exceptions to int.
+     * @details In case of an error, it throws exceptions to int.
      *         These exceptions apply to OpenCL.
      */
     CWaterOpenCL();
@@ -25,7 +25,7 @@ public:
 
     /*
      * @brief Loading data into buffers.
-     * @detail Loads data into the buffers of the computing device. 
+     * @details Loads data into the buffers of the computing device. 
      *         It also calculates additional required data.
      * @param vertex Vertex data.
      * @param faces Faces data.
@@ -101,7 +101,7 @@ private:
 
         /*
          * @constructor
-         * @detail In case of an error, it throws exceptions to int.
+         * @details In case of an error, it throws exceptions to int.
          *         These exceptions apply to OpenCL.
          * @param context The context for which the memory object is created.
          * @param size The size of the memory object.
@@ -176,7 +176,7 @@ private:
 
         /*
          * @brief Set flag of memory object.
-         * @detail If you specify a flag that differs from the current object, 
+         * @details If you specify a flag that differs from the current object, 
          *         it will be recreated. All data will be lost.
          * @param context The context for which the memory object is created.
          * @param flag New flag.
@@ -187,7 +187,7 @@ private:
 
         /*
          * @brief Set new size of memory object.
-         * @detail If you specify a size that differs from the current object, 
+         * @details If you specify a size that differs from the current object, 
          *         it will be recreated.
          * @param context The context for which the memory object is created.
          * @param commandQueue The command queue for transfer data.
@@ -200,7 +200,7 @@ private:
 
         /*
         * @brief Set new size of memory object.
-        * @detail If you specify a size that differs from the current object, 
+        * @details If you specify a size that differs from the current object, 
         *         it will be recreated. All data will be lost.
         * @param context The context for which the memory object is created.
         * @param size New size.
@@ -217,7 +217,7 @@ private:
 
         /*
          * @brief Get data from object.
-         * @detail To prevent memory leaks, delete the received ptr via delete.
+         * @details To prevent memory leaks, delete the received ptr via delete.
          * @param commandQueue  The command queue for uploading data.
          * @param data Output buffer.
          * @param size Size of returned data in bytes.
@@ -248,7 +248,7 @@ private:
 
         /*
          * @brief Function attachment.
-         * @detail Must be pre-set parameters.
+         * @details Must be pre-set parameters.
          * @param program Compiled program.
          * @param name Char string. Function name.
          * @return 0 if sucsses, else OpenCl error code.
@@ -290,7 +290,7 @@ private:
 
     /*
      * @brief Calculation of additional data.
-     * @detail Should be called after loading vertices and polygons.
+     * @details Should be called after loading vertices and polygons.
      * @return 0 if sucsses, else OpenCl error code.
      */
     int computeData();
@@ -303,7 +303,7 @@ private:
 
     /*
      * @brief Calculation inside the lying polygons.
-     * @detail The result is filling the data with the following changes: countInnerEdges_.
+     * @details The result is filling the data with the following changes: countInnerEdges_.
      * @param bufferEdges Buffer with data on the edges.
      * @param bufferMarkNoneBorder A buffer with the notation that the 
      *                             edge is already inside. It is necessary 
@@ -319,7 +319,7 @@ private:
 
     /*
      * @brief Calculation of edges on the edge.
-     * @detail The result is filling the data with the following changes:
+     * @details The result is filling the data with the following changes:
      *         edgesHoleBorders_, countBorderEdges_.
      * @param bufferEdges Buffer with data on the edges.
      * @param bufferMarkNoneBorder A buffer with the notation that the 
@@ -347,7 +347,7 @@ private:
 
     /*
      * @brief Calculation of fracture edges.
-     * @detail The result is filling the data with the following changes:
+     * @details The result is filling the data with the following changes:
      *         edgesHoleBorders_, countFractureEdges_.
      * @param bufferInnerFaces Buffer with information about the senetrained polygons.
      * @param bufferInnerEdges Buffer with information about the senetrained edges.

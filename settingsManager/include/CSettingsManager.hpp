@@ -12,7 +12,7 @@
  *
  * @brief The class that manages the settings files.
  * 
- * @detail Static class. When the program is terminated, 
+ * @details Static class. When the program is terminated, 
  *         it is necessary to call method @see CSettingsManager::detach. 
  *         You also need to call the @see CSettingsManager::saveParametrs method 
  *         to write the settings to files.
@@ -24,10 +24,10 @@
      /**
       *
       * @brief Function of obtaining parameters.
-      * @detail Looks for among the loaded categories and looks 
-      *         for the required parameter. If the category is not found, 
-      *         it tries to load the <category> .conf file.
-      *         Thread safe function.
+      * @details Looks for among the loaded categories and looks 
+      *          for the required parameter. If the category is not found, 
+      *          it tries to load the "category".conf file.
+      *          Thread safe function.
       * 
       * @param [in] category The name of the category (File name) 
       *                      that contains the parameter.
@@ -54,7 +54,7 @@
      /**
       *
       * @brief Writes parameters to files.
-      * @detail Thread safe function.
+      * @details Thread safe function.
       * 
       * @return True if success write.
       * 
@@ -64,7 +64,7 @@
      /**
       *
       * @brief Set path where stored *.conf files.
-      * @detail Thread safe function.
+      * @details Thread safe function.
       * 
       * @param [in] path Path to dirictory.
       * 
@@ -74,9 +74,9 @@
      /**
       *
       * @brief Parameter entry function.
-      * @detail Looks for among the loaded categories and looks 
+      * @details Looks for among the loaded categories and looks 
       *         for the required parameter. If the category is not found, 
-      *         it tries to load the <category>.conf file.
+      *         it tries to load the "category".conf file.
       *         Thread safe function.
       * 
       * @param [in] category The name of the category (File name) 
@@ -95,7 +95,7 @@
      /**
      *
      * @brief Parameter entry function.
-     * @detail Looks for among the loaded categories and looks 
+     * @details Looks for among the loaded categories and looks 
      *         for the required parameter. If the category is not found, 
      *         it tries to load the <category>.conf file.
      *         Thread safe function.
@@ -116,14 +116,14 @@
      /**
       *
       * @brief Get instance.
-      * @detail Not a thread-safe function.
+      * @details Not a thread-safe function.
       */
      static CSettingsManager &instance();
 
      /**
       *
       * @brief Release of resources.
-      * @detail Not a thread-safe function.
+      * @details Not a thread-safe function.
       */
      static void detach();
  private:
