@@ -1,3 +1,4 @@
+
 __kernel void deleteDoubleVert(__global __read_only float        *vertex,
 							   __global             unsigned int *faces) {
     unsigned int id = get_global_id(0),

@@ -30,6 +30,12 @@ private:
         std::vector<uint32_t> faces_;
     };
     CHole hole_;
+
+    /**
+     * @brief Search for container boundaries.
+     * @param borders Buffer for output data.
+     * @return 0 if sucsses, else OpenCl error code.
+     */
     int findBorderHoles(std::vector <std::vector<uint32_t>> &borders);
 };
 

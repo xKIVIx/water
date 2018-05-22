@@ -78,7 +78,8 @@ void CServer::work() {
                       (float *)&(task.data_.c_str()[9]),
                       (float *)&(task.data_.c_str()[9]) + sizeVertexBlock / 4);
         
-        std::vector <uint> face;
+        std::vector <uint> face,
+                           result;
         uint sizeFaceBlock = *( (size_t *)(task.data_.c_str() + 5) );
         face.reserve(sizeVertexBlock/4);
         face.insert(face.end(),
@@ -86,13 +87,10 @@ void CServer::work() {
                     (uint *)&(task.data_.c_str()[9 + sizeVertexBlock]) + sizeFaceBlock / 4);
         
         waterCompute.loadData(vertex, face);
-        waterCompute.computeWaterLvl(vertex, face);
+        waterCompute.computeWaterLvl(vertex, result);
         task.data_.clear();
-        std::vector <uint32_t> gg;
-        //waterCompute.getFractureFaces(gg);
-        waterCompute.getInnerEdgesFaces(gg);
-        task.data_.reserve(gg.size() * 3);
-        for(auto iter = gg.begin(); iter != gg.end(); ++iter) {
+        task.data_.reserve(result.size() * 3 * sizeof(uint32_t));
+        for(auto iter = result.begin(); iter != result.end(); ++iter) {
             task.data_.insert(task.data_.end(),
                               (char *)&face.data()[*iter * 3],
                               (char *)&face.data()[*iter * 3 + 3]);

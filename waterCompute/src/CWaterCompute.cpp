@@ -20,19 +20,41 @@ enum StateEdge {
 const char MASK_BEGIN_EDGE = TIME_USED | USED,
            MASK_CHEK_NEXT_EDGE = ~USED;
 
+inline void roadMatOut(const std::vector<uint32_t> &edges) {
+    for(uint32_t i = 0; i < edges.size(); i+=2) {
+        for(uint32_t j = 0; j < edges.size(); j += 2) {
+            if(i == j) {
+                std::cout << "0, ";
+                continue;
+            }
+            if((edges[i] == edges[j]) ||
+                (edges[i] == edges[j + 1]) ||
+               (edges[i + 1] == edges[j]) ||
+               (edges[i + 1] == edges[j + 1])) {
+                std::cout << "1, ";
+            } else {
+                std::cout << "0, ";
+            }
+        }
+        std::cout << std::endl;
+    }
+}
+
 int CWaterCompute::computeWaterLvl(std::vector <float> &vertex,
                                    std::vector <uint32_t> &faces) {
     std::vector <std::vector<uint32_t>> borders,
                                         innerFaces;
     findBorderHoles(borders);
     computeInnerFaces(borders, innerFaces);
-    
+    faces.swap(innerFaces.front());
     // todo
     return 0;
 }
+
 void CWaterCompute::clear() {
     clearOpenCl();
 }
+
 inline bool isNotRepertVert(const std::vector <uint32_t> &edges,
                             const std::vector <uint32_t> &cycle,
                             const uint32_t vert) {
@@ -60,28 +82,8 @@ inline void useEdges(std::vector <char> &states,
     }
 }
 
-inline void roadMatOut(const std::vector<uint32_t> &edges) {
-    for(uint32_t i = 0; i < edges.size(); i+=2) {
-        for(uint32_t j = 0; j < edges.size(); j += 2) {
-            if(i == j) {
-                std::cout << "0, ";
-                continue;
-            }
-            if((edges[i] == edges[j]) ||
-                (edges[i] == edges[j + 1]) ||
-               (edges[i + 1] == edges[j]) ||
-               (edges[i + 1] == edges[j + 1])) {
-                std::cout << "1, ";
-            } else {
-                std::cout << "0, ";
-            }
-        }
-        std::cout << std::endl;
-    }
-}
 
 int CWaterCompute::findBorderHoles(std::vector <std::vector<uint32_t>> &cycles) {
-    roadMatOut(edgesHoleBorders_);
     std::vector <uint32_t> cycle;
     std::vector <char> statesEdges;
     uint32_t sizeFractureEdges;

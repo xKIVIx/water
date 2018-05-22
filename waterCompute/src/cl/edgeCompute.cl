@@ -103,14 +103,14 @@ __kernel void findFractureEdges(__global __read_only float        *vertex,
     unsigned int posVertex3_1 = getThirdFacePoint(&faces[posFace1], &edgesInner[posEdge]) * 3,
                  posVertex3_2 = getThirdFacePoint(&faces[posFace2], &edgesInner[posEdge]) * 3;;
     float yCup = (D - A * vertex[posVertex3_1] - C * vertex[posVertex3_1 + 2]) / B - COMPUTE_ERR;
-    if(yCup < vertex[posVertex3_1 + 1]) {
+    if(yCup <= vertex[posVertex3_1 + 1]) {
         return;
     }
     
     // chek second point
     
     yCup = (D - A * vertex[posVertex3_2] - C * vertex[posVertex3_2 + 2]) / B - COMPUTE_ERR;
-    if(yCup < vertex[posVertex3_2 + 1]) {
+    if(yCup <= vertex[posVertex3_2 + 1]) {
         return;
     }
     unsigned int writePos = atomic_inc(countEdgesFracture);

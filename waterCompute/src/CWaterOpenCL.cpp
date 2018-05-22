@@ -234,10 +234,17 @@ int CWaterOpenCL::initKernels() {
         return err;
     }
 
-    err = kernelFindInnerVertex.setFunction(program_,
+    err = kernelFindInnerVertex_.setFunction(program_,
                                             "findInnerVertex");
     if(err != CL_SUCCESS) {
         errorMessage("Fail init kernelFindInnerVertex", err);
+        return err;
+    }
+
+    err = kernelFindInnerFaces_.setFunction(program_,
+                                            "findInnerFaces");
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail init kernelFindInnerFaces", err);
         return err;
     }
     return CL_SUCCESS;
@@ -383,7 +390,6 @@ int CWaterOpenCL::computeData() {
         return err;
     }
     edgesHoleBorders_.resize(countFractureEdges_ * 2);
-    roadMatOut(edgesHoleBorders_);
     err = bufferInnerFaces.getData(commandQueue_, facesIn_);
     if(err != CL_SUCCESS) {
         errorMessage("Fail get data from bufferInnerFaces", err);
@@ -482,6 +488,12 @@ int CWaterOpenCL::computeInnerFaces(const std::vector<std::vector<uint32_t>> &bo
     CMemObject bufferEdges(context_,
                            edgesHoleBorders_.size() * sizeof(uint32_t),
                            CL_MEM_READ_ONLY);
+    CMemObject bufferInnerFaces(context_,
+                                bufferFaces_.getSize(),
+                                CL_MEM_READ_WRITE);
+    CMemObject bufferCountInnerFaces(context_,
+                                     sizeof(uint32_t),
+                                     CL_MEM_READ_WRITE);
     int err = bufferEdges.loadData(context_,
                                    commandQueue_,
                                    (char *)edgesHoleBorders_.data(),
@@ -492,77 +504,145 @@ int CWaterOpenCL::computeInnerFaces(const std::vector<std::vector<uint32_t>> &bo
     }
     for(auto iter = borders.begin(); iter != borders.end(); ++iter) {
         err = bufferBorder.loadData(context_,
-                                        commandQueue_,
-                                        (char *)iter->data(),
-                                        iter->size() * sizeof(uint32_t));
+                                    commandQueue_,
+                                    (char *)iter->data(),
+                                    iter->size() * sizeof(uint32_t));
         if(err != CL_SUCCESS) {
             errorMessage("Fail load data into bufferBorder", err);
             return err;
         }
         uint32_t countVertex = 0;
         err = computeInnerVertex(bufferEdges, 
-                                 bufferBorder, 
+                                 bufferBorder,
+                                 iter->size(),
                                  buferInnerVertex,
                                  countVertex);
         if(err != CL_SUCCESS) {
             errorMessage("Fail computeInnerVertex", err);
             return err;
         }
+
+        err = kernelFindInnerFaces_.bindParametr(bufferFaces_, 0);
+        if(err != CL_SUCCESS) {
+            errorMessage("Fail bind bufferFaces", err);
+            return err;
+        }
+
+        err = kernelFindInnerFaces_.bindParametr(bufferFaces_.getSize() / sizeof(uint32_t), 1);
+        if(err != CL_SUCCESS) {
+            errorMessage("Fail bind size faces", err);
+            return err;
+        }
+        err = kernelFindInnerFaces_.bindParametr(buferInnerVertex, 2);
+        if(err != CL_SUCCESS) {
+            errorMessage("Fail bind bufferInnerVertex", err);
+            return err;
+        }
+
+        err = kernelFindInnerFaces_.bindParametr(bufferInnerFaces, 3);
+        if(err != CL_SUCCESS) {
+            errorMessage("Fail bind bufferInnerFaces", err);
+            return err;
+        }
+        uint32_t countInnerFaces = 0;
+        err = bufferCountInnerFaces.loadData(context_,
+                                             commandQueue_,
+                                             (char *)&countInnerFaces,
+                                             sizeof(uint32_t));
+        err = kernelFindInnerFaces_.bindParametr(bufferCountInnerFaces, 4);
+        if(err != CL_SUCCESS) {
+            errorMessage("Fail bind bufferCountInnerFaces", err);
+            return err;
+        }
+        uint32_t workSize[3] = {
+            countVertex,
+            countVertex,
+            countVertex
+        };
+
+        err = kernelFindInnerFaces_.complite(commandQueue_,
+                                             workSize,
+                                             3);
+        if(err != CL_SUCCESS) {
+            errorMessage("Fail complite kernelFindInnerFaces", err);
+            return err;
+        }
+        faces.emplace_back();
+        err = bufferCountInnerFaces.getData(commandQueue_, countInnerFaces);
+        if(err != CL_SUCCESS) {
+            errorMessage("Fail get data bufferInnerFaces", err);
+            return err;
+        }
+        err = bufferInnerFaces.getData(commandQueue_, faces.back());
+        if(err != CL_SUCCESS) {
+            errorMessage("Fail get data bufferInnerFaces", err);
+            return err;
+        }
+        faces.back().resize(countInnerFaces);
     }
     return CL_SUCCESS;
 }
 
 int CWaterOpenCL::computeInnerVertex(const CMemObject &edges,
                                      const CMemObject &bufferBorder,
-                                     const CMemObject &buferInnerVertex,
+                                     const uint32_t   borderSize,
+                                     const CMemObject &bufferInnerVertex,
                                      uint32_t &countInnerVertex) {
-    int err = kernelFindInnerVertex.bindParametr(edges, 0);
+    int err = kernelFindInnerVertex_.bindParametr(edges, 0);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind edges", err);
         return err;
     }
 
-    err = kernelFindInnerVertex.bindParametr(bufferBorder, 1);
+    err = kernelFindInnerVertex_.bindParametr(bufferBorder, 1);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind bufferBorder", err);
         return err;
     }
 
-    err = kernelFindInnerVertex.bindParametr(bufferBorder.getSize() / sizeof(uint32_t), 2);
+    err = kernelFindInnerVertex_.bindParametr(borderSize, 2);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind border size", err);
         return err;
     }
 
-    err = kernelFindInnerVertex.bindParametr(buferInnerVertex, 3);
-    if(err != CL_SUCCESS) {
-        errorMessage("Fail bind buferInnerVertex", err);
-        return err;
-    }
-
-    err = kernelFindInnerVertex.bindParametr(bufferVertex_, 4);
+    err = kernelFindInnerVertex_.bindParametr(bufferVertex_, 3);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind bufferVertex_", err);
         return err;
     }
+
+    err = kernelFindInnerVertex_.bindParametr(bufferInnerVertex, 4);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferInnerVertex", err);
+        return err;
+    }
+    
     CMemObject bufferCountInnerVertex(context_,
                                       sizeof(uint32_t),
                                       CL_MEM_READ_WRITE);
-    err = kernelFindInnerVertex.bindParametr(bufferCountInnerVertex, 5);
+    err = bufferCountInnerVertex.loadData(context_,
+                                          commandQueue_,
+                                          (char *)&countInnerVertex,
+                                          sizeof(uint32_t));
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail zeroing bufferCountInnerVertex", err);
+        return err;
+    }
+    err = kernelFindInnerVertex_.bindParametr(bufferCountInnerVertex, 5);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind bufferCountInnerVertex", err);
         return err;
     }
 
-    uint32_t workSize = bufferVertex_.getSize() / sizeof(float) / 3;
+    uint32_t workSize = bufferVertex_.getSize() / (sizeof(float) * 3);
 
-    err = kernelFindInnerVertex.complite(commandQueue_, &workSize, 1);
+    err = kernelFindInnerVertex_.complite(commandQueue_, &workSize, 1);
     if(err != CL_SUCCESS) {
         errorMessage("Fail complite kernelComputeInnerFaces", err);
         return err;
     }
-    uint32_t l = 0;
-    err = bufferCountInnerVertex.getData(commandQueue_, l);
+    err = bufferCountInnerVertex.getData(commandQueue_, countInnerVertex);
     if(err != CL_SUCCESS) {
         errorMessage("Fail get data bufferCountInnerVertex", err);
         return err;

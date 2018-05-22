@@ -69,6 +69,12 @@ protected:
      */
     void clearOpenCl();
 
+    /*
+     * @brief Search for internal tank polygons.
+     * @param borders Data on the boundaries of capacities.
+     * @param faces Result buffer.
+     * @return 0 if sucsses, else OpenCl error code.
+     */
     int computeInnerFaces(const std::vector<std::vector<uint32_t>> &borders, 
                           std::vector<std::vector<uint32_t>> &faces);
 
@@ -297,12 +303,13 @@ private:
 
     /*
      * @brief Calculation inside the lying polygons.
-     * @detail The result is filling the data with the following changes:
-     *         bufferInnerEdges_, bufferInnerEdgeFaces_, countInnerEdges_.
+     * @detail The result is filling the data with the following changes: countInnerEdges_.
      * @param bufferEdges Buffer with data on the edges.
      * @param bufferMarkNoneBorder A buffer with the notation that the 
      *                             edge is already inside. It is necessary 
      *                             for the calculation of edges - boundaries.
+     * @param bufferInnerEdges The buffer storing the resulting internal edges.
+     * @param bufferInnerFaces The buffer storing the resulting internal faces.
      * @return 0 if sucsses, else OpenCl error code.
      */
     int computeInnerEdges(const CMemObject &bufferEdges,
@@ -313,7 +320,7 @@ private:
     /*
      * @brief Calculation of edges on the edge.
      * @detail The result is filling the data with the following changes:
-     *         bufferBorderEdges_, bufferBorderEdgeFaces_, countBorderEdges_.
+     *         edgesHoleBorders_, countBorderEdges_.
      * @param bufferEdges Buffer with data on the edges.
      * @param bufferMarkNoneBorder A buffer with the notation that the 
      *                             edge is already inside.
@@ -322,15 +329,28 @@ private:
     int computeBorderEdges(const CMemObject &bufferEdges,
                            const CMemObject &bufferMarkNoneBorder);
 
+
+    /*
+     * @brief Calculation of internal points of capacities.
+     * @param edges A buffer with data on the edges capable of creating a capacity.
+     * @param bufferBorder The buffer contains data about the boundary.
+     * @param borderSize Size boundary.
+     * @param buferInnerVertex Result buffer.
+     * @param countInnerVertex Size result.
+     * @return 0 if sucsses, else OpenCl error code.
+     */
     int computeInnerVertex(const CMemObject &edges,
                            const CMemObject &bufferBorder,
+                           const uint32_t   borderSize,
                            const CMemObject &buferInnerVertex,
-                           uint32_t &countInnerVertex);
+                           uint32_t         &countInnerVertex);
 
     /*
      * @brief Calculation of fracture edges.
      * @detail The result is filling the data with the following changes:
-     *         bufferIdsFractureEdges_, countFractureEdges_.
+     *         edgesHoleBorders_, countFractureEdges_.
+     * @param bufferInnerFaces Buffer with information about the senetrained polygons.
+     * @param bufferInnerEdges Buffer with information about the senetrained edges.
      * @return 0 if sucsses, else OpenCl error code.
      */
     int computeFractureEdges(const CMemObject &bufferInnerFaces,
@@ -346,7 +366,8 @@ private:
             kernelFindInnerEdges_,
             kernelFindBorderEdges_,
             kernelFindFractureEdges_,
-            kernelFindInnerVertex;
+            kernelFindInnerVertex_,
+            kernelFindInnerFaces_;
 
     CLdescriptor program_ = nullptr,
                  commandQueue_ = nullptr,
