@@ -6,7 +6,7 @@
 #include <vector>
 
 /**
- * @brief A class that performs parallel processing of data.
+ * A class that performs parallel processing of data.
  */
 class CWaterOpenCL {
 public:
@@ -24,7 +24,7 @@ public:
     ~CWaterOpenCL();
 
     /*
-     * @brief Loading data into buffers.
+     * Loading data into buffers.
      * @details Loads data into the buffers of the computing device. 
      *         It also calculates additional required data.
      * @param vertex Vertex data.
@@ -35,7 +35,7 @@ public:
                  const std::vector <uint32_t> &faces);
 
     /*
-     * @brief Returns an array with the id of the polygons 
+     * Returns an array with the id of the polygons 
      *        adjacent to the inner edges.
      * @param faces Result buffer.
      * @return 0 if sucsses, else OpenCl error code.
@@ -43,21 +43,21 @@ public:
     int getInnerEdgesFaces(std::vector <uint32_t> &faces) const;
 
     /*
-     * @brief Preparation of border polygons.
+     * Preparation of border polygons.
      * @param faces Result buffer.
      * @return 0 if sucsses, else OpenCl error code.
      */
     int getBorderFaces(std::vector <uint32_t> &faces) const;
 
     /*
-     * @brief Get edges fracture.
+     * Get edges fracture.
      * @param edges Result buffer.
      * @return 0 if sucsses, else OpenCl error code.
      */
     int getFractureEdges(std::vector <uint32_t> &edges) const;
 
     /*
-     * @brief Get inner edges.
+     * Get inner edges.
      * @param edges Result buffer.
      * @return 0 if sucsses, else OpenCl error code.
      */
@@ -70,7 +70,7 @@ protected:
     void clearOpenCl();
 
     /*
-     * @brief Search for internal tank polygons.
+     * Search for internal tank polygons.
      * @param borders Data on the boundaries of capacities.
      * @param faces Result buffer.
      * @return 0 if sucsses, else OpenCl error code.
@@ -121,7 +121,7 @@ private:
                    const CMemObject &obj2);
 
         /*
-         * @brief Loading data into an object.
+         * Loading data into an object.
          * @param context The context for which the memory object is created.
          * @param commandQueue The command queue for loading data.
          * @param data Pointer to data.
@@ -134,7 +134,7 @@ private:
                      const uint32_t size);
 
         /*
-         * @brief Get data from object.
+         * Get data from object.
          * @param commandQueue  The command queue for uploading data.
          * @param data Output buffer.
          * @return 0 if sucsses, else OpenCl error code.
@@ -142,7 +142,7 @@ private:
         int getData(const CLdescriptor commandQueue,
                     std::vector<float> &data) const;
         /*
-         * @brief Get data from object.
+         * Get data from object.
          * @param commandQueue  The command queue for uploading data.
          * @param data Output buffer.
          * @return 0 if sucsses, else OpenCl error code.
@@ -151,7 +151,7 @@ private:
                     std::vector<bool> &data) const;
 
         /*
-         * @brief Get data from object.
+         * Get data from object.
          * @param commandQueue  The command queue for uploading data.
          * @param data Output buffer.
          * @return 0 if sucsses, else OpenCl error code.
@@ -160,7 +160,7 @@ private:
                     std::vector<uint32_t> &data) const;
 
         /*
-         * @brief Get data from object.
+         * Get data from object.
          * @param commandQueue  The command queue for uploading data.
          * @param data Output buffer.
          * @return 0 if sucsses, else OpenCl error code.
@@ -169,13 +169,13 @@ private:
                     uint32_t &data) const;
 
         /*
-         * @brief Get size of memory object.
+         * Get size of memory object.
          * @return Size in bytes.
          */
         uint32_t getSize() const;
 
         /*
-         * @brief Set flag of memory object.
+         * Set flag of memory object.
          * @details If you specify a flag that differs from the current object, 
          *         it will be recreated. All data will be lost.
          * @param context The context for which the memory object is created.
@@ -186,7 +186,7 @@ private:
                     const int flag);
 
         /*
-         * @brief Set new size of memory object.
+         * Set new size of memory object.
          * @details If you specify a size that differs from the current object, 
          *         it will be recreated.
          * @param context The context for which the memory object is created.
@@ -199,7 +199,7 @@ private:
                    const uint32_t size);
 
         /*
-        * @brief Set new size of memory object.
+        * Set new size of memory object.
         * @details If you specify a size that differs from the current object, 
         *         it will be recreated. All data will be lost.
         * @param context The context for which the memory object is created.
@@ -216,7 +216,7 @@ private:
         CMemObject & operator= (const CMemObject & sec);
 
         /*
-         * @brief Get data from object.
+         * Get data from object.
          * @details To prevent memory leaks, delete the received ptr via delete.
          * @param commandQueue  The command queue for uploading data.
          * @param data Output buffer.
@@ -247,7 +247,7 @@ private:
         ~CKernel();
 
         /*
-         * @brief Function attachment.
+         * Function attachment.
          * @details Must be pre-set parameters.
          * @param program Compiled program.
          * @param name Char string. Function name.
@@ -257,7 +257,7 @@ private:
                         const char *name);
 
         /*
-         * @brief Bind parametr to function.
+         * Bind parametr to function.
          * @param memObject Memory object to parametr.
          * @param paramId Position of parametr.
          * @return 0 if sucsses, else OpenCl error code.
@@ -266,7 +266,7 @@ private:
                          const uint32_t paramId) const;
 
         /*
-         * @brief Bind parametr to function.
+         * Bind parametr to function.
          * @param param Uint parametr.
          * @param paramId Position of parametr.
          * @return 0 if sucsses, else OpenCl error code.
@@ -275,7 +275,7 @@ private:
                          const uint32_t paramId) const;
 
         /*
-         * @brief Complite function.
+         * Complite function.
          * @param commandQueue The command queue for uploading data.
          * @param workSizes Count iteration array. workSizes[0] * workSizes[1] *...
          * @param countWorkSizes Size of workSizes.
@@ -289,20 +289,20 @@ private:
     };
 
     /*
-     * @brief Calculation of additional data.
+     * Calculation of additional data.
      * @details Should be called after loading vertices and polygons.
      * @return 0 if sucsses, else OpenCl error code.
      */
     int computeData();
 
     /*
-     * @brief Init nessary kernels.
+     * Init nessary kernels.
      * @return 0 if sucsses, else OpenCl error code.
      */
     int initKernels();
 
     /*
-     * @brief Calculation inside the lying polygons.
+     * Calculation inside the lying polygons.
      * @details The result is filling the data with the following changes: countInnerEdges_.
      * @param bufferEdges Buffer with data on the edges.
      * @param bufferMarkNoneBorder A buffer with the notation that the 
@@ -318,7 +318,7 @@ private:
                           const CMemObject &bufferInnerFaces);
 
     /*
-     * @brief Calculation of edges on the edge.
+     * Calculation of edges on the edge.
      * @details The result is filling the data with the following changes:
      *         edgesHoleBorders_, countBorderEdges_.
      * @param bufferEdges Buffer with data on the edges.
@@ -331,7 +331,7 @@ private:
 
 
     /*
-     * @brief Calculation of internal points of capacities.
+     * Calculation of internal points of capacities.
      * @param edges A buffer with data on the edges capable of creating a capacity.
      * @param bufferBorder The buffer contains data about the boundary.
      * @param borderSize Size boundary.
@@ -346,7 +346,7 @@ private:
                            uint32_t         &countInnerVertex);
 
     /*
-     * @brief Calculation of fracture edges.
+     * Calculation of fracture edges.
      * @details The result is filling the data with the following changes:
      *         edgesHoleBorders_, countFractureEdges_.
      * @param bufferInnerFaces Buffer with information about the senetrained polygons.

@@ -13,7 +13,7 @@
 class CWaterCompute:public CWaterOpenCL {
 public:
     /**
-     * @brief Calculates water levels.
+     * Calculates water levels.
      * @param vertex Buffer for output data about vertices.
      * @param Buffer for output data about polygons.
      * @return 0 if sucsses, else OpenCl error code.
@@ -32,7 +32,7 @@ private:
     CHole hole_;
 
     /**
-     * @brief Search for container boundaries.
+     *  Search for container boundaries.
      * @param borders Buffer for output data.
      * @return 0 if sucsses, else OpenCl error code.
      */

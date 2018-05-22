@@ -10,7 +10,7 @@
 
 /**
  *
- * @brief The class that manages the settings files.
+ * The class that manages the settings files.
  * 
  * @details Static class. When the program is terminated, 
  *         it is necessary to call method @see CSettingsManager::detach. 
@@ -23,7 +23,7 @@
      
      /**
       *
-      * @brief Function of obtaining parameters.
+      * Function of obtaining parameters.
       * @details Looks for among the loaded categories and looks 
       *          for the required parameter. If the category is not found, 
       *          it tries to load the "category".conf file.
@@ -43,7 +43,7 @@
 					  std::string &parametr);
 
      /**
-      * @brief Get integer parametr.
+      * Get integer parametr.
       * @see CSettingsManager::getParametr
       * 
       */
@@ -53,7 +53,7 @@
 
      /**
       *
-      * @brief Writes parameters to files.
+      * Writes parameters to files.
       * @details Thread safe function.
       * 
       * @return True if success write.
@@ -63,7 +63,7 @@
 
      /**
       *
-      * @brief Set path where stored *.conf files.
+      * Set path where stored *.conf files.
       * @details Thread safe function.
       * 
       * @param [in] path Path to dirictory.
@@ -73,7 +73,7 @@
 
      /**
       *
-      * @brief Parameter entry function.
+      * Parameter entry function.
       * @details Looks for among the loaded categories and looks 
       *         for the required parameter. If the category is not found, 
       *         it tries to load the "category".conf file.
@@ -94,7 +94,7 @@
 
      /**
      *
-     * @brief Parameter entry function.
+     * Parameter entry function.
      * @details Looks for among the loaded categories and looks 
      *         for the required parameter. If the category is not found, 
      *         it tries to load the <category>.conf file.
@@ -115,14 +115,14 @@
 
      /**
       *
-      * @brief Get instance.
+      * Get instance.
       * @details Not a thread-safe function.
       */
      static CSettingsManager &instance();
 
      /**
       *
-      * @brief Release of resources.
+      * Release of resources.
       * @details Not a thread-safe function.
       */
      static void detach();
