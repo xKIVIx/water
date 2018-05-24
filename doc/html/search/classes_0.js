@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['cclrear',['CClrear',['../class_c_clrear.html',1,'']]],
   ['cnet',['CNet',['../class_net_1_1_c_net.html',1,'Net']]],
   ['cnethandler',['CNetHandler',['../class_net_1_1_c_net_handler.html',1,'Net']]],
   ['cnethandlerwebsocket',['CNetHandlerWebSocket',['../class_net_1_1_c_net_handler_web_socket.html',1,'Net']]],

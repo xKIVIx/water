@@ -42,11 +42,28 @@ inline void roadMatOut(const std::vector<uint32_t> &edges) {
 
 int CWaterCompute::computeWaterLvl(std::vector <float> &vertex,
                                    std::vector <uint32_t> &faces) {
-    std::vector <std::vector<uint32_t>> borders,
-                                        innerFaces;
+    std::list <std::vector<uint32_t>> borders,
+                                      innerFaces,
+                                      newArea;
     findBorderHoles(borders);
     computeInnerFaces(borders, innerFaces);
-    faces.swap(innerFaces.front());
+    int err = removeCommunityAreas(innerFaces, newArea);
+    if(err != 0) {
+        return err;
+    }
+    while(!newArea.empty()) {
+        std::list <std::vector<uint32_t>> tmp;
+        err = removeCommunityAreas(newArea, tmp);
+        if(err != 0) {
+            return err;
+        }
+        for(auto iter = newArea.begin(); iter != newArea.end(); ++iter) {
+            innerFaces.emplace_back();
+            innerFaces.back().swap(*iter);
+        }
+        newArea.swap(tmp);
+    }
+    faces.swap(innerFaces.back());
     // todo
     return 0;
 }
@@ -83,7 +100,7 @@ inline void useEdges(std::vector <char> &states,
 }
 
 
-int CWaterCompute::findBorderHoles(std::vector <std::vector<uint32_t>> &cycles) {
+int CWaterCompute::findBorderHoles(std::list <std::vector<uint32_t>> &cycles) {
     std::vector <uint32_t> cycle;
     std::vector <char> statesEdges;
     uint32_t sizeFractureEdges;

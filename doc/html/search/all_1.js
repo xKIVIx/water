@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['cclrear',['CClrear',['../class_c_clrear.html',1,'']]],
   ['clear',['clear',['../class_c_water_compute.html#a6afba6407dd75a22e2beeac9472fdf6c',1,'CWaterCompute']]],
   ['clearopencl',['clearOpenCl',['../class_c_water_open_c_l.html#a213bd842a23c3a1d50e90b60d9395143',1,'CWaterOpenCL']]],
   ['close',['close',['../class_net_1_1_c_net.html#a7dbe5d1a571964634d88596d7c6e7c2f',1,'Net::CNet']]],

@@ -247,6 +247,20 @@ int CWaterOpenCL::initKernels() {
         errorMessage("Fail init kernelFindInnerFaces", err);
         return err;
     }
+
+    err = kernelCountColise_.setFunction(program_,
+                                         "countColise");
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail init kernelCountColise", err);
+        return err;
+    }
+
+    err = kernelRemoveCommunityAreas_.setFunction(program_,
+                                                  "removeCommunityAreas");
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail init removeCommunityAreas", err);
+        return err;
+    }
     return CL_SUCCESS;
 }
 
@@ -473,8 +487,8 @@ int CWaterOpenCL::computeInnerEdges(const CMemObject &bufferEdges,
     return err;
 }
 
-int CWaterOpenCL::computeInnerFaces(const std::vector<std::vector<uint32_t>> &borders, 
-                                    std::vector<std::vector<uint32_t>> &faces) {
+int CWaterOpenCL::computeInnerFaces(const std::list<std::vector<uint32_t>> &borders, 
+                                    std::list<std::vector<uint32_t>> &faces) {
     uint32_t maxSize = 0;
     for(auto iter = borders.begin(); iter != borders.end(); ++iter) {
         maxSize = (iter->size() > maxSize) ? iter->size() : maxSize;
@@ -581,6 +595,266 @@ int CWaterOpenCL::computeInnerFaces(const std::vector<std::vector<uint32_t>> &bo
         faces.back().resize(countInnerFaces);
     }
     return CL_SUCCESS;
+}
+
+class CClrear {
+public:
+    CClrear(uint32_t size) {
+        clearMem = new char[size];
+        for(uint32_t i = 0; i < size; i++) {
+            clearMem[i] = 0;
+        }
+    }
+    ~CClrear() {
+        delete[] clearMem;
+    }
+    const char *get() const {
+        return clearMem;
+    }
+private:
+    char *clearMem = nullptr;
+};
+
+int CWaterOpenCL::removeCommunityAreas(std::list<std::vector<uint32_t>>& areas,
+                                       std::list<std::vector<uint32_t>>& newAreas) {
+    CClrear clearMem(bufferFaces_.getSize() / (3 * sizeof(uint32_t)));
+    CMemObject bufferArea(context_,
+                          bufferFaces_.getSize() / 3,
+                          CL_MEM_READ_ONLY),
+        bufferFirstCountersColise(context_,
+                                  bufferFaces_.getSize() / (3 * sizeof(uint32_t)),
+                                  CL_MEM_READ_WRITE),
+        bufferSecondCountersColise(context_,
+                                   bufferFaces_.getSize() / (3 * sizeof(uint32_t)),
+                                   CL_MEM_READ_WRITE),
+        bufferResultFirstArea(context_,
+                              bufferFaces_.getSize() / 3,
+                              CL_MEM_READ_WRITE),
+        bufferResultSecondArea(context_,
+                               bufferFaces_.getSize() / 3,
+                               CL_MEM_READ_WRITE),
+        bufferResultThirdArea(context_,
+                              bufferFaces_.getSize() / 3,
+                              CL_MEM_READ_WRITE),
+        bufferResultSizes(context_,
+                          sizeof(uint32_t) * 3,
+                          CL_MEM_READ_WRITE);
+    int err = kernelCountColise_.bindParametr (bufferArea, 0);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferArea", err);
+        return err;
+    }
+
+    err = kernelRemoveCommunityAreas_.bindParametr(bufferFirstCountersColise, 0);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferFirstCountersColise", err);
+        return err;
+    }
+    err = kernelRemoveCommunityAreas_.bindParametr(bufferSecondCountersColise, 1);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferSecondCountersColise", err);
+        return err;
+    }
+    err = kernelRemoveCommunityAreas_.bindParametr(bufferResultFirstArea, 2);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferResultFirstArea", err);
+        return err;
+    }
+    err = kernelRemoveCommunityAreas_.bindParametr(bufferResultSecondArea, 3);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferResultSecondArea", err);
+        return err;
+    }
+    err = kernelRemoveCommunityAreas_.bindParametr(bufferResultThirdArea, 4);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferResultThirdArea", err);
+        return err;
+    }
+    err = kernelRemoveCommunityAreas_.bindParametr(bufferResultSizes, 5);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferResultSizes", err);
+        return err;
+    }
+
+    for(auto iterFirstArea = areas.begin(); iterFirstArea != areas.end(); ++iterFirstArea) {
+
+        err = bufferArea.loadData(context_, 
+                                  commandQueue_, 
+                                  (char *)iterFirstArea->data(), 
+                                  iterFirstArea->size() * sizeof(uint32_t));
+        if(err != CL_SUCCESS) {
+            errorMessage("Fail load data into bufferArea", err);
+            return err;
+        }
+
+        err = kernelCountColise_.bindParametr(bufferFirstCountersColise, 1);
+        if(err != CL_SUCCESS) {
+            errorMessage("Fail bind bufferFirstCountersColise", err);
+            return err;
+        }
+        err = bufferFirstCountersColise.loadData(context_, 
+                                                 commandQueue_, 
+                                                 clearMem.get(), 
+                                                 bufferFirstCountersColise.getSize());
+        if(err != CL_SUCCESS) {
+            errorMessage("Fail zeroing bufferFirstCountersColise", err);
+            return err;
+        }
+
+        uint32_t workSize = iterFirstArea->size();
+        err = kernelCountColise_.complite(commandQueue_, &workSize, 1);
+        if(err != CL_SUCCESS) {
+            errorMessage("Fail complite kernelCountColise", err);
+            return err;
+        }
+        auto iterSecondArea = iterFirstArea;
+        iterSecondArea++;
+        for(; iterSecondArea != areas.end(); ++iterSecondArea) {
+            err = bufferArea.loadData(context_, 
+                                      commandQueue_, 
+                                      (char *)iterSecondArea->data(), 
+                                      iterSecondArea->size() * sizeof(uint32_t));
+            if(err != CL_SUCCESS) {
+                errorMessage("Fail load data into bufferArea", err);
+                return err;
+            }
+
+            err = bufferSecondCountersColise.loadData(context_, 
+                                                      commandQueue_, 
+                                                      clearMem.get(), 
+                                                      bufferSecondCountersColise.getSize());
+            if(err != CL_SUCCESS) {
+                errorMessage("Fail zeroing bufferSecondCountersColise", err);
+                return err;
+            }
+            err = kernelCountColise_.bindParametr (bufferSecondCountersColise, 1);
+            if(err != CL_SUCCESS) {
+                errorMessage("Fail bind bufferSecondCountersColise", err);
+                return err;
+            }
+
+            workSize = iterSecondArea->size();
+            err = kernelCountColise_.complite(commandQueue_, &workSize, 1);
+            if(err != CL_SUCCESS) {
+                errorMessage("Fail complite kernelCountColise", err);
+                return err;
+            }
+
+            //
+            err = bufferResultSizes.loadData(context_,
+                                             commandQueue_,
+                                             clearMem.get(),
+                                             bufferResultSizes.getSize());
+            if(err != CL_SUCCESS) {
+                errorMessage("Fail zeroing bufferResultSizes", err);
+                return err;
+            }
+
+            workSize = bufferVertex_.getSize() / (3 * sizeof(uint32_t));
+            err = kernelRemoveCommunityAreas_.complite(commandQueue_, 
+                                                       &workSize, 
+                                                       1);
+            if(err != CL_SUCCESS) {
+                errorMessage("Fail complite kernelRemove—ommunityAreas", err);
+                return err;
+            }
+            std::vector <uint32_t> sizes;
+            err = bufferResultSizes.getData(commandQueue_, sizes);
+            if(err != CL_SUCCESS) {
+                errorMessage("Fail get data from bufferResultSizes", err);
+                return err;
+            }
+            if((sizes[0] != 0) && (sizes[0] != iterFirstArea->size())) {
+                iterFirstArea->clear();
+                err = bufferResultFirstArea.getData(commandQueue_, *iterFirstArea);
+                if(err != CL_SUCCESS) {
+                    errorMessage("Fail get data from bufferResultFirstArea", err);
+                    return err;
+                }
+                iterFirstArea->resize(sizes[0]);
+
+                err = kernelCountColise_.bindParametr(bufferResultFirstArea, 0);
+                if(err != CL_SUCCESS) {
+                    errorMessage("Fail bind bufferResultFirstArea", err);
+                    return err;
+                }
+                err = kernelCountColise_.bindParametr(bufferFirstCountersColise, 1);
+                if(err != CL_SUCCESS) {
+                    errorMessage("Fail bind bufferFirstCountersColise", err);
+                    return err;
+                }
+                err = bufferFirstCountersColise.loadData(context_, 
+                                                         commandQueue_, 
+                                                         clearMem.get(), 
+                                                         bufferFirstCountersColise.getSize());
+                if(err != CL_SUCCESS) {
+                    errorMessage("Fail zeroing bufferFirstCountersColise", err);
+                    return err;
+                }
+
+                workSize = iterFirstArea->size();
+                err = kernelCountColise_.complite(commandQueue_, &workSize, 1);
+                if(err != CL_SUCCESS) {
+                    errorMessage("Fail complite kernelCountColise", err);
+                    return err;
+                }
+
+                err = kernelCountColise_.bindParametr(bufferArea, 0);
+                if(err != CL_SUCCESS) {
+                    errorMessage("Fail bind bufferArea", err);
+                    return err;
+                }
+
+            }
+            if((sizes[1] != 0) && (sizes[1] != iterSecondArea->size())) {
+                iterSecondArea->clear();
+                err = bufferResultSecondArea.getData(commandQueue_, *iterSecondArea);
+                if(err != CL_SUCCESS) {
+                    errorMessage("Fail get data from bufferResultSecondArea", err);
+                    return err;
+                }
+                iterSecondArea->resize(sizes[1]);
+
+                err = kernelCountColise_.bindParametr(bufferResultSecondArea, 0);
+                if(err != CL_SUCCESS) {
+                    errorMessage("Fail bind bufferResultSecondArea", err);
+                    return err;
+                }
+                err = kernelCountColise_.bindParametr(bufferSecondCountersColise, 1);
+                if(err != CL_SUCCESS) {
+                    errorMessage("Fail bind bufferSecondCountersColise", err);
+                    return err;
+                }
+                err = bufferSecondCountersColise.loadData(context_, 
+                                                         commandQueue_, 
+                                                         clearMem.get(), 
+                                                         bufferSecondCountersColise.getSize());
+                if(err != CL_SUCCESS) {
+                    errorMessage("Fail zeroing bufferFirstCountersColise", err);
+                    return err;
+                }
+
+                workSize = iterSecondArea->size();
+                err = kernelCountColise_.complite(commandQueue_, &workSize, 1);
+                if(err != CL_SUCCESS) {
+                    errorMessage("Fail complite kernelCountColise", err);
+                    return err;
+                }
+
+                err = kernelCountColise_.bindParametr(bufferArea, 0);
+                if(err != CL_SUCCESS) {
+                    errorMessage("Fail bind bufferArea", err);
+                    return err;
+                }
+            }
+            if((sizes[0] != 0) && (sizes[1] != 0) && (sizes[2] != 0)) {
+                newAreas.emplace_back();
+                bufferResultThirdArea.getData(commandQueue_, newAreas.back());
+                newAreas.back().resize(sizes[2]);
+            }
+        }
+    }
+    return err;
 }
 
 int CWaterOpenCL::computeInnerVertex(const CMemObject &edges,

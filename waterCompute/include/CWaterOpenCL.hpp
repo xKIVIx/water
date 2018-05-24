@@ -4,6 +4,7 @@
 #define CWATER_OPENCL
 
 #include <vector>
+#include <list>
 
 /**
  * A class that performs parallel processing of data.
@@ -75,8 +76,18 @@ protected:
      * @param faces Result buffer.
      * @return 0 if sucsses, else OpenCl error code.
      */
-    int computeInnerFaces(const std::vector<std::vector<uint32_t>> &borders, 
-                          std::vector<std::vector<uint32_t>> &faces);
+    int computeInnerFaces(const std::list<std::vector<uint32_t>> &borders, 
+                          std::list<std::vector<uint32_t>> &faces);
+
+
+    /*
+     * Search for stacking.
+     * @param areas Polygons related to tanks.
+     * @param newAreas New capacitances formed by intersection.
+     * @return 0 if sucsses, else OpenCl error code.
+     */
+    int removeCommunityAreas(std::list<std::vector<uint32_t>>& areas,
+                             std::list<std::vector<uint32_t>>& newAreas);
 
     std::vector <uint32_t> facesIn_,
                            edgesHoleBorders_;
@@ -208,6 +219,7 @@ private:
         */
         int resize(const CLdescriptor context,
                    const uint32_t size);
+
         friend CKernel;
     private:
         /*
@@ -356,8 +368,6 @@ private:
     int computeFractureEdges(const CMemObject &bufferInnerFaces,
                              const CMemObject &bufferInnerEdges);
 
-   
-
     CMemObject bufferVertex_,
                bufferFaces_;
 
@@ -367,7 +377,9 @@ private:
             kernelFindBorderEdges_,
             kernelFindFractureEdges_,
             kernelFindInnerVertex_,
-            kernelFindInnerFaces_;
+            kernelFindInnerFaces_,
+            kernelCountColise_,
+            kernelRemoveCommunityAreas_;
 
     CLdescriptor program_ = nullptr,
                  commandQueue_ = nullptr,

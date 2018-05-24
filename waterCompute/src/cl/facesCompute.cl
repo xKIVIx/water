@@ -76,3 +76,30 @@ __kernel void findInnerFaces(__global __read_only unsigned int *faces,
         }
     }
 }
+
+__kernel void countColise(__global __read_only unsigned int  *area,
+                          __global             unsigned char *counters) {
+    unsigned int i = get_global_id(0);
+    counters[area[i]] = 1;
+}
+
+__kernel void removeCommunityAreas(__global __read_only unsigned char *countersFirst,
+                                   __global __read_only unsigned char *countersSecond,
+                                   __global             unsigned int  *resultFirst,
+                                   __global             unsigned int  *resultSecond,
+                                   __global             unsigned int  *resultThird,
+                                   __global             unsigned int  *resultSizes) {
+    unsigned int i = get_global_id(0),
+                 writePos;
+    if((countersFirst[i] + countersSecond[i]) == 2) {
+        writePos = atomic_inc(&resultSizes[2]);
+        resultThird[writePos] = i;
+    } else if(countersFirst[i] == 1) {
+        writePos = atomic_inc(&resultSizes[0]);
+        resultFirst[writePos] = i;
+    } else if(countersSecond[i] == 1) {
+        writePos = atomic_inc(&resultSizes[1]);
+        resultSecond[writePos] = i;
+    }
+    
+}
