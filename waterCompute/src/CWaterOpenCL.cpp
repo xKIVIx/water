@@ -261,6 +261,20 @@ int CWaterOpenCL::initKernels() {
         errorMessage("Fail init removeCommunityAreas", err);
         return err;
     }
+
+    err = kernelFindUnionVertex_.setFunction(program_,
+                                                  "findUnionVertex");
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail init findUnionVertex", err);
+        return err;
+    }
+
+    err = kernelGetMarkData_.setFunction(program_,
+                                         "getMarkData");
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail init getMarkData", err);
+        return err;
+    }
     return CL_SUCCESS;
 }
 
@@ -855,6 +869,134 @@ int CWaterOpenCL::removeCommunityAreas(std::list<std::vector<uint32_t>>& areas,
         }
     }
     return err;
+}
+
+int CWaterOpenCL::findUnionVertex(const std::list<std::vector<uint32_t>>& areas, 
+                                  std::list<std::vector<uint32_t>>& unionVertex) {
+    CMemObject bufferFirstArea(context_,
+                               bufferFaces_.getSize() / 3,
+                               CL_MEM_READ_ONLY),
+               bufferSecondArea(context_,
+                                bufferFaces_.getSize() / 3,
+                                CL_MEM_READ_ONLY),
+               bufferMarks(context_,
+                           bufferVertex_.getSize() / 3,
+                           CL_MEM_READ_WRITE),
+               bufferResult(context_,
+                            bufferFaces_.getSize() / 3,
+                            CL_MEM_WRITE_ONLY),
+               bufferResultSize(context_,
+                                sizeof(uint32_t),
+                                CL_MEM_READ_WRITE);
+    CClrear clearMem(bufferMarks.getSize());
+    int err;
+    err = kernelFindUnionVertex_.bindParametr(bufferFaces_, 0);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferFaces", err);
+        return err;
+    }
+    err = kernelFindUnionVertex_.bindParametr(bufferFirstArea, 1);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferFirstArea", err);
+        return err;
+    }
+    err = kernelFindUnionVertex_.bindParametr(bufferSecondArea, 2);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferSecondArea", err);
+        return err;
+    }
+    err = kernelFindUnionVertex_.bindParametr(bufferMarks, 3);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferMarks", err);
+        return err;
+    }
+    err = kernelGetMarkData_.bindParametr(bufferMarks, 0);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferMarks", err);
+        return err;
+    }
+    err = kernelGetMarkData_.bindParametr(bufferResult, 1);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferResult", err);
+        return err;
+    }
+    err = kernelGetMarkData_.bindParametr(bufferResultSize, 2);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferMarks", err);
+        return err;
+    }
+
+    for(auto iterFirst = areas.begin(); iterFirst != areas.end(); ++iterFirst) {
+        err = bufferFirstArea.loadData(context_,
+                                       commandQueue_,
+                                       (char *)iterFirst->data(),
+                                       iterFirst->size() * sizeof(uint32_t));
+        if(err != CL_SUCCESS) {
+            errorMessage("Fail load bufferFirstArea", err);
+            return err;
+        }
+        
+        auto iterSecond = iterFirst;
+        iterSecond++;
+        for(; iterSecond != areas.end(); ++iterSecond) {
+            err = bufferSecondArea.loadData(context_,
+                                            commandQueue_,
+                                            (char *)iterSecond->data(),
+                                            iterSecond->size() * sizeof(uint32_t));
+            if(err != CL_SUCCESS) {
+                errorMessage("Fail load bufferSecondArea", err);
+                return err;
+            }
+            err = bufferMarks.loadData(context_,
+                                       commandQueue_,
+                                       clearMem.get(),
+                                       bufferMarks.getSize());
+            if(err != CL_SUCCESS) {
+                errorMessage("Fail zeroing bufferMarks", err);
+                return err;
+            }
+
+            uint32_t resultSize = 0;
+            err = bufferResultSize.loadData(context_,
+                                            commandQueue_,
+                                            (char *)&resultSize,
+                                            sizeof(uint32_t));
+            if(err != CL_SUCCESS) {
+                errorMessage("Fail zeroing bufferResultSize", err);
+                return err;
+            }
+
+            uint32_t workSize[2] = {
+                iterFirst->size(),
+                iterSecond->size()
+            };
+            err = kernelFindUnionVertex_.complite(commandQueue_,
+                                                  workSize,
+                                                  2);
+            if(err != CL_SUCCESS) {
+                errorMessage("Fail complite kernelFindUnionVertex", err);
+                return err;
+            }
+            uint32_t workSize1 = bufferMarks.getSize() / sizeof(uint32_t);
+            err = kernelGetMarkData_.complite(commandQueue_,
+                                              &workSize1,
+                                              1);
+
+            unionVertex.emplace_back();
+            err = bufferResult.getData(commandQueue_, unionVertex.back());
+            if(err != CL_SUCCESS) {
+                errorMessage("Fail get data bufferResult", err);
+                return err;
+            }
+            err = bufferResultSize.getData(commandQueue_, resultSize);
+            if(err != CL_SUCCESS) {
+                errorMessage("Fail get data bufferResultSize", err);
+                return err;
+            }
+            unionVertex.back().resize(resultSize);
+        }
+    }
+    return CL_SUCCESS;
 }
 
 int CWaterOpenCL::computeInnerVertex(const CMemObject &edges,

@@ -86,8 +86,11 @@ protected:
      * @param newAreas New capacitances formed by intersection.
      * @return 0 if sucsses, else OpenCl error code.
      */
-    int removeCommunityAreas(std::list<std::vector<uint32_t>>& areas,
-                             std::list<std::vector<uint32_t>>& newAreas);
+    int removeCommunityAreas(std::list<std::vector<uint32_t>> &areas,
+                             std::list<std::vector<uint32_t>> &newAreas);
+
+    int findUnionVertex(const std::list<std::vector<uint32_t>> &areas,
+                        std::list<std::vector<uint32_t>> &unionVertex);
 
     std::vector <uint32_t> facesIn_,
                            edgesHoleBorders_;
@@ -379,7 +382,9 @@ private:
             kernelFindInnerVertex_,
             kernelFindInnerFaces_,
             kernelCountColise_,
-            kernelRemoveCommunityAreas_;
+            kernelRemoveCommunityAreas_,
+            kernelFindUnionVertex_,
+            kernelGetMarkData_;
 
     CLdescriptor program_ = nullptr,
                  commandQueue_ = nullptr,

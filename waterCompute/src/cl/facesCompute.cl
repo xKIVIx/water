@@ -101,5 +101,22 @@ __kernel void removeCommunityAreas(__global __read_only unsigned char *countersF
         writePos = atomic_inc(&resultSizes[1]);
         resultSecond[writePos] = i;
     }
+}
+
+__kernel void findUnionVertex(__global __read_only  unsigned int  *faces,
+                              __global __read_only  unsigned int  *firstArea,
+                              __global __read_only  unsigned int  *secondAera,
+                              __global              unsigned int  *unionVertexMark) {
+                                  
+    unsigned int idFirstFace = get_global_id(0),
+                 idSecondFace = get_global_id(1);
+    for(unsigned char i = 0; i < 3; i++) {
+        for(unsigned char k = 0; k < 3; k++) {
+            if(faces[firstArea[idFirstFace] * 3 + i] == 
+               faces[secondAera[idSecondFace] * 3 + k]) {
+                atomic_max(&unionVertexMark[firstArea[idFirstFace] * 3 + i], 1);
+            }
+        }
+    }
     
 }

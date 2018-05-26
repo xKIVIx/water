@@ -63,7 +63,8 @@ int CWaterCompute::computeWaterLvl(std::vector <float> &vertex,
         }
         newArea.swap(tmp);
     }
-    faces.swap(innerFaces.back());
+    borders.clear();
+    findUnionVertex(innerFaces, borders);
     // todo
     return 0;
 }

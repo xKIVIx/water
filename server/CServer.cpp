@@ -90,11 +90,11 @@ void CServer::work() {
         waterCompute.computeWaterLvl(vertex, result);
         task.data_.clear();
         task.data_.reserve(result.size() * 3 * sizeof(uint32_t));
-        for(auto iter = result.begin(); iter != result.end(); ++iter) {
+        //for(auto iter = result.begin(); iter != result.end(); ++iter) {
             task.data_.insert(task.data_.end(),
-                              (char *)&face.data()[*iter * 3],
-                              (char *)&face.data()[*iter * 3 + 3]);
-        }
+                              (char *)&(face.data()[104 * 3]),
+                              (char *)&(face.data()[104 * 3 + 3]));
+        //}
 	    reception_->compliteTask(task);
         waterCompute.clear();
     }	

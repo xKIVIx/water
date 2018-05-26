@@ -129,6 +129,16 @@ __kernel void deleteDoubleVert(__global __read_only float        *vertex,
         }
     }
 }
+
+__kernel void getMarkData(__global __read_only unsigned int *markers,
+                          __global             unsigned int *result,
+                          __global             unsigned int *resultSize) {
+    unsigned int i = get_global_id(0);
+    if(markers[i] != 0) {
+        unsigned int pos = atomic_inc(resultSize);
+        result[pos] = i;
+    }
+}
 bool isColise(float2 vert0,
               float2 vert1,
               float2 vert) {
@@ -230,6 +240,23 @@ __kernel void removeCommunityAreas(__global __read_only unsigned char *countersF
     } else if(countersSecond[i] == 1) {
         writePos = atomic_inc(&resultSizes[1]);
         resultSecond[writePos] = i;
+    }
+}
+
+__kernel void findUnionVertex(__global __read_only  unsigned int  *faces,
+                              __global __read_only  unsigned int  *firstArea,
+                              __global __read_only  unsigned int  *secondAera,
+                              __global              unsigned int  *unionVertexMark) {
+                                  
+    unsigned int idFirstFace = get_global_id(0),
+                 idSecondFace = get_global_id(1);
+    for(unsigned char i = 0; i < 3; i++) {
+        for(unsigned char k = 0; k < 3; k++) {
+            if(faces[firstArea[idFirstFace] * 3 + i] == 
+               faces[secondAera[idSecondFace] * 3 + k]) {
+                atomic_max(&unionVertexMark[firstArea[idFirstFace] * 3 + i], 1);
+            }
+        }
     }
     
 }
