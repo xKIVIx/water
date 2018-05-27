@@ -65,7 +65,44 @@ int CWaterCompute::computeWaterLvl(std::vector <float> &vertex,
     }
     borders.clear();
     findUnionVertex(innerFaces, borders);
+    std::vector<float> minHeights;
+    std::vector<uint32_t> minVertIds;
+    findMinPoint(borders, minHeights, minVertIds);
     // todo
+    return 0;
+}
+
+int CWaterCompute::findMinPoint(const std::list<std::vector<uint32_t>>& borders,
+                                std::vector<float> &heights,
+                                std::vector<uint32_t> &result) {
+    std::vector <float> vertex;
+    int err = getVertex(vertex);
+    if(err != 0) {
+        errorMessage("Fail get vertex", err);
+        return err;
+    }
+    for(auto iterFirst = borders.begin(); 
+        iterFirst != borders.end(); 
+        ++iterFirst) {
+
+        if(iterFirst->empty()) {
+            continue;
+        }
+
+        uint32_t minId = iterFirst->back();
+        float min = vertex[minId * 3 + 1];
+        for(auto iterSecond = iterFirst->begin(); 
+            iterSecond != iterFirst->end(); 
+            ++iterSecond) {
+
+            if(vertex[*iterSecond * 3 + 1] < min) {
+                min = vertex[*iterSecond * 3 + 1];
+                minId = *iterSecond;
+            }
+        }
+        heights.push_back(min);
+        result.push_back(minId);
+    }
     return 0;
 }
 

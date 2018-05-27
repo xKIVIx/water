@@ -368,6 +368,10 @@ int CWaterOpenCL::getBorderEdges(std::vector<uint32_t>& edges) const {
     return CL_SUCCESS;
 }
 
+int CWaterOpenCL::getVertex(std::vector<float>& result) const {
+    return bufferVertex_.getData(commandQueue_, result);
+}
+
 int CWaterOpenCL::computeData() {
     int err;
     std::cout << "Find edges\n";

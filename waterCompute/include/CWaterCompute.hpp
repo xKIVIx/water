@@ -24,10 +24,18 @@ public:
      * Cleaning of internal data.
      */
     void clear();
+
+    
 private:
+    struct CTransferPoint {
+        uint32_t target_;
+        float capVal_;
+    };
     struct CHole {
-        std::vector<CHole> holes_;
-        std::vector<uint32_t> faces_;
+        std::vector<uint32_t> area_;
+        float currVal_,
+              capVal_,
+              square_;
     };
     CHole hole_;
 
@@ -37,6 +45,10 @@ private:
      * @return 0 if sucsses, else OpenCl error code.
      */
     int findBorderHoles(std::list <std::vector<uint32_t>> &borders);
+
+    int findMinPoint(const std::list <std::vector<uint32_t>> &borders,
+                     std::vector<float> &heights,
+                     std::vector<uint32_t> &result);
 };
 
 

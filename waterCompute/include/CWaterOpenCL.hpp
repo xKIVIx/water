@@ -64,6 +64,8 @@ public:
      */
     int getBorderEdges(std::vector <uint32_t> &edges) const;
 
+    int getVertex(std::vector <float> &result) const;
+
 protected:
     /**
      * Cleaning of internal data.
