@@ -146,30 +146,27 @@ __kernel void findVal(__global __read_only float        *vertex,
                                   
     unsigned int idArea = get_global_id(0),
                  posFace = area[idArea] * 3;
-    float3 vert0 = (float3) {vertex[faces[posFace] * 3],
-                             vertex[faces[posFace] * 3 + 1],
-                             vertex[faces[posFace] * 3 + 2]},
-           vert1 = (float3) {vertex[faces[posFace + 1] * 3],
-                             vertex[faces[posFace + 1] * 3 + 1],
-                             vertex[faces[posFace + 1] * 3 + 2]},
-           vert2 = (float3) {vertex[faces[posFace + 2] * 3],
-                             vertex[faces[posFace + 2] * 3 + 1],
-                             vertex[faces[posFace + 2] * 3 + 2]};
+    float vert0 = vertex[faces[posFace] * 3 + 1],
+          vert1 = vertex[faces[posFace + 1] * 3 + 1],
+          vert2 = vertex[faces[posFace + 2] * 3 + 1];
                              
-    float minHeight = vert0.y;
-    min(minHeight, vert1.y);
-    min(minHeight, vert2.y);
+    float minHeight = vert0;
+    minHeight = min(minHeight, vert1);
+    minHeight = min(minHeight, vert2);
     
-    if(minHeight > height) {
+    if(minHeight >= height) {
         result[idArea] = 0.0f;
         return;
+    } 
+    
+    float maxHeight = vert0;
+    maxHeight = max(maxHeight, vert1);
+    maxHeight = max(maxHeight, vert2);
+    
+    if(height < maxHeight) {
+        result[idArea] = squares[idArea] * (height - minHeight) / 2.0f;
+    } else {
+        result[idArea] = squares[idArea] * (maxHeight - minHeight) / 2.0f;
+        result[idArea] += squares[idArea] * (height - maxHeight) ;
     }
-    
-    float maxHeight = vert0.y;
-    max(maxHeight, vert1.y);
-    max(maxHeight, vert2.y);
-    
-    result[idArea] = squares[idArea] * (height - maxHeight);
-    result[idArea] += squares[idArea] * (maxHeight - minHeight) / 2.0f;
-
 }

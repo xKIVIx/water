@@ -149,7 +149,11 @@ int CWaterCompute::computeWaterLvl(std::vector <float> &vertex,
     buildGraph(borders, minHeights, verts, edges);
     findMSP(verts, edges);
     std::vector <float> heights;
+    float maxHeight = edges.back().weight_;
     for(auto iter = edges.begin(); iter != edges.end(); ++iter) {
+        if(iter->state_ != USED) {
+            continue;
+        }
         bool chek = false;
         for(auto iterChek = heights.begin(); iterChek != heights.end(); ++iterChek) {
             if(*iterChek == iter->weight_) {
@@ -159,8 +163,12 @@ int CWaterCompute::computeWaterLvl(std::vector <float> &vertex,
         }
         if(!chek) {
             heights.push_back(iter->weight_);
+            if(iter->weight_ > maxHeight) {
+                maxHeight = iter->weight_;
+            }
         }
     }
+    heights.push_back(maxHeight + 20.0f);
     std::vector<float> squares,
                        vals;
     err = computeAreaData(innerFaces, heights, squares, vals);
