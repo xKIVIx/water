@@ -13,7 +13,8 @@ add_library(WaterCompute STATIC
             src/CWaterCompute.cpp
 			src/CWaterOpenCL.cpp
 			src/CKernel.cpp
-			src/CMemObject.cpp)
+			src/CMemObject.cpp
+			src/CWaterMap.cpp)
 
 target_include_directories(WaterCompute PRIVATE
 						   ${OpenCL_INCLUDE_DIRS}

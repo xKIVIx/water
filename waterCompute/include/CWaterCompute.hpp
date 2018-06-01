@@ -6,12 +6,12 @@
 #include <vector>
 #include <map>
 
-#include "CWaterOpenCL.hpp"
+#include "CWaterMap.hpp"
 /**
  *
  * Class of basic calculations.
  */
-class CWaterCompute:public CWaterOpenCL {
+class CWaterCompute : public CWaterMap{
 public:
     /**
      * Calculates water levels.
@@ -36,10 +36,6 @@ private:
      * @return 0 if sucsses, else OpenCl error code.
      */
     int findBorderHoles(std::list <std::vector<uint32_t>> &borders);
-
-    int findMinPoint(const std::list <std::vector<uint32_t>> &borders,
-                     std::vector<float> &heights,
-                     std::vector<uint32_t> &result);
 };
 
 

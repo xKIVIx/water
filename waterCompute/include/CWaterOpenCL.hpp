@@ -37,7 +37,7 @@ public:
 
     /*
      * Returns an array with the id of the polygons 
-     *        adjacent to the inner edges.
+     *        adjacent to the inner edges_.
      * @param faces Result buffer.
      * @return 0 if sucsses, else OpenCl error code.
      */
@@ -51,15 +51,15 @@ public:
     int getBorderFaces(std::vector <uint32_t> &faces) const;
 
     /*
-     * Get edges fracture.
-     * @param edges Result buffer.
+     * Get edges_ fracture.
+     * @param edges_ Result buffer.
      * @return 0 if sucsses, else OpenCl error code.
      */
     int getFractureEdges(std::vector <uint32_t> &edges) const;
 
     /*
-     * Get inner edges.
-     * @param edges Result buffer.
+     * Get inner edges_.
+     * @param edges_ Result buffer.
      * @return 0 if sucsses, else OpenCl error code.
      */
     int getBorderEdges(std::vector <uint32_t> &edges) const;
@@ -333,11 +333,11 @@ private:
     /*
      * Calculation inside the lying polygons.
      * @details The result is filling the data with the following changes: countInnerEdges_.
-     * @param bufferEdges Buffer with data on the edges.
+     * @param bufferEdges Buffer with data on the edges_.
      * @param bufferMarkNoneBorder A buffer with the notation that the 
      *                             edge is already inside. It is necessary 
-     *                             for the calculation of edges - boundaries.
-     * @param bufferInnerEdges The buffer storing the resulting internal edges.
+     *                             for the calculation of edges_ - boundaries.
+     * @param bufferInnerEdges The buffer storing the resulting internal edges_.
      * @param bufferInnerFaces The buffer storing the resulting internal faces.
      * @return 0 if sucsses, else OpenCl error code.
      */
@@ -347,10 +347,10 @@ private:
                           const CMemObject &bufferInnerFaces);
 
     /*
-     * Calculation of edges on the edge.
+     * Calculation of edges_ on the edge.
      * @details The result is filling the data with the following changes:
      *         edgesHoleBorders_, countBorderEdges_.
-     * @param bufferEdges Buffer with data on the edges.
+     * @param bufferEdges Buffer with data on the edges_.
      * @param bufferMarkNoneBorder A buffer with the notation that the 
      *                             edge is already inside.
      * @return 0 if sucsses, else OpenCl error code.
@@ -361,7 +361,7 @@ private:
 
     /*
      * Calculation of internal points of capacities.
-     * @param edges A buffer with data on the edges capable of creating a capacity.
+     * @param edges_ A buffer with data on the edges_ capable of creating a capacity.
      * @param bufferBorder The buffer contains data about the boundary.
      * @param borderSize Size boundary.
      * @param buferInnerVertex Result buffer.
@@ -375,11 +375,11 @@ private:
                            uint32_t         &countInnerVertex);
 
     /*
-     * Calculation of fracture edges.
+     * Calculation of fracture edges_.
      * @details The result is filling the data with the following changes:
      *         edgesHoleBorders_, countFractureEdges_.
      * @param bufferInnerFaces Buffer with information about the senetrained polygons.
-     * @param bufferInnerEdges Buffer with information about the senetrained edges.
+     * @param bufferInnerEdges Buffer with information about the senetrained edges_.
      * @return 0 if sucsses, else OpenCl error code.
      */
     int computeFractureEdges(const CMemObject &bufferInnerFaces,

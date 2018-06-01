@@ -1,6 +1,7 @@
 /* Copyright (c) 2018, Aleksandrov Maksim */
 
 #include <iostream>
+#include <algorithm>
 
 #include "CSettingsManager.hpp"
 
@@ -18,79 +19,9 @@ enum StateEdge {
     END = 1<<2
 };
 
-struct Edge;
-
-struct Vert {
-    std::list <Edge *> edges_;
-    StateEdge state_ = NOT_USE;
-};
-
-struct Edge {
-    Vert *connectVert_[2];
-    StateEdge state_ = NOT_USE;
-    float weight_;
-};
 
 const char MASK_BEGIN_EDGE = TIME_USED | USED,
            MASK_CHEK_NEXT_EDGE = ~USED;
-
-void buildGraph(const std::list <std::vector<uint32_t>> borders,
-                const std::vector<float> minHeights,
-                std::vector<Vert> &verts,
-                std::list<Edge> &edges) {
-    auto currVert = verts.begin(),
-         secondVert = currVert;
-    auto iterHeight = minHeights.begin();
-    secondVert++;
-    for(auto iter = borders.begin(); iter != borders.end(); ++iter) {
-        if(!iter->empty()) {
-            edges.emplace_back();
-            edges.back().weight_ = *iterHeight;
-            edges.back().connectVert_[0] = &(*currVert);
-            currVert->edges_.push_back(&edges.back());
-            edges.back().connectVert_[1] = &(*secondVert);
-            secondVert->edges_.push_back(&edges.back());
-        }
-        iterHeight++;
-        secondVert++;
-        if(secondVert == verts.end()) {
-            currVert++;
-            secondVert = currVert;
-            secondVert++;
-        }
-    }
-}
-
-void findMSP(std::vector<Vert> &verts,
-             std::list<Edge> &edges) {
-    std::list<Edge *> sortedEdges;
-    for(auto iter = edges.begin(); iter != edges.end(); iter++) {
-        sortedEdges.push_back(&(*iter));
-    }
-    sortedEdges.sort([](Edge *one, Edge *two) {
-        return one->weight_ < two->weight_;
-    });
-    uint32_t countEdgesCurr = 0,
-             countEdgesNeed = verts.size() - 1;
-    for(auto iter = sortedEdges.begin(); iter != sortedEdges.end(); ++iter) {
-        if(((*iter)->connectVert_[0]->state_ != USED) ||
-            ((*iter)->connectVert_[1]->state_ != USED)) {
-
-            (*iter)->connectVert_[0]->state_ = USED;
-            (*iter)->connectVert_[1]->state_ = USED;
-            (*iter)->state_ = USED;
-            countEdgesCurr++;
-            if(countEdgesCurr == countEdgesNeed) {
-                break;
-            }
-        }
-    }
-    for(auto iterVert = verts.begin(); iterVert != verts.end(); ++iterVert) {
-        iterVert->edges_.remove_if([](Edge *item) {
-            return item->state_ == NOT_USE;
-        });
-    }
-}
 
 inline void roadMatOut(const std::vector<uint32_t> &edges) {
     for(uint32_t i = 0; i < edges.size(); i+=2) {
@@ -141,78 +72,13 @@ int CWaterCompute::computeWaterLvl(std::vector <float> &vertex,
         errorMessage("Fail find union vertex", err);
         return err;
     }
-    std::vector<float> minHeights;
-    std::vector<uint32_t> minVertIds;
-    findMinPoint(borders, minHeights, minVertIds);
-    std::vector<Vert> verts(innerFaces.size());
-    std::list<Edge> edges;
-    buildGraph(borders, minHeights, verts, edges);
-    findMSP(verts, edges);
-    std::vector <float> heights;
-    float maxHeight = edges.back().weight_;
-    for(auto iter = edges.begin(); iter != edges.end(); ++iter) {
-        if(iter->state_ != USED) {
-            continue;
-        }
-        bool chek = false;
-        for(auto iterChek = heights.begin(); iterChek != heights.end(); ++iterChek) {
-            if(*iterChek == iter->weight_) {
-                chek = true;
-                break;
-            }
-        }
-        if(!chek) {
-            heights.push_back(iter->weight_);
-            if(iter->weight_ > maxHeight) {
-                maxHeight = iter->weight_;
-            }
-        }
-    }
-    heights.push_back(maxHeight + 20.0f);
-    std::vector<float> squares,
-                       vals;
-    err = computeAreaData(innerFaces, heights, squares, vals);
+
+    err = buildMap(borders, innerFaces);
     if(err != 0) {
-        errorMessage("Fail compute areas data", err);
+        errorMessage("Fail build map", err);
         return err;
     }
     // todo
-    return 0;
-}
-
-int CWaterCompute::findMinPoint(const std::list<std::vector<uint32_t>>& borders,
-                                std::vector<float> &heights,
-                                std::vector<uint32_t> &result) {
-    std::vector <float> vertex;
-    int err = getVertex(vertex);
-    if(err != 0) {
-        errorMessage("Fail get vertex", err);
-        return err;
-    }
-    for(auto iterFirst = borders.begin(); 
-        iterFirst != borders.end(); 
-        ++iterFirst) {
-
-        if(iterFirst->empty()) {
-            heights.push_back(0.0f);
-            result.push_back(0);
-            continue;
-        }
-
-        uint32_t minId = iterFirst->back();
-        float min = vertex[minId * 3 + 1];
-        for(auto iterSecond = iterFirst->begin(); 
-            iterSecond != iterFirst->end(); 
-            ++iterSecond) {
-
-            if(vertex[*iterSecond * 3 + 1] < min) {
-                min = vertex[*iterSecond * 3 + 1];
-                minId = *iterSecond;
-            }
-        }
-        heights.push_back(min);
-        result.push_back(minId);
-    }
     return 0;
 }
 
