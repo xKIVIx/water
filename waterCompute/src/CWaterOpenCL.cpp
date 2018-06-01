@@ -275,6 +275,20 @@ int CWaterOpenCL::initKernels() {
         errorMessage("Fail init getMarkData", err);
         return err;
     }
+
+    err = kernelFindVal_.setFunction(program_,
+                                     "findVal");
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail init kernelFindVal", err);
+        return err;
+    }
+
+    err = kernelFindSquare_.setFunction(program_,
+                                        "findSquare");
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail init kernelFindSquare", err);
+        return err;
+    }
     return CL_SUCCESS;
 }
 
@@ -436,6 +450,145 @@ int CWaterOpenCL::computeData() {
     }
     edgesHoleBorders_.resize((countFractureEdges_ + countBorderEdges_) * 2);
     return err;
+}
+
+int CWaterOpenCL::computeAreaData(const std::list<std::vector<uint32_t>>& areas,
+                                  const std::vector<float> &heights,
+                                  std::vector<float> &resultSquare,
+                                  std::vector<float> &resultVal) {
+    CMemObject bufferAreas(context_,
+                           bufferFaces_.getSize() / 3,
+                           CL_MEM_READ_ONLY),
+               bufferSquare(context_,
+                            bufferFaces_.getSize() / 3,
+                            CL_MEM_READ_WRITE),
+               bufferVal(context_,
+                         bufferFaces_.getSize() / 3,
+                         CL_MEM_READ_WRITE);
+    int err = 0;
+
+    // binding kernelFindSquare_
+    err = kernelFindSquare_.bindParametr(bufferVertex_, 0);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferVertex", err);
+        return err;
+    }
+
+    err = kernelFindSquare_.bindParametr(bufferFaces_, 1);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferFaces", err);
+        return err;
+    }
+
+    err = kernelFindSquare_.bindParametr(bufferAreas, 2);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferAreas", err);
+        return err;
+    }
+
+    err = kernelFindSquare_.bindParametr(bufferSquare, 3);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferSquare", err);
+        return err;
+    }
+
+    //binding kernelFindVal
+    err = kernelFindVal_.bindParametr(bufferVertex_, 0);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferVertex", err);
+        return err;
+    }
+
+    err = kernelFindVal_.bindParametr(bufferFaces_, 1);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferFaces", err);
+        return err;
+    }
+
+    err = kernelFindVal_.bindParametr(bufferAreas, 2);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferAreas", err);
+        return err;
+    }
+
+    err = kernelFindVal_.bindParametr(bufferSquare, 3);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferSquare", err);
+        return err;
+    }
+
+    err = kernelFindVal_.bindParametr(bufferVal, 5);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferVal", err);
+        return err;
+    }
+
+    for(auto iter = areas.begin(); iter != areas.end(); ++iter) {
+
+        err = bufferAreas.loadData(context_,
+                                   commandQueue_,
+                                   (char *)iter->data(),
+                                   iter->size() * sizeof(uint32_t));
+        if(err != CL_SUCCESS) {
+            errorMessage("Fail load data into bufferAreas", err);
+            return err;
+        }
+
+        std::vector <float> result;
+        uint32_t workSize = iter->size();
+        err = kernelFindSquare_.complite(commandQueue_,
+                                         &workSize,
+                                         1);
+
+        if(err != CL_SUCCESS) {
+            errorMessage("Fail complite kernelFindSquare", err);
+            return err;
+        }
+
+        for(auto height = heights.begin(); height != heights.end(); ++height) {
+
+            err = kernelFindVal_.bindParametr(*height, 4);
+            if(err != CL_SUCCESS) {
+                errorMessage("Fail bind height", err);
+                return err;
+            }
+
+            err = kernelFindVal_.complite(commandQueue_,
+                                          &workSize,
+                                          1);
+            if(err != CL_SUCCESS) {
+                errorMessage("Fail complite kernelFindVal", err);
+                return err;
+            }
+
+            err = bufferVal.getData(commandQueue_, result);
+            if(err != CL_SUCCESS) {
+                errorMessage("Fail get data bufferVal", err);
+                return err;
+            }
+            result.resize(iter->size());
+            resultVal.push_back(0.0f);
+            for(auto i = result.begin(); i != result.end(); ++i) {
+                resultVal.back() += *i;
+            }
+            result.clear();
+        }
+
+        err = bufferSquare.getData(commandQueue_, result);
+        if(err != CL_SUCCESS) {
+            errorMessage("Fail get data bufferSquare", err);
+            return err;
+        }
+
+        result.resize(iter->size());
+        resultSquare.push_back(0.0f);
+        for(auto i = result.begin(); i != result.end(); ++i) {
+            resultSquare.back() += *i;
+        }
+        result.clear();
+    }
+
+    return CL_SUCCESS;
 }
 
 int CWaterOpenCL::computeInnerEdges(const CMemObject &bufferEdges,

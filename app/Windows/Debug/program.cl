@@ -260,3 +260,56 @@ __kernel void findUnionVertex(__global __read_only  unsigned int  *faces,
     }
     
 }
+
+__kernel void findSquare(__global __read_only float         *vertex,
+                         __global __read_only unsigned int  *faces,
+                         __global __read_only unsigned int  *area,
+                         __global             float         *result) {
+    unsigned int idArea = get_global_id(0),
+                 posFace = area[idArea] * 3;
+    float2 vert0 = (float2) {vertex[faces[posFace] * 3],
+                             vertex[faces[posFace] * 3 + 2]},
+           vert1 = (float2) {vertex[faces[posFace + 1] * 3],
+                             vertex[faces[posFace + 1] * 3 + 2]},
+           vert2 = (float2) {vertex[faces[posFace + 2] * 3],
+                             vertex[faces[posFace + 2] * 3 + 2]};
+                             
+    result[idArea] = fabs((vert1.x - vert0.x) * (vert2.y - vert0.y) - (vert1.y - vert0.y) * (vert2.x - vert0.x)) / 2.0f;
+}
+
+__kernel void findVal(__global __read_only float        *vertex,
+                      __global __read_only unsigned int *faces,
+                      __global __read_only unsigned int *area,
+                      __global __read_only float        *squares,
+                                           float        height,
+                      __global             float        *result) {
+                                  
+    unsigned int idArea = get_global_id(0),
+                 posFace = area[idArea] * 3;
+    float3 vert0 = (float3) {vertex[faces[posFace] * 3],
+                             vertex[faces[posFace] * 3 + 1],
+                             vertex[faces[posFace] * 3 + 2]},
+           vert1 = (float3) {vertex[faces[posFace + 1] * 3],
+                             vertex[faces[posFace + 1] * 3 + 1],
+                             vertex[faces[posFace + 1] * 3 + 2]},
+           vert2 = (float3) {vertex[faces[posFace + 2] * 3],
+                             vertex[faces[posFace + 2] * 3 + 1],
+                             vertex[faces[posFace + 2] * 3 + 2]};
+                             
+    float minHeight = vert0.y;
+    min(minHeight, vert1.y);
+    min(minHeight, vert2.y);
+    
+    if(minHeight > height) {
+        result[idArea] = 0.0f;
+        return;
+    }
+    
+    float maxHeight = vert0.y;
+    max(maxHeight, vert1.y);
+    max(maxHeight, vert2.y);
+    
+    result[idArea] = squares[idArea] * (height - maxHeight);
+    result[idArea] += squares[idArea] * (maxHeight - minHeight) / 2.0f;
+
+}

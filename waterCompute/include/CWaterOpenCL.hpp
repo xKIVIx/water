@@ -81,6 +81,11 @@ protected:
     int computeInnerFaces(const std::list<std::vector<uint32_t>> &borders, 
                           std::list<std::vector<uint32_t>> &faces);
 
+    int computeAreaData(const std::list<std::vector<uint32_t>>& areas,
+                        const std::vector<float> &heights,
+                        std::vector<float> &resultSquare,
+                        std::vector<float> &resultVal);
+
 
     /*
      * Search for stacking.
@@ -290,7 +295,14 @@ private:
          */
         int bindParametr(const uint32_t param,
                          const uint32_t paramId) const;
-
+        /*
+         * Bind parametr to function.
+         * @param param Float parametr.
+         * @param paramId Position of parametr.
+         * @return 0 if sucsses, else OpenCl error code.
+         */
+        int bindParametr(const float param,
+                         const uint32_t paramId) const;
         /*
          * Complite function.
          * @param commandQueue The command queue for uploading data.
@@ -386,7 +398,9 @@ private:
             kernelCountColise_,
             kernelRemoveCommunityAreas_,
             kernelFindUnionVertex_,
-            kernelGetMarkData_;
+            kernelGetMarkData_,
+            kernelFindVal_,
+            kernelFindSquare_;
 
     CLdescriptor program_ = nullptr,
                  commandQueue_ = nullptr,

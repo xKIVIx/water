@@ -4,6 +4,7 @@
 #define CWATER_COMPUTE
 
 #include <vector>
+#include <map>
 
 #include "CWaterOpenCL.hpp"
 /**
@@ -27,17 +28,7 @@ public:
 
     
 private:
-    struct CTransferPoint {
-        uint32_t target_;
-        float capVal_;
-    };
-    struct CHole {
-        std::vector<uint32_t> area_;
-        float currVal_,
-              capVal_,
-              square_;
-    };
-    CHole hole_;
+
 
     /**
      *  Search for container boundaries.

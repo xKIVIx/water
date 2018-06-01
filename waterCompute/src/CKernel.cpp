@@ -30,6 +30,14 @@ int CWaterOpenCL::CKernel::bindParametr(const uint32_t param,
                           &param);
 }
 
+int CWaterOpenCL::CKernel::bindParametr(const float param, 
+                                        const uint32_t paramId) const {
+    return clSetKernelArg((cl_kernel)kernel_,
+                          paramId,
+                          sizeof(param),
+                          &param);
+}
+
 int CWaterOpenCL::CKernel::complite(const CLdescriptor commandQueue,
                                     const uint32_t *workSizes,
                                     const uint32_t countWorkSizes) const{
