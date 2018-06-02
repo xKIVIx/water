@@ -5,6 +5,7 @@
 
 #include <list>
 #include <vector>
+#include <map>
 
 #include "CWaterOpenCL.hpp"
 
@@ -15,8 +16,9 @@
 class CWaterMap : public CWaterOpenCL {
 public:
 
-protected:
+    void addWater(const float size);
 
+protected:
     int buildMap(const std::list <std::vector<uint32_t>> &borders,
                  const std::list <std::vector<uint32_t>> &areas);
     
@@ -30,6 +32,10 @@ private:
 
     struct Vert {
         std::list <Edge *> edges_;
+        std::vector<uint32_t> faces_;
+        std::map<float, float> valGrad_;
+        float currVal_ = 0.0f,
+              square_ = 0.0f;
         State state_ = NOT_USE;
     };
 
@@ -47,6 +53,10 @@ private:
     int findMinPoint(const std::list <std::vector<uint32_t>> &borders,
                      std::vector<float> &heights,
                      std::vector<uint32_t> &result);
+
+    void fillData(const std::vector<float> &squares,
+                  const std::vector<float> &vals,
+                  const std::vector<float> &heights);
 
     std::vector<Vert> verts_;
     std::list<Edge> edges_;
