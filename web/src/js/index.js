@@ -43,7 +43,7 @@ function handleComeResult(result) {
                                        3,
                                        void(0),
                                        3,
-                                       face,
+                                       faces,
                                        program,
                                        [0.0, 0.0, 0.6, 1.0],
                                        vec3.fromValues(0.0,0.0, 0.0),
@@ -120,7 +120,7 @@ document.getElementById('start-button').onclick = function() {
         alert("Модель не загружена. Выберите модель.");
         return;
     }
-    let valWater = document.getElementById('rain-val').value;
+    let valWater = document.getElementById('rain-val').value / 1000;
     let k = 1 / document.getElementById('scale-model').value;
     valWater *= k;
     let data = [new Uint8Array([0]), // opcode
