@@ -6,7 +6,7 @@
 
 #define errorMessage(message, failCode) std::cout << message << ": " << failCode << std::endl
 
-const uint32_t COUNT_ITERATIONS = 20;
+const uint32_t COUNT_ITERATIONS = 50;
 
 int CWaterMap::buildMap(const std::list<std::vector<uint32_t>> &borders,
                         const std::list<std::vector<uint32_t>> &areas) {

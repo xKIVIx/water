@@ -136,6 +136,11 @@ int CServer::computeWaterLvl(const std::string &data,
     auto iterVertex = resultVertex.begin();
     auto iterFaces = resultFaces.begin();
     for(; iterVertex != resultVertex.end();) {
+        if(iterVertex->empty()) {
+            iterFaces++;
+            iterVertex++;
+            continue;
+        }
         uint32_t tmp = iterVertex->size();
         result.insert(result.end(),
                       (char *)&tmp,

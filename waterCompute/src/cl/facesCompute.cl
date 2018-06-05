@@ -200,8 +200,8 @@ __kernel void getFacesToHeight (__global __read_only float        *vertex,
         resultVertex[writePosVert + 7] = height;
         resultVertex[writePosVert + 8] = vertex[idVert2 + 2];
         
-        resultFaces[writePos] = writePosVert;
-        resultFaces[writePos + 1] = writePosVert + 3;
-        resultFaces[writePos + 2] = writePosVert + 6;
+        resultFaces[writePos] = writePosVert / 3;
+        resultFaces[writePos + 1] = writePosVert / 3 + 1;
+        resultFaces[writePos + 2] = writePosVert / 3 + 2;
     }
 }
