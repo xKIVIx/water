@@ -43,7 +43,7 @@ function handleComeResult(result) {
                                        3,
                                        void(0),
                                        3,
-                                       waterMesh.face,
+                                       face,
                                        program,
                                        [0.0, 0.0, 0.6, 1.0],
                                        vec3.fromValues(0.0,0.0, 0.0),
