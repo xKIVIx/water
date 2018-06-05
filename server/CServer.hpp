@@ -4,6 +4,7 @@
 #define CSERVER
 
 #include "CReception.hpp"
+#include "CWaterCompute.hpp"
 /**
  * @brief The class is a stream. which
  *        performs the work of the server.
@@ -17,6 +18,7 @@ class CServer {
     ~CServer();
 
     private:
+    CWaterCompute waterCompute;
     std::thread *workThread_ = nullptr;
     std::mutex mutex_;
     bool endState_ = false;
@@ -49,6 +51,10 @@ class CServer {
      * 
      */
     void stop();
+
+    int computeWaterLvl(const std::string &data,
+                              uint32_t    readPos,
+                              std::string &result);
 };
 
 #endif // CSERVER
