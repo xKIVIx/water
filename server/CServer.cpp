@@ -4,9 +4,10 @@
 #include <vector>
 
 #include "CSettingsManager.hpp"
-#include "CWaterCompute.hpp"
 
 #include "CServer.hpp"
+
+#define errorMessage(message, failCode) std::cout << message << ": " << failCode << std::endl
 
 CServer::CServer() {
     workThread_ = new std::thread(&CServer::work, this);
@@ -64,60 +65,98 @@ void CServer::work() {
 		}
 	}
 	std::cout << "\nServer is create.\n";
-    CWaterCompute waterCompute;
     while( !isEnd() ) {
         STask task = reception_->getTask();
         if((task.token_.socket_ == -1) || 
            (task.data_.empty())) {
             continue;
         }
-        std::vector <float> vertex;
-        uint sizeVertexBlock = *( (size_t *)(task.data_.c_str() + 1) );
-        vertex.reserve(sizeVertexBlock/4);
-        vertex.insert(vertex.end(),
-                      (float *)&(task.data_.c_str()[9]),
-                      (float *)&(task.data_.c_str()[9]) + sizeVertexBlock / 4);
-        
-        std::vector <uint> face;
-        uint sizeFaceBlock = *( (size_t *)(task.data_.c_str() + 5) );
-        face.reserve(sizeVertexBlock/4);
-        face.insert(face.end(),
-                    (uint *)&(task.data_.c_str()[9 + sizeVertexBlock]),
-                    (uint *)&(task.data_.c_str()[9 + sizeVertexBlock]) + sizeFaceBlock / 4);
-        
-        waterCompute.loadData(vertex, face);
-        waterCompute.prepareData();
-        waterCompute.addWater(1.0f);
-
-        std::list<std::vector<float>> resultVertex;
-        std::list<std::vector<uint32_t>> resultFaces;
-        waterCompute.getWaterLvls(resultVertex, resultFaces);
-        task.data_.clear();
-        auto iterVertex = resultVertex.begin();
-        auto iterFaces = resultFaces.begin();
-        for(; iterVertex != resultVertex.end();) {
-            uint32_t tmp = iterVertex->size();
-            task.data_.insert(task.data_.end(),
-                              (char *)&tmp,
-                              (char *)&tmp + sizeof(uint32_t));
-            task.data_.insert(task.data_.end(),
-                              (char *)iterVertex->data(),
-                              (char *)iterVertex->data() + tmp * sizeof(float));
-
-            tmp = iterFaces->size();
-            task.data_.insert(task.data_.end(),
-                              (char *)&tmp,
-                              (char *)&tmp + sizeof(uint32_t));
-            task.data_.insert(task.data_.end(),
-                              (char *)iterFaces->data(),
-                              (char *)iterFaces->data() + tmp * sizeof(float));
-
-            iterFaces++;
-            iterVertex++;
+        uint8_t opCode = *(uint8_t *)task.data_.data();
+        int err;
+        std::string result;
+        switch(opCode) {
+            case 0:
+                err = computeWaterLvl(task.data_, 1, result);
+                break;
+            default:
+                break;
         }
+        task.data_.swap(result);
 	    reception_->compliteTask(task);
-        waterCompute.clear();
+        
     }	
+}
+
+int CServer::computeWaterLvl(const std::string &data,
+                                   uint32_t    readPos,
+                                   std::string &result) {
+
+    float waterVal = *(float *)(data.data() + readPos);
+    readPos += 4;
+
+    uint sizeVertexBlock = *(uint *)(data.data() + readPos);
+    readPos += 4;
+
+    uint sizeFaceBlock = *(uint *)(data.data() + readPos);
+    readPos += 4;
+
+    std::vector <float> vertex;
+    vertex.reserve(sizeVertexBlock/4);
+    vertex.insert(vertex.end(),
+                  (float *)(data.data() + readPos),
+                  (float *)(data.data() + readPos + sizeVertexBlock));
+    readPos += sizeVertexBlock;
+
+    std::vector <uint> face;
+    face.reserve(sizeVertexBlock/4);
+    face.insert(face.end(),
+                (uint *)(data.data() + readPos),
+                (uint *)(data.data() + readPos + sizeFaceBlock));
+
+    int err = waterCompute.loadData(vertex, face);
+    if(err != 0) {
+        errorMessage("Fail load data", err);
+        waterCompute.clear();
+        return 0;
+    }
+
+    err = waterCompute.prepareData();
+    if(err != 0) {
+        errorMessage("Fail prepare data", err);
+        waterCompute.clear();
+        return 0;
+    }
+
+    waterCompute.addWater(waterVal);
+
+    std::list<std::vector<float>> resultVertex;
+    std::list<std::vector<uint32_t>> resultFaces;
+    waterCompute.getWaterLvls(resultVertex, resultFaces);
+
+    auto iterVertex = resultVertex.begin();
+    auto iterFaces = resultFaces.begin();
+    for(; iterVertex != resultVertex.end();) {
+        uint32_t tmp = iterVertex->size();
+        result.insert(result.end(),
+                      (char *)&tmp,
+                      (char *)&tmp + sizeof(uint32_t));
+        result.insert(result.end(),
+                      (char *)iterVertex->data(),
+                      (char *)iterVertex->data() + tmp * sizeof(float));
+
+        tmp = iterFaces->size();
+        result.insert(result.end(),
+                      (char *)&tmp,
+                      (char *)&tmp + sizeof(uint32_t));
+        result.insert(result.end(),
+                      (char *)iterFaces->data(),
+                      (char *)iterFaces->data() + tmp * sizeof(float));
+
+        iterFaces++;
+        iterVertex++;
+    }
+    waterCompute.clear();
+    return 0;
 }
 
 void CServer::stop() {
