@@ -24,7 +24,7 @@ function handleComeResult(result) {
                        gl.getShader('fragment-water-shader')];
         let program = gl.getShaderProgram(shaders);
         let readPoint = 0;
-        while(readPoint != arrayBuffer.length) {
+        while(readPoint != arrayBuffer.byteLength) {
             let size = new Uint32Array(arrayBuffer, readPoint, 1);
             readPoint += 4;
             let vertex = new Float32Array(arrayBuffer, 
