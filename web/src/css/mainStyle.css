@@ -1,5 +1,5 @@
 body {
-    background-color: black;
+    background-color: aquamarine;
 }
 h1{
     font-size: 20pt;
@@ -7,9 +7,10 @@ h1{
 h2{
     font-size: 14pt;
 }
-.blockMenu {
+.block-menu {
     padding: 5px;
-    border: 1
+    background-color: aquamarine;
+    border-bottom-right-radius: 20px;
 }
 #menu, #view {
     position: absolute;
@@ -18,12 +19,13 @@ h2{
 }
 #view {
     left: 0px;
-    width: 60%;
+    width: 60.5%;
+    background-color: black;
 }
 #menu {
-    right: 0px;
-    width: 40%;
-    background-color: white;
+    left: 61%;
+    width: 39%;
+    background-color: rgb(37, 70, 121);
 }
 #viewport {
     width: 100%;
@@ -40,4 +42,8 @@ h2{
     margin-top: -75px;
     width: 300px;
     height: 150px;
+}
+
+.parametr {
+    margin-bottom: 10px;
 }

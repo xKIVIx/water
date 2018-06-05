@@ -7,8 +7,7 @@ import * as netWork from "./net.js";
 import * as parser from "./fileParser/parser.js";
 import {mat4,vec3,quat} from "./includes/GLMatrix/gl-matrix.js";
 
-var mesh,
-    waterMesh;
+var mesh;
 
 
 /**
@@ -18,67 +17,50 @@ var mesh,
 function handleComeResult(result) {
     var fileReader = new FileReader();
     fileReader.onload = function() {
+        objects.length = 1;
         var arrayBuffer = this.result;
-        waterMesh = new Object();
-        let sizes = new Uint32Array(arrayBuffer, 0, 2);
-        waterMesh.vertex = new Float32Array(arrayBuffer, 
-                                            8, 
-                                            sizes[0]/4);
-        waterMesh.face = new Uint32Array(arrayBuffer, 
-                                         8 + sizes[0], 
-                                         sizes[1]/4);
+        
         let shaders = [gl.getShader('vertex-water-shader'),
                        gl.getShader('fragment-water-shader')];
         let program = gl.getShaderProgram(shaders);
-        let object = gl.loadObject(waterMesh.vertex,
-                                   3,
-                                   void(0),
-                                   3,
-                                   waterMesh.face,
-                                   program,
-                                   [0.0, 0.0, 0.6, 1.0],
-                                   vec3.fromValues(0.0,0.0, 0.0),
-                                   quat.create());
-        if(object !== void(0)) {
-            objects[1] = object;
-            gl.rend();
+        let readPoint = 0;
+        while(readPoint != arrayBuffer.length) {
+            let size = new Uint32Array(arrayBuffer, readPoint, 1);
+            readPoint += 4;
+            let vertex = new Float32Array(arrayBuffer, 
+                                          readPoint, 
+                                          size[0]);
+            readPoint += 4 * size[0];
+
+            size = new Uint32Array(arrayBuffer, readPoint, 1);
+            readPoint += 4;
+            let faces = new Uint32Array(arrayBuffer, 
+                                        readPoint, 
+                                        size[0]);
+            readPoint += 4 * size[0];
+            
+            let object = gl.loadObject(vertex,
+                                       3,
+                                       void(0),
+                                       3,
+                                       waterMesh.face,
+                                       program,
+                                       [0.0, 0.0, 0.6, 1.0],
+                                       vec3.fromValues(0.0,0.0, 0.0),
+                                       quat.create());
+            if(object !== void(0)) {
+                objects.push(object);
+            }
         }
+        gl.rend();
     };
     fileReader.readAsArrayBuffer(result.data);
 }
-
-function handleComeTestResult(result) {
-    var fileReader = new FileReader();
-    fileReader.onload = function() {
-        waterMesh = new Object();
-        var arrayBuffer = this.result;
-        waterMesh.vertex = mesh.vertex;
-        waterMesh.face = new Uint32Array(arrayBuffer);
-        let shaders = [gl.getShader('vertex-water-shader'),
-                       gl.getShader('fragment-water-shader')];
-        let program = gl.getShaderProgram(shaders);
-        let object = gl.loadObject(waterMesh.vertex,
-                                   3,
-                                   void(0),
-                                   3,
-                                   waterMesh.face,
-                                   program,
-                                   [0.0, 0.0, 0.6, 1.0],
-                                   vec3.fromValues(0.0,0.0, 0.0),
-                                   quat.create());
-        if(object !== void(0)) {
-            objects[1] = object;
-            gl.rend();
-        }
-    };
-    fileReader.readAsArrayBuffer(result.data);
-}
-
 
 var gl = new webGL.WebGLcontext('viewport');
 var objects = new Array();
 gl.setObjectsList(objects);
-//gl.rend();
+
 webGLcontrol.initControlAera('viewport', gl, objects);
 
 document.getElementById('file-path').onchange = function() {
@@ -134,8 +116,17 @@ function packData(data) {
 }
 
 document.getElementById('start-button').onclick = function() {
+    if(mesh == void(0)) {
+        alert("Модель не загружена. Выберите модель.");
+        return;
+    }
+    let valWater = document.getElementById('rain-val').value;
+    let k = 1 / document.getElementById('scale-model').value;
+    valWater *= k;
     let data = [new Uint8Array([0]), // opcode
-                // blocks sizes
+                //water val
+                new Float32Array([valWater]),
+                //blocks sizes
                 new Uint32Array([mesh.vertex.length * 4,
                                  mesh.face.length * 4]),
                 new Float32Array(mesh.vertex),
@@ -143,29 +134,5 @@ document.getElementById('start-button').onclick = function() {
     let message = packData(data);
     // adding opcode;
     netWork.sendMessage(message, handleComeResult);
-}
-
-document.getElementById('border-faces-button').onclick = function() {
-    let data = [new Uint8Array([1]), // opcode
-                // blocks sizes
-                new Uint32Array([mesh.vertex.length * 4,
-                                 mesh.face.length * 4]),
-                new Float32Array(mesh.vertex),
-                new Uint32Array(mesh.face)];
-    let message = packData(data);
-    // adding opcode;
-    netWork.sendMessage(message, handleComeTestResult);
-}
-
-document.getElementById('fruct-faces-button').onclick = function() {
-    let data = [new Uint8Array([2]), // opcode
-                // blocks sizes
-                new Uint32Array([mesh.vertex.length * 4,
-                                 mesh.face.length * 4]),
-                new Float32Array(mesh.vertex),
-                new Uint32Array(mesh.face)];
-    let message = packData(data);
-    // adding opcode;
-    netWork.sendMessage(message, handleComeTestResult);
 }
 

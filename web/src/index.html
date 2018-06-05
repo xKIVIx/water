@@ -34,21 +34,38 @@
         </div>
         <div id="menu">
             <div>
-                <div>
+                <div class="block-menu">
                     <h2>Параметры</h2>
-                    <input  id="file-path"
-                            type="file"
-                            value="3d map">
-                    <label for="file-path">Путь к файлу</label>
+                    <div class = "parametr">
+                        <label>
+                            Путь к модели
+                            <input  id="file-path"
+                                    accept=".ply"
+                                    type="file"
+                                    value="3d map">
+                        </label>
+                    </div>
+                    <div class = "parametr">
+                        <label>
+                            Маштаб модели 1:
+                            <input id="scale-model"
+                                   type="number"
+                                   value="1"
+                                   min="1">
+                        </label>
+                    </div>
+                    <div class = "parametr">
+                        <label>
+                            Количество осадков (мм)
+                            <input id="rain-val"
+                                   type="number"
+                                   value="0"
+                                   min="0">
+                        </label>
+                    </div>
                     <input  id="start-button"
                             type="button"
-                            value="Complite">
-                    <input  id="border-faces-button"
-                            type="button"
-                            value="Border faces">
-                    <input  id="fruct-faces-button"
-                            type="button"
-                            value="fruct faces">
+                            value="выполнить расчет">
                 </div>
             </div>
         </div>
