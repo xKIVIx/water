@@ -14,13 +14,12 @@
 class CWaterCompute : public CWaterMap{
 public:
     /**
-     * Calculates water levels.
+     * Prepare data to calculates water levels.
      * @param vertex Buffer for output data about vertices.
      * @param Buffer for output data about polygons.
      * @return 0 if sucsses, else OpenCl error code.
      */
-    int computeWaterLvl(std::vector <float> &vertex,
-                        std::vector <uint32_t> &faces);
+    int prepareData();
     /**
      * Cleaning of internal data.
      */

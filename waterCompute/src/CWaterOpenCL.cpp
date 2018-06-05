@@ -289,6 +289,13 @@ int CWaterOpenCL::initKernels() {
         errorMessage("Fail init kernelFindSquare", err);
         return err;
     }
+
+    err = kernelGetFacesToHeight_.setFunction(program_,
+                                              "getFacesToHeight");
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail init kernelGetFacesToHeight", err);
+        return err;
+    }
     return CL_SUCCESS;
 }
 
@@ -384,6 +391,112 @@ int CWaterOpenCL::getBorderEdges(std::vector<uint32_t>& edges) const {
 
 int CWaterOpenCL::getVertex(std::vector<float>& result) const {
     return bufferVertex_.getData(commandQueue_, result);
+}
+
+int CWaterOpenCL::getFacesToHeight(const std::vector<uint32_t> &area,
+                                   const float                  height,
+                                         std::vector<uint32_t> &faces, 
+                                         std::vector<float>    &vertex) {
+    CMemObject bufferResultFaces(context_,
+                                 area.size() * 3 * sizeof(uint32_t),
+                                 CL_MEM_WRITE_ONLY),
+               bufferResultVertex(context_,
+                                  bufferResultFaces.getSize() * 3,
+                                  CL_MEM_WRITE_ONLY),
+               bufferArea(context_,
+                          area.size() * sizeof(uint32_t),
+                          CL_MEM_READ_ONLY),
+               bufferResultSize(context_,
+                                sizeof(uint32_t),
+                                CL_MEM_READ_WRITE);
+    uint32_t sizeResult = 0;
+    int err = bufferResultSize.loadData(context_,
+                                        commandQueue_,
+                                        (char *)&sizeResult,
+                                        sizeof(uint32_t));
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail zeroing bufferResultSize", err);
+        return err;
+    }
+
+    err = bufferArea.loadData(context_,
+                              commandQueue_,
+                              (char*)area.data(),
+                              bufferArea.getSize());
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail load area", err);
+        return err;
+    }
+
+
+    err = kernelGetFacesToHeight_.bindParametr(bufferVertex_, 0);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferVertex", err);
+        return err;
+    }
+
+    err = kernelGetFacesToHeight_.bindParametr(bufferFaces_, 1);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferVertex", err);
+        return err;
+    }
+
+    err = kernelGetFacesToHeight_.bindParametr(bufferArea, 2);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferArea", err);
+        return err;
+    }
+
+    err = kernelGetFacesToHeight_.bindParametr(height, 3);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind height", err);
+        return err;
+    }
+
+    err = kernelGetFacesToHeight_.bindParametr(bufferResultFaces, 4);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferResultFaces", err);
+        return err;
+    }
+
+    err = kernelGetFacesToHeight_.bindParametr(bufferResultVertex, 5);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferResultVertex", err);
+        return err;
+    }
+
+    err = kernelGetFacesToHeight_.bindParametr(bufferResultSize, 6);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferResultSize", err);
+        return err;
+    }
+
+    uint32_t workSize = area.size();
+
+    err = kernelGetFacesToHeight_.complite(commandQueue_, &workSize, 1);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail complite kernelGetFacesToHeight", err);
+        return err;
+    }
+
+    err = bufferResultFaces.getData(commandQueue_, faces);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail get data bufferResultFaces", err);
+        return err;
+    }
+    err = bufferResultVertex.getData(commandQueue_, vertex);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail get data bufferResultVertex", err);
+        return err;
+    }
+    err = bufferResultSize.getData(commandQueue_, sizeResult);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail get data bufferResultSize", err);
+        return err;
+    }
+    faces.resize(sizeResult);
+    vertex.resize(sizeResult * 3);
+    return CL_SUCCESS;
 }
 
 int CWaterOpenCL::computeData() {

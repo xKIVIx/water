@@ -170,3 +170,38 @@ __kernel void findVal(__global __read_only float        *vertex,
         result[idArea] += squares[idArea] * (height - maxHeight) ;
     }
 }
+__kernel void getFacesToHeight (__global __read_only float        *vertex,
+                                __global __read_only unsigned int *faces,
+                                __global __read_only unsigned int *area,
+                                                     float         height,
+                                __global             unsigned int *resultFaces,
+                                __global             float        *resultVertex,
+                                __global             unsigned int *resultSize) {
+    unsigned int idFace = area[get_global_id(0)] * 3,
+                 idVert0 = faces[idFace] * 3,
+                 idVert1 = faces[idFace + 1] * 3,
+                 idVert2 = faces[idFace + 2] * 3;
+    float minHeight = vertex[idVert0 + 1];
+    minHeight = min(minHeight, vertex[idVert1 + 1]);
+    minHeight = min(minHeight, vertex[idVert2 + 1]);
+    
+    if(minHeight < height) {
+        unsigned int writePos = atomic_add(resultSize, 3),
+                     writePosVert = writePos * 3;
+        resultVertex[writePosVert] = vertex[idVert0];
+        resultVertex[writePosVert + 1] = height;
+        resultVertex[writePosVert + 2] = vertex[idVert0 + 2];
+        
+        resultVertex[writePosVert + 3] = vertex[idVert1];
+        resultVertex[writePosVert + 4] = height;
+        resultVertex[writePosVert + 5] = vertex[idVert1 + 2];
+        
+        resultVertex[writePosVert + 6] = vertex[idVert2];
+        resultVertex[writePosVert + 7] = height;
+        resultVertex[writePosVert + 8] = vertex[idVert2 + 2];
+        
+        resultFaces[writePos] = writePosVert;
+        resultFaces[writePos + 1] = writePosVert + 3;
+        resultFaces[writePos + 2] = writePosVert + 6;
+    }
+}

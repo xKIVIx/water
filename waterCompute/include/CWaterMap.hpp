@@ -18,6 +18,9 @@ public:
 
     void addWater(const float size);
 
+    void getWaterLvls(std::list<std::vector <float>> &vertex,
+                      std::list<std::vector <uint32_t>> &faces);
+
 protected:
     int buildMap(const std::list <std::vector<uint32_t>> &borders,
                  const std::list <std::vector<uint32_t>> &areas);
@@ -54,9 +57,10 @@ private:
                      std::vector<float> &heights,
                      std::vector<uint32_t> &result);
 
-    void fillData(const std::vector<float> &squares,
-                  const std::vector<float> &vals,
-                  const std::vector<float> &heights);
+    void fillData(const std::vector<float>               &squares, 
+                  const std::list<std::vector<uint32_t>> faces,
+                  const std::vector<float>               &vals,
+                  const std::vector<float>               &heights);
 
     std::vector<Vert> verts_;
     std::list<Edge> edges_;

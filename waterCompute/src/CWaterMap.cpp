@@ -6,7 +6,7 @@
 
 #define errorMessage(message, failCode) std::cout << message << ": " << failCode << std::endl
 
-const uint32_t COUNT_ITERATIONS = 10;
+const uint32_t COUNT_ITERATIONS = 20;
 
 int CWaterMap::buildMap(const std::list<std::vector<uint32_t>> &borders,
                         const std::list<std::vector<uint32_t>> &areas) {
@@ -39,20 +39,24 @@ int CWaterMap::buildMap(const std::list<std::vector<uint32_t>> &borders,
         return err;
     }
 
-    fillData(squares, vals, heights);
+    fillData(squares, areas, vals, heights);
 
     return 0;
 }
 
-void CWaterMap::fillData(const std::vector<float>& squares, 
-                         const std::vector<float>& vals,
-                         const std::vector<float>& heights) {
+void CWaterMap::fillData(const std::vector<float>               &squares, 
+                         const std::list<std::vector<uint32_t>> faces,
+                         const std::vector<float>               &vals,
+                         const std::vector<float>               &heights) {
     uint32_t i = 0;
+    auto iterFaces = faces.begin();
     for(auto iterVerts = verts_.begin(); iterVerts != verts_.end(); ++iterVerts) {
-    
+        
+        iterVerts->faces_ = *iterFaces;
+        ++iterFaces;
         iterVerts->square_ = squares[i];
         for(uint32_t k = 0; k < heights.size(); k++) {
-            iterVerts->valGrad_.insert(std::pair<float, float>(heights[k], vals[i*heights.size() + k]));
+            iterVerts->valGrad_.insert(std::pair<float, float>(heights[k], vals[i * heights.size() + k]));
         }
         i++;
     }
@@ -67,15 +71,17 @@ void CWaterMap::addWater(const float size) {
     for(uint32_t i = 0; i < COUNT_ITERATIONS; i++) {
         for(auto iterEdge = edges_.begin(); iterEdge != edges_.end(); ++iterEdge) {
             Vert *oneVert = iterEdge->connectVert_[0],
-                *twoVert = iterEdge->connectVert_[1];
+                 *twoVert = iterEdge->connectVert_[1];
 
             auto val0 = oneVert->valGrad_.find(iterEdge->weight_),
-                val1 = twoVert->valGrad_.find(iterEdge->weight_);
+                 val1 = twoVert->valGrad_.find(iterEdge->weight_);
 
             if(val0->second < oneVert->currVal_) {
                 twoVert->currVal_ += oneVert->currVal_ - val0->second;
+                oneVert->currVal_ = val0->second;
                 if(val1->second < twoVert->currVal_) {
                     float v = twoVert->currVal_ - val1->second;
+                    twoVert->currVal_ = val1->second;
                     val0++;
                     val1++;
                     float unionVal = val0->second + val1->second;
@@ -84,8 +90,10 @@ void CWaterMap::addWater(const float size) {
                 }
             } else if(val1->second < twoVert->currVal_) {
                 oneVert->currVal_ += twoVert->currVal_ - val1->second;
+                twoVert->currVal_ = val1->second;
                 if(val0->second < oneVert->currVal_) {
                     float v = oneVert->currVal_ - val0->second;
+                    oneVert->currVal_ = val0->second;
                     val0++;
                     val1++;
                     float unionVal = val0->second + val1->second;
@@ -96,6 +104,35 @@ void CWaterMap::addWater(const float size) {
                 continue;
             }
 
+        }
+    }
+}
+
+void CWaterMap::getWaterLvls(std::list<std::vector <float>> &vertex,
+                             std::list<std::vector <uint32_t>> &faces) {
+    for(auto iter = verts_.begin(); iter != verts_.end(); ++iter) {
+        vertex.emplace_back();
+        faces.emplace_back();
+        auto iterVal = iter->valGrad_.begin();
+        for(; iterVal != iter->valGrad_.end(); ++iterVal) {
+            if(iterVal->second > iter->currVal_) {
+                break;
+            }
+        }
+        float height;
+        if(iterVal == iter->valGrad_.end()) {
+            auto elem = iter->valGrad_.rbegin();
+            height = elem->first * (iter->currVal_ / elem->second);
+        } else {
+            height = iterVal->first * (iter->currVal_ / iterVal->second);
+        }
+        int err = getFacesToHeight(iter->faces_, 
+                                   height, 
+                                   faces.back(), 
+                                   vertex.back());
+        if(err != 0) {
+            vertex.pop_back();
+            faces.pop_back();
         }
     }
 }

@@ -99,6 +99,11 @@ protected:
     int findUnionVertex(const std::list<std::vector<uint32_t>> &areas,
                         std::list<std::vector<uint32_t>> &unionVertex);
 
+    int getFacesToHeight(const std::vector<uint32_t> &area,
+                         const float                  height,
+                               std::vector<uint32_t> &faces, 
+                               std::vector<float>    &vertex);
+
     std::vector <uint32_t> facesIn_,
                            edgesHoleBorders_;
     uint32_t countInnerEdges_ = 0,
@@ -400,7 +405,8 @@ private:
             kernelFindUnionVertex_,
             kernelGetMarkData_,
             kernelFindVal_,
-            kernelFindSquare_;
+            kernelFindSquare_,
+            kernelGetFacesToHeight_;
 
     CLdescriptor program_ = nullptr,
                  commandQueue_ = nullptr,

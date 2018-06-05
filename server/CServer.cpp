@@ -78,8 +78,7 @@ void CServer::work() {
                       (float *)&(task.data_.c_str()[9]),
                       (float *)&(task.data_.c_str()[9]) + sizeVertexBlock / 4);
         
-        std::vector <uint> face,
-                           result;
+        std::vector <uint> face;
         uint sizeFaceBlock = *( (size_t *)(task.data_.c_str() + 5) );
         face.reserve(sizeVertexBlock/4);
         face.insert(face.end(),
@@ -87,14 +86,35 @@ void CServer::work() {
                     (uint *)&(task.data_.c_str()[9 + sizeVertexBlock]) + sizeFaceBlock / 4);
         
         waterCompute.loadData(vertex, face);
-        waterCompute.computeWaterLvl(vertex, result);
+        waterCompute.prepareData();
+        waterCompute.addWater(1.0f);
+
+        std::list<std::vector<float>> resultVertex;
+        std::list<std::vector<uint32_t>> resultFaces;
+        waterCompute.getWaterLvls(resultVertex, resultFaces);
         task.data_.clear();
-        task.data_.reserve(result.size() * 3 * sizeof(uint32_t));
-        //for(auto iter = result.begin(); iter != result.end(); ++iter) {
+        auto iterVertex = resultVertex.begin();
+        auto iterFaces = resultFaces.begin();
+        for(; iterVertex != resultVertex.end();) {
+            uint32_t tmp = iterVertex->size();
             task.data_.insert(task.data_.end(),
-                              (char *)&(face.data()[104 * 3]),
-                              (char *)&(face.data()[104 * 3 + 3]));
-        //}
+                              (char *)&tmp,
+                              (char *)&tmp + sizeof(uint32_t));
+            task.data_.insert(task.data_.end(),
+                              (char *)iterVertex->data(),
+                              (char *)iterVertex->data() + tmp * sizeof(float));
+
+            tmp = iterFaces->size();
+            task.data_.insert(task.data_.end(),
+                              (char *)&tmp,
+                              (char *)&tmp + sizeof(uint32_t));
+            task.data_.insert(task.data_.end(),
+                              (char *)iterFaces->data(),
+                              (char *)iterFaces->data() + tmp * sizeof(float));
+
+            iterFaces++;
+            iterVertex++;
+        }
 	    reception_->compliteTask(task);
         waterCompute.clear();
     }	

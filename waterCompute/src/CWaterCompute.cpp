@@ -43,8 +43,7 @@ inline void roadMatOut(const std::vector<uint32_t> &edges) {
     }
 }
 
-int CWaterCompute::computeWaterLvl(std::vector <float> &vertex,
-                                   std::vector <uint32_t> &faces) {
+int CWaterCompute::prepareData() {
     std::list <std::vector<uint32_t>> borders,
                                       innerFaces,
                                       newArea;
@@ -78,7 +77,6 @@ int CWaterCompute::computeWaterLvl(std::vector <float> &vertex,
         errorMessage("Fail build map", err);
         return err;
     }
-    // todo
     return 0;
 }
 
