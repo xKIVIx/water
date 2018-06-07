@@ -901,6 +901,7 @@ private:
 
 int CWaterOpenCL::removeCommunityAreas(std::list<std::vector<uint32_t>>& areas,
                                        std::list<std::vector<uint32_t>>& newAreas) {
+    // prepare bufffers
     CClrear clearMem(bufferFaces_.getSize() / (3 * sizeof(uint32_t)));
     CMemObject bufferArea(context_,
                           bufferFaces_.getSize() / 3,
@@ -923,6 +924,7 @@ int CWaterOpenCL::removeCommunityAreas(std::list<std::vector<uint32_t>>& areas,
         bufferResultSizes(context_,
                           sizeof(uint32_t) * 3,
                           CL_MEM_READ_WRITE);
+    // prepare kernels
     int err = kernelCountColise_.bindParametr (bufferArea, 0);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind bufferArea", err);
@@ -1092,44 +1094,14 @@ int CWaterOpenCL::removeCommunityAreas(std::list<std::vector<uint32_t>>& areas,
             }
             if((sizes[1] != 0) && (sizes[1] != iterSecondArea->size())) {
                 iterSecondArea->clear();
+                std::vector<uint32_t> result;
                 err = bufferResultSecondArea.getData(commandQueue_, *iterSecondArea);
                 if(err != CL_SUCCESS) {
                     errorMessage("Fail get data from bufferResultSecondArea", err);
                     return err;
                 }
-                iterSecondArea->resize(sizes[1]);
-
-                err = kernelCountColise_.bindParametr(bufferResultSecondArea, 0);
-                if(err != CL_SUCCESS) {
-                    errorMessage("Fail bind bufferResultSecondArea", err);
-                    return err;
-                }
-                err = kernelCountColise_.bindParametr(bufferSecondCountersColise, 1);
-                if(err != CL_SUCCESS) {
-                    errorMessage("Fail bind bufferSecondCountersColise", err);
-                    return err;
-                }
-                err = bufferSecondCountersColise.loadData(context_, 
-                                                         commandQueue_, 
-                                                         clearMem.get(), 
-                                                         bufferSecondCountersColise.getSize());
-                if(err != CL_SUCCESS) {
-                    errorMessage("Fail zeroing bufferFirstCountersColise", err);
-                    return err;
-                }
-
-                workSize = iterSecondArea->size();
-                err = kernelCountColise_.complite(commandQueue_, &workSize, 1);
-                if(err != CL_SUCCESS) {
-                    errorMessage("Fail complite kernelCountColise", err);
-                    return err;
-                }
-
-                err = kernelCountColise_.bindParametr(bufferArea, 0);
-                if(err != CL_SUCCESS) {
-                    errorMessage("Fail bind bufferArea", err);
-                    return err;
-                }
+                result.resize(sizes[1]);
+                iterSecondArea->swap(result);
             }
             if((sizes[0] != 0) && (sizes[1] != 0) && (sizes[2] != 0)) {
                 newAreas.emplace_back();
