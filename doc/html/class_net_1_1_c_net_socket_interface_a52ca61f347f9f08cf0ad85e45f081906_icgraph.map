@@ -1,0 +1,8 @@
+<map id="Net::CNetSocketInterface::createClientSocket" name="Net::CNetSocketInterface::createClientSocket">
+<area shape="rect" id="node2" href="$class_net_1_1_c_net.html#a7dbe5d1a571964634d88596d7c6e7c2f" title="Closing of clients&#39; expectations. " alt="" coords="223,31,341,57"/>
+<area shape="rect" id="node7" href="$unit_tests_2_c_net_8cpp.html#a6d38eb34063ddd7c3218a522f3328749" title="TEST" alt="" coords="255,81,309,108"/>
+<area shape="rect" id="node3" href="$unit_tests_2_c_net_8cpp.html#a8fc61e9a7084a3f9818f096f46ae06a2" title="serverWork" alt="" coords="407,5,494,32"/>
+<area shape="rect" id="node5" href="$class_c_reception.html#ae29e31358d6a1e7f410f3f07d93793ba" title="The function of stopping the work of receiving clients. " alt="" coords="389,56,512,83"/>
+<area shape="rect" id="node4" href="$unit_tests_2_c_net_8cpp.html#af4cfb35bd05c77d79a0236a4524426f7" title="TEST" alt="" coords="619,5,673,32"/>
+<area shape="rect" id="node6" href="$class_c_reception.html#a6332fe59732e3eb5c2c6f5efecaaa2c5" title="Destructor. " alt="" coords="560,56,732,83"/>
+</map>

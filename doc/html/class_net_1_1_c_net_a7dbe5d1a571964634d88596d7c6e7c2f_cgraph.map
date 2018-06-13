@@ -1,0 +1,5 @@
+<map id="Net::CNet::close" name="Net::CNet::close">
+<area shape="rect" id="node2" href="$class_net_1_1_c_net_socket_interface.html#a52ca61f347f9f08cf0ad85e45f081906" title="Create a client socket. " alt="" coords="172,5,341,47"/>
+<area shape="rect" id="node3" href="$class_net_1_1_c_net_socket_interface.html#ad6a594a3ebe2fd855399aabfcbe0f95e" title="Sending data. " alt="" coords="172,71,341,112"/>
+<area shape="rect" id="node4" href="$class_net_1_1_c_net_socket_interface.html#a32974d8d814e78f05208eec685376df5" title="Close socket. " alt="" coords="172,136,341,177"/>
+</map>

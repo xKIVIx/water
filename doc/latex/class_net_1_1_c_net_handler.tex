@@ -1,0 +1,228 @@
+\hypertarget{class_net_1_1_c_net_handler}{}\section{Net\+:\+:C\+Net\+Handler Class Reference}
+\label{class_net_1_1_c_net_handler}\index{Net\+::\+C\+Net\+Handler@{Net\+::\+C\+Net\+Handler}}
+
+
+Virtual class for creating a connection protocol handler.  
+
+
+
+
+{\ttfamily \#include $<$C\+Net\+Handler.\+hpp$>$}
+
+
+
+Inheritance diagram for Net\+:\+:C\+Net\+Handler\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=226pt]{class_net_1_1_c_net_handler__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Net\+:\+:C\+Net\+Handler\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=226pt]{class_net_1_1_c_net_handler__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{struct_net_1_1_s_message_head}{S\+Message\+Head}} \mbox{\hyperlink{class_net_1_1_c_net_handler_a992b6c07fcda7c7f8ee411773b7dc3c6}{decod\+Message\+Head}} (const std\+::string \&message\+Head)=0
+\begin{DoxyCompactList}\small\item\em Function for decoding the message header. \end{DoxyCompactList}\item 
+virtual std\+::string \mbox{\hyperlink{class_net_1_1_c_net_handler_a1f43099b8631032d4555a326dd71f4d1}{disconect}} (Disconnect\+Reason reason)=0
+\begin{DoxyCompactList}\small\item\em A function for correctly terminating a connection. \end{DoxyCompactList}\item 
+virtual std\+::string \mbox{\hyperlink{class_net_1_1_c_net_handler_a7bd761afe7eff3897b840db84f870135}{handle}} (const std\+::string \&head, bool \&is\+Send\+Answer)=0
+\begin{DoxyCompactList}\small\item\em Puncturing header processing function. Returns the response to the query. If the protocol header does not apply to the current handler, an empty response is returned. \end{DoxyCompactList}\item 
+virtual uint \mbox{\hyperlink{class_net_1_1_c_net_handler_a6d0a79a8fc8126f6bf90e348c90152a7}{get\+Message\+Head\+Max\+Size}} ()=0
+\begin{DoxyCompactList}\small\item\em Get the maximum size of the message header. \end{DoxyCompactList}\item 
+virtual std\+::string \mbox{\hyperlink{class_net_1_1_c_net_handler_a9e8b6b44b05d2acb7b7cb28c57bedcb8}{pack\+Data}} (const std\+::string \&data, const bool is\+Use\+Mask)=0
+\begin{DoxyCompactList}\small\item\em Packs the data in accordance with the transmission protocol. \end{DoxyCompactList}\item 
+virtual std\+::string \mbox{\hyperlink{class_net_1_1_c_net_handler_af905edf8c2f5dee54f278f78d66b400d}{ping}} ()=0
+\begin{DoxyCompactList}\small\item\em Receive a package to send a ping request. \end{DoxyCompactList}\item 
+virtual std\+::string \mbox{\hyperlink{class_net_1_1_c_net_handler_a818189d3332d68cf28d30ec31bed0e17}{pong}} ()=0
+\begin{DoxyCompactList}\small\item\em Receive a package to send a ping response. \end{DoxyCompactList}\item 
+virtual std\+::string \mbox{\hyperlink{class_net_1_1_c_net_handler_aea2d09ea3bfa8d7a13ace3aec6ba9356}{unpack\+Data}} (const \mbox{\hyperlink{struct_net_1_1_s_message_head}{S\+Message\+Head}} \&head, const std\+::string \&data\+Pack)=0
+\begin{DoxyCompactList}\small\item\em Unpacks the data according to the transmission protocol. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Virtual class for creating a connection protocol handler. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_net_1_1_c_net_handler_a992b6c07fcda7c7f8ee411773b7dc3c6}\label{class_net_1_1_c_net_handler_a992b6c07fcda7c7f8ee411773b7dc3c6}} 
+\index{Net\+::\+C\+Net\+Handler@{Net\+::\+C\+Net\+Handler}!decod\+Message\+Head@{decod\+Message\+Head}}
+\index{decod\+Message\+Head@{decod\+Message\+Head}!Net\+::\+C\+Net\+Handler@{Net\+::\+C\+Net\+Handler}}
+\subsubsection{\texorpdfstring{decod\+Message\+Head()}{decodMessageHead()}}
+{\footnotesize\ttfamily virtual \mbox{\hyperlink{struct_net_1_1_s_message_head}{S\+Message\+Head}} Net\+::\+C\+Net\+Handler\+::decod\+Message\+Head (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{message\+Head }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Function for decoding the message header. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em message\+Head} & The part of the message or the entire message containing the title. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{struct_net_1_1_s_message_head}{S\+Message\+Head}} Decrypted message header. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_net_1_1_c_net_handler_web_socket_a26a43acb16b7879df22aa3ce3fc1d172}{Net\+::\+C\+Net\+Handler\+Web\+Socket}}.
+
+\mbox{\Hypertarget{class_net_1_1_c_net_handler_a1f43099b8631032d4555a326dd71f4d1}\label{class_net_1_1_c_net_handler_a1f43099b8631032d4555a326dd71f4d1}} 
+\index{Net\+::\+C\+Net\+Handler@{Net\+::\+C\+Net\+Handler}!disconect@{disconect}}
+\index{disconect@{disconect}!Net\+::\+C\+Net\+Handler@{Net\+::\+C\+Net\+Handler}}
+\subsubsection{\texorpdfstring{disconect()}{disconect()}}
+{\footnotesize\ttfamily virtual std\+::string Net\+::\+C\+Net\+Handler\+::disconect (\begin{DoxyParamCaption}\item[{Disconnect\+Reason}]{reason }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+A function for correctly terminating a connection. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reason} & The cause of the connection failure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::string Package to send. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_net_1_1_c_net_handler_web_socket_ac5a2c812c7a1fdb426265a4590409ae3}{Net\+::\+C\+Net\+Handler\+Web\+Socket}}.
+
+\mbox{\Hypertarget{class_net_1_1_c_net_handler_a6d0a79a8fc8126f6bf90e348c90152a7}\label{class_net_1_1_c_net_handler_a6d0a79a8fc8126f6bf90e348c90152a7}} 
+\index{Net\+::\+C\+Net\+Handler@{Net\+::\+C\+Net\+Handler}!get\+Message\+Head\+Max\+Size@{get\+Message\+Head\+Max\+Size}}
+\index{get\+Message\+Head\+Max\+Size@{get\+Message\+Head\+Max\+Size}!Net\+::\+C\+Net\+Handler@{Net\+::\+C\+Net\+Handler}}
+\subsubsection{\texorpdfstring{get\+Message\+Head\+Max\+Size()}{getMessageHeadMaxSize()}}
+{\footnotesize\ttfamily virtual uint Net\+::\+C\+Net\+Handler\+::get\+Message\+Head\+Max\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Get the maximum size of the message header. 
+
+\begin{DoxyReturn}{Returns}
+uint Head size. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_net_1_1_c_net_handler_web_socket_a5c3fa1c1f926119482b25159afffb6cd}{Net\+::\+C\+Net\+Handler\+Web\+Socket}}.
+
+\mbox{\Hypertarget{class_net_1_1_c_net_handler_a7bd761afe7eff3897b840db84f870135}\label{class_net_1_1_c_net_handler_a7bd761afe7eff3897b840db84f870135}} 
+\index{Net\+::\+C\+Net\+Handler@{Net\+::\+C\+Net\+Handler}!handle@{handle}}
+\index{handle@{handle}!Net\+::\+C\+Net\+Handler@{Net\+::\+C\+Net\+Handler}}
+\subsubsection{\texorpdfstring{handle()}{handle()}}
+{\footnotesize\ttfamily virtual std\+::string Net\+::\+C\+Net\+Handler\+::handle (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{head,  }\item[{bool \&}]{is\+Send\+Answer }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Puncturing header processing function. Returns the response to the query. If the protocol header does not apply to the current handler, an empty response is returned. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em head} & Protocol header for connection setup. \\
+\hline
+{\em is\+Send\+Answer} & Sets whether the response should be sent. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::string Answer. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_net_1_1_c_net_handler_web_socket_ad4c16a911b8cb26f69dda807b5ca2c70}{Net\+::\+C\+Net\+Handler\+Web\+Socket}}.
+
+\mbox{\Hypertarget{class_net_1_1_c_net_handler_a9e8b6b44b05d2acb7b7cb28c57bedcb8}\label{class_net_1_1_c_net_handler_a9e8b6b44b05d2acb7b7cb28c57bedcb8}} 
+\index{Net\+::\+C\+Net\+Handler@{Net\+::\+C\+Net\+Handler}!pack\+Data@{pack\+Data}}
+\index{pack\+Data@{pack\+Data}!Net\+::\+C\+Net\+Handler@{Net\+::\+C\+Net\+Handler}}
+\subsubsection{\texorpdfstring{pack\+Data()}{packData()}}
+{\footnotesize\ttfamily virtual std\+::string Net\+::\+C\+Net\+Handler\+::pack\+Data (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{data,  }\item[{const bool}]{is\+Use\+Mask }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Packs the data in accordance with the transmission protocol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & Data for packaging. \\
+\hline
+{\em is\+Use\+Mask} & Use the mask when packing. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::string Package to send. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_net_1_1_c_net_handler_web_socket_aa408c8c686da45c36969a7dcf7478daa}{Net\+::\+C\+Net\+Handler\+Web\+Socket}}.
+
+\mbox{\Hypertarget{class_net_1_1_c_net_handler_af905edf8c2f5dee54f278f78d66b400d}\label{class_net_1_1_c_net_handler_af905edf8c2f5dee54f278f78d66b400d}} 
+\index{Net\+::\+C\+Net\+Handler@{Net\+::\+C\+Net\+Handler}!ping@{ping}}
+\index{ping@{ping}!Net\+::\+C\+Net\+Handler@{Net\+::\+C\+Net\+Handler}}
+\subsubsection{\texorpdfstring{ping()}{ping()}}
+{\footnotesize\ttfamily virtual std\+::string Net\+::\+C\+Net\+Handler\+::ping (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Receive a package to send a ping request. 
+
+\begin{DoxyReturn}{Returns}
+std\+::string Package to send. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_net_1_1_c_net_handler_web_socket_aa19e13e42fa3a31ab8d8a8291af4b5e6}{Net\+::\+C\+Net\+Handler\+Web\+Socket}}.
+
+\mbox{\Hypertarget{class_net_1_1_c_net_handler_a818189d3332d68cf28d30ec31bed0e17}\label{class_net_1_1_c_net_handler_a818189d3332d68cf28d30ec31bed0e17}} 
+\index{Net\+::\+C\+Net\+Handler@{Net\+::\+C\+Net\+Handler}!pong@{pong}}
+\index{pong@{pong}!Net\+::\+C\+Net\+Handler@{Net\+::\+C\+Net\+Handler}}
+\subsubsection{\texorpdfstring{pong()}{pong()}}
+{\footnotesize\ttfamily virtual std\+::string Net\+::\+C\+Net\+Handler\+::pong (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Receive a package to send a ping response. 
+
+\begin{DoxyReturn}{Returns}
+std\+::string Package to send. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_net_1_1_c_net_handler_web_socket_a51d3618ba601abc5047cf0da91b8a374}{Net\+::\+C\+Net\+Handler\+Web\+Socket}}.
+
+\mbox{\Hypertarget{class_net_1_1_c_net_handler_aea2d09ea3bfa8d7a13ace3aec6ba9356}\label{class_net_1_1_c_net_handler_aea2d09ea3bfa8d7a13ace3aec6ba9356}} 
+\index{Net\+::\+C\+Net\+Handler@{Net\+::\+C\+Net\+Handler}!unpack\+Data@{unpack\+Data}}
+\index{unpack\+Data@{unpack\+Data}!Net\+::\+C\+Net\+Handler@{Net\+::\+C\+Net\+Handler}}
+\subsubsection{\texorpdfstring{unpack\+Data()}{unpackData()}}
+{\footnotesize\ttfamily virtual std\+::string Net\+::\+C\+Net\+Handler\+::unpack\+Data (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_net_1_1_s_message_head}{S\+Message\+Head}} \&}]{head,  }\item[{const std\+::string \&}]{data\+Pack }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Unpacks the data according to the transmission protocol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em head} & Decoded message header. \\
+\hline
+{\em data\+Pack} & A message with the heading at the beginning. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::string Unpacked data. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_net_1_1_c_net_handler_web_socket_a09297039609dca2d8e2c376626ef78f1}{Net\+::\+C\+Net\+Handler\+Web\+Socket}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+server/\+C\+Net/\+Handler/C\+Net\+Handler.\+hpp\end{DoxyCompactItemize}

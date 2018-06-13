@@ -1,0 +1,227 @@
+\hypertarget{class_net_1_1_c_net_socket_interface}{}\section{Net\+:\+:C\+Net\+Socket\+Interface Class Reference}
+\label{class_net_1_1_c_net_socket_interface}\index{Net\+::\+C\+Net\+Socket\+Interface@{Net\+::\+C\+Net\+Socket\+Interface}}
+
+
+The interface for accessing sockets. At the beginning of using the functions, you need to initialize.  
+
+
+
+
+{\ttfamily \#include $<$C\+Net\+Socket\+Interface.\+hpp$>$}
+
+
+
+Collaboration diagram for Net\+:\+:C\+Net\+Socket\+Interface\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=207pt]{class_net_1_1_c_net_socket_interface__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static int \mbox{\hyperlink{class_net_1_1_c_net_socket_interface_a250ab776d6ce77b1a905904dce7bf21f}{create\+Server\+Socket}} (const uint max\+Con, const int port, const char $\ast$ip\+Adress)
+\begin{DoxyCompactList}\small\item\em Create a server socket. \end{DoxyCompactList}\item 
+static int \mbox{\hyperlink{class_net_1_1_c_net_socket_interface_a52ca61f347f9f08cf0ad85e45f081906}{create\+Client\+Socket}} (const int port, const char $\ast$ip\+Adress)
+\begin{DoxyCompactList}\small\item\em Create a client socket. \end{DoxyCompactList}\item 
+static int \mbox{\hyperlink{class_net_1_1_c_net_socket_interface_a4fceb3945002b0aa62dbc7af4afac76d}{accept}} (const int socket)
+\begin{DoxyCompactList}\small\item\em Waiting for the client. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{class_net_1_1_c_net_socket_interface_a32974d8d814e78f05208eec685376df5}{close\+Socket}} (const int socket)
+\begin{DoxyCompactList}\small\item\em Close socket. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_net_1_1_c_net_socket_interface_a3f0603a3708ca966b9f37d9202761aa8}\label{class_net_1_1_c_net_socket_interface_a3f0603a3708ca966b9f37d9202761aa8}} 
+static void \mbox{\hyperlink{class_net_1_1_c_net_socket_interface_a3f0603a3708ca966b9f37d9202761aa8}{init\+Interface}} ()
+\begin{DoxyCompactList}\small\item\em Interface initialization function. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_net_1_1_c_net_socket_interface_a8d07a643a30977a250d611653d05e7d2}\label{class_net_1_1_c_net_socket_interface_a8d07a643a30977a250d611653d05e7d2}} 
+static void \mbox{\hyperlink{class_net_1_1_c_net_socket_interface_a8d07a643a30977a250d611653d05e7d2}{close\+Interface}} ()
+\begin{DoxyCompactList}\small\item\em Function of disabling the initialized interface. \end{DoxyCompactList}\item 
+static int \mbox{\hyperlink{class_net_1_1_c_net_socket_interface_ad6a594a3ebe2fd855399aabfcbe0f95e}{send}} (const int socket, const char $\ast$data, const int data\+Size)
+\begin{DoxyCompactList}\small\item\em Sending data. \end{DoxyCompactList}\item 
+static int \mbox{\hyperlink{class_net_1_1_c_net_socket_interface_a66531da7c243f12948bd79293d6299e2}{recv}} (const int socket, char $\ast$buffer, const int buffer\+Size)
+\begin{DoxyCompactList}\small\item\em Receiving data. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The interface for accessing sockets. At the beginning of using the functions, you need to initialize. 
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_net_1_1_c_net_socket_interface_a3f0603a3708ca966b9f37d9202761aa8}{C\+Net\+Socket\+Interface\+::init\+Interface}} At the end of work, call \mbox{\hyperlink{class_net_1_1_c_net_socket_interface_a8d07a643a30977a250d611653d05e7d2}{close\+Interface}}. 
+\end{DoxySeeAlso}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_net_1_1_c_net_socket_interface_a4fceb3945002b0aa62dbc7af4afac76d}\label{class_net_1_1_c_net_socket_interface_a4fceb3945002b0aa62dbc7af4afac76d}} 
+\index{Net\+::\+C\+Net\+Socket\+Interface@{Net\+::\+C\+Net\+Socket\+Interface}!accept@{accept}}
+\index{accept@{accept}!Net\+::\+C\+Net\+Socket\+Interface@{Net\+::\+C\+Net\+Socket\+Interface}}
+\subsubsection{\texorpdfstring{accept()}{accept()}}
+{\footnotesize\ttfamily int Net\+::\+C\+Net\+Socket\+Interface\+::accept (\begin{DoxyParamCaption}\item[{const int}]{socket }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Waiting for the client. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em socket} & Listen socket. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int Client socket. 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_net_1_1_c_net_socket_interface_a4fceb3945002b0aa62dbc7af4afac76d_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_net_1_1_c_net_socket_interface_a32974d8d814e78f05208eec685376df5}\label{class_net_1_1_c_net_socket_interface_a32974d8d814e78f05208eec685376df5}} 
+\index{Net\+::\+C\+Net\+Socket\+Interface@{Net\+::\+C\+Net\+Socket\+Interface}!close\+Socket@{close\+Socket}}
+\index{close\+Socket@{close\+Socket}!Net\+::\+C\+Net\+Socket\+Interface@{Net\+::\+C\+Net\+Socket\+Interface}}
+\subsubsection{\texorpdfstring{close\+Socket()}{closeSocket()}}
+{\footnotesize\ttfamily void Net\+::\+C\+Net\+Socket\+Interface\+::close\+Socket (\begin{DoxyParamCaption}\item[{const int}]{socket }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Close socket. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em socket} & Socket. \\
+\hline
+\end{DoxyParams}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_net_1_1_c_net_socket_interface_a32974d8d814e78f05208eec685376df5_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_net_1_1_c_net_socket_interface_a52ca61f347f9f08cf0ad85e45f081906}\label{class_net_1_1_c_net_socket_interface_a52ca61f347f9f08cf0ad85e45f081906}} 
+\index{Net\+::\+C\+Net\+Socket\+Interface@{Net\+::\+C\+Net\+Socket\+Interface}!create\+Client\+Socket@{create\+Client\+Socket}}
+\index{create\+Client\+Socket@{create\+Client\+Socket}!Net\+::\+C\+Net\+Socket\+Interface@{Net\+::\+C\+Net\+Socket\+Interface}}
+\subsubsection{\texorpdfstring{create\+Client\+Socket()}{createClientSocket()}}
+{\footnotesize\ttfamily int Net\+::\+C\+Net\+Socket\+Interface\+::create\+Client\+Socket (\begin{DoxyParamCaption}\item[{const int}]{port,  }\item[{const char $\ast$}]{ip\+Adress }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Create a client socket. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em port} & \\
+\hline
+{\em ip\+Adress} & I\+P\+V4 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int Socket. 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_net_1_1_c_net_socket_interface_a52ca61f347f9f08cf0ad85e45f081906_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_net_1_1_c_net_socket_interface_a250ab776d6ce77b1a905904dce7bf21f}\label{class_net_1_1_c_net_socket_interface_a250ab776d6ce77b1a905904dce7bf21f}} 
+\index{Net\+::\+C\+Net\+Socket\+Interface@{Net\+::\+C\+Net\+Socket\+Interface}!create\+Server\+Socket@{create\+Server\+Socket}}
+\index{create\+Server\+Socket@{create\+Server\+Socket}!Net\+::\+C\+Net\+Socket\+Interface@{Net\+::\+C\+Net\+Socket\+Interface}}
+\subsubsection{\texorpdfstring{create\+Server\+Socket()}{createServerSocket()}}
+{\footnotesize\ttfamily int Net\+::\+C\+Net\+Socket\+Interface\+::create\+Server\+Socket (\begin{DoxyParamCaption}\item[{const uint}]{max\+Con,  }\item[{const int}]{port,  }\item[{const char $\ast$}]{ip\+Adress }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Create a server socket. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em max\+Con} & The maximum number of connections. \\
+\hline
+{\em port} & \\
+\hline
+{\em ip\+Adress} & I\+P\+V4 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int Listen socket. 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=330pt]{class_net_1_1_c_net_socket_interface_a250ab776d6ce77b1a905904dce7bf21f_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_net_1_1_c_net_socket_interface_a66531da7c243f12948bd79293d6299e2}\label{class_net_1_1_c_net_socket_interface_a66531da7c243f12948bd79293d6299e2}} 
+\index{Net\+::\+C\+Net\+Socket\+Interface@{Net\+::\+C\+Net\+Socket\+Interface}!recv@{recv}}
+\index{recv@{recv}!Net\+::\+C\+Net\+Socket\+Interface@{Net\+::\+C\+Net\+Socket\+Interface}}
+\subsubsection{\texorpdfstring{recv()}{recv()}}
+{\footnotesize\ttfamily int Net\+::\+C\+Net\+Socket\+Interface\+::recv (\begin{DoxyParamCaption}\item[{const int}]{socket,  }\item[{char $\ast$}]{buffer,  }\item[{const int}]{buffer\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Receiving data. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em socket} & \\
+\hline
+{\em buffer} & \\
+\hline
+{\em buffer\+Size} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int The size of the data received. -\/1 if an error occurred. 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_net_1_1_c_net_socket_interface_a66531da7c243f12948bd79293d6299e2_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_net_1_1_c_net_socket_interface_ad6a594a3ebe2fd855399aabfcbe0f95e}\label{class_net_1_1_c_net_socket_interface_ad6a594a3ebe2fd855399aabfcbe0f95e}} 
+\index{Net\+::\+C\+Net\+Socket\+Interface@{Net\+::\+C\+Net\+Socket\+Interface}!send@{send}}
+\index{send@{send}!Net\+::\+C\+Net\+Socket\+Interface@{Net\+::\+C\+Net\+Socket\+Interface}}
+\subsubsection{\texorpdfstring{send()}{send()}}
+{\footnotesize\ttfamily int Net\+::\+C\+Net\+Socket\+Interface\+::send (\begin{DoxyParamCaption}\item[{const int}]{socket,  }\item[{const char $\ast$}]{data,  }\item[{const int}]{data\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Sending data. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em socket} & \\
+\hline
+{\em data} & \\
+\hline
+{\em data\+Size} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int The size of the sent data. -\/1 if an error occurred. 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_net_1_1_c_net_socket_interface_ad6a594a3ebe2fd855399aabfcbe0f95e_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+server/\+C\+Net/C\+Net\+Socket\+Interface.\+hpp\item 
+server/\+C\+Net/C\+Net\+Socket\+Interface\+Linux.\+cpp\item 
+server/\+C\+Net/C\+Net\+Socket\+Interface\+Windows.\+cpp\end{DoxyCompactItemize}

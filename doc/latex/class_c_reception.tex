@@ -1,0 +1,106 @@
+\hypertarget{class_c_reception}{}\section{C\+Reception Class Reference}
+\label{class_c_reception}\index{C\+Reception@{C\+Reception}}
+
+
+A class for asynchronous task acceptance from clients.  
+
+
+
+
+{\ttfamily \#include $<$C\+Reception.\+hpp$>$}
+
+
+
+Collaboration diagram for C\+Reception\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=169pt]{class_c_reception__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_c_reception_a978822b58f7e3ec745869c9649c6dd14}{C\+Reception}} (const int max\+Con, const char $\ast$ip, const int port)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_reception_a6332fe59732e3eb5c2c6f5efecaaa2c5}\label{class_c_reception_a6332fe59732e3eb5c2c6f5efecaaa2c5}} 
+\mbox{\hyperlink{class_c_reception_a6332fe59732e3eb5c2c6f5efecaaa2c5}{$\sim$\+C\+Reception}} ()
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_s_task}{S\+Task}} \mbox{\hyperlink{class_c_reception_a842ffb5e64b4e65ff9faa087ffcd31fe}{get\+Task}} ()
+\begin{DoxyCompactList}\small\item\em Getting the task. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_c_reception_a286512c534ff02e51e8217241dd89727}{complite\+Task}} (\mbox{\hyperlink{struct_s_task}{S\+Task}} \&task)
+\begin{DoxyCompactList}\small\item\em Sending the completed task. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_reception_ae29e31358d6a1e7f410f3f07d93793ba}\label{class_c_reception_ae29e31358d6a1e7f410f3f07d93793ba}} 
+void \mbox{\hyperlink{class_c_reception_ae29e31358d6a1e7f410f3f07d93793ba}{stop}} ()
+\begin{DoxyCompactList}\small\item\em The function of stopping the work of receiving clients. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A class for asynchronous task acceptance from clients. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_c_reception_a978822b58f7e3ec745869c9649c6dd14}\label{class_c_reception_a978822b58f7e3ec745869c9649c6dd14}} 
+\index{C\+Reception@{C\+Reception}!C\+Reception@{C\+Reception}}
+\index{C\+Reception@{C\+Reception}!C\+Reception@{C\+Reception}}
+\subsubsection{\texorpdfstring{C\+Reception()}{CReception()}}
+{\footnotesize\ttfamily C\+Reception\+::\+C\+Reception (\begin{DoxyParamCaption}\item[{const int}]{max\+Con,  }\item[{const char $\ast$}]{ip,  }\item[{const int}]{port }\end{DoxyParamCaption})}
+
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em max\+Con} & Maximum number of connections. \\
+\hline
+{\em ip} & I\+Pv4. \\
+\hline
+{\em port} & Port number. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_c_reception_a286512c534ff02e51e8217241dd89727}\label{class_c_reception_a286512c534ff02e51e8217241dd89727}} 
+\index{C\+Reception@{C\+Reception}!complite\+Task@{complite\+Task}}
+\index{complite\+Task@{complite\+Task}!C\+Reception@{C\+Reception}}
+\subsubsection{\texorpdfstring{complite\+Task()}{compliteTask()}}
+{\footnotesize\ttfamily void C\+Reception\+::complite\+Task (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_s_task}{S\+Task}} \&}]{task }\end{DoxyParamCaption})}
+
+
+
+Sending the completed task. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em task} & Сompleted task. \\
+\hline
+\end{DoxyParams}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_c_reception_a286512c534ff02e51e8217241dd89727_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_c_reception_a842ffb5e64b4e65ff9faa087ffcd31fe}\label{class_c_reception_a842ffb5e64b4e65ff9faa087ffcd31fe}} 
+\index{C\+Reception@{C\+Reception}!get\+Task@{get\+Task}}
+\index{get\+Task@{get\+Task}!C\+Reception@{C\+Reception}}
+\subsubsection{\texorpdfstring{get\+Task()}{getTask()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_s_task}{S\+Task}} C\+Reception\+::get\+Task (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Getting the task. 
+
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{struct_s_task}{S\+Task}} 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+server/C\+Reception.\+hpp\item 
+server/C\+Reception.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,12 @@
+<map id="Net::CNetSocketInterface::closeSocket" name="Net::CNetSocketInterface::closeSocket">
+<area shape="rect" id="node2" href="$class_net_1_1_c_net.html#a324846d932eefbfe5316ea53f66a69dd" title="Destructor. " alt="" coords="240,5,364,32"/>
+<area shape="rect" id="node3" href="$class_net_1_1_c_net.html#a7dbe5d1a571964634d88596d7c6e7c2f" title="Closing of clients&#39; expectations. " alt="" coords="243,107,361,133"/>
+<area shape="rect" id="node4" href="$unit_tests_2_c_net_8cpp.html#a8fc61e9a7084a3f9818f096f46ae06a2" title="serverWork" alt="" coords="473,81,560,108"/>
+<area shape="rect" id="node8" href="$class_net_1_1_c_net.html#a802a6ab154226caaa8d70423374b8034" title="The function of connection waiting. " alt="" coords="223,157,381,184"/>
+<area shape="rect" id="node9" href="$unit_tests_2_c_net_8cpp.html#a6d38eb34063ddd7c3218a522f3328749" title="TEST" alt="" coords="489,183,544,209"/>
+<area shape="rect" id="node10" href="$class_net_1_1_c_net.html#a7f66009e63ed53b541331143bb2f4bfb" title="Disconnect the client. " alt="" coords="227,259,377,285"/>
+<area shape="rect" id="node6" href="$class_c_reception.html#ae29e31358d6a1e7f410f3f07d93793ba" title="The function of stopping the work of receiving clients. " alt="" coords="455,132,578,159"/>
+<area shape="rect" id="node5" href="$unit_tests_2_c_net_8cpp.html#af4cfb35bd05c77d79a0236a4524426f7" title="TEST" alt="" coords="711,81,765,108"/>
+<area shape="rect" id="node7" href="$class_c_reception.html#a6332fe59732e3eb5c2c6f5efecaaa2c5" title="Destructor. " alt="" coords="652,183,824,209"/>
+<area shape="rect" id="node11" href="$class_c_reception.html#a286512c534ff02e51e8217241dd89727" title="Sending the completed task. " alt="" coords="429,284,604,311"/>
+</map>

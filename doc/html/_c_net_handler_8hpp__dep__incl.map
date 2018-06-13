@@ -1,0 +1,12 @@
+<map id="server/CNet/Handler/CNetHandler.hpp" name="server/CNet/Handler/CNetHandler.hpp">
+<area shape="rect" id="node2" href="$_c_net_handler_web_socket_8hpp.html" title="server/CNet/Handler\l/CNetHandlerWebSocket.hpp" alt="" coords="429,95,621,136"/>
+<area shape="rect" id="node6" href="$_c_net_8hpp.html" title="server/CNet/CNet.hpp" alt="" coords="259,102,405,129"/>
+<area shape="rect" id="node3" href="$_c_net_2_c_net_8cpp.html" title="server/CNet/CNet.cpp" alt="" coords="264,191,411,218"/>
+<area shape="rect" id="node4" href="$_c_net_handler_web_socket_8cpp.html" title="server/CNet/Handler\l/CNetHandlerWebSocket.cpp" alt="" coords="629,184,821,225"/>
+<area shape="rect" id="node5" href="$unit_tests_2_c_net_8cpp.html" title="server/unitTests/CNet.cpp" alt="" coords="435,191,605,218"/>
+<area shape="rect" id="node7" href="$_c_reception_8hpp.html" title="server/CReception.hpp" alt="" coords="88,191,240,218"/>
+<area shape="rect" id="node8" href="$_c_reception_8cpp.html" title="server/CReception.cpp" alt="" coords="5,273,157,300"/>
+<area shape="rect" id="node9" href="$_c_server_8hpp.html" title="server/CServer.hpp" alt="" coords="181,273,312,300"/>
+<area shape="rect" id="node10" href="$_c_server_8cpp.html" title="server/CServer.cpp" alt="" coords="108,348,239,375"/>
+<area shape="rect" id="node11" href="$server_2main_8cpp.html" title="server/main.cpp" alt="" coords="263,348,377,375"/>
+</map>

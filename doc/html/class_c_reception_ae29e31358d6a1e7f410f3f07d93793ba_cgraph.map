@@ -1,0 +1,6 @@
+<map id="CReception::stop" name="CReception::stop">
+<area shape="rect" id="node2" href="$class_net_1_1_c_net.html#a7dbe5d1a571964634d88596d7c6e7c2f" title="Closing of clients&#39; expectations. " alt="" coords="176,78,295,105"/>
+<area shape="rect" id="node3" href="$class_net_1_1_c_net_socket_interface.html#a52ca61f347f9f08cf0ad85e45f081906" title="Create a client socket. " alt="" coords="343,5,512,47"/>
+<area shape="rect" id="node4" href="$class_net_1_1_c_net_socket_interface.html#ad6a594a3ebe2fd855399aabfcbe0f95e" title="Sending data. " alt="" coords="343,71,512,112"/>
+<area shape="rect" id="node5" href="$class_net_1_1_c_net_socket_interface.html#a32974d8d814e78f05208eec685376df5" title="Close socket. " alt="" coords="343,136,512,177"/>
+</map>

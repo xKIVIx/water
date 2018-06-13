@@ -1,0 +1,176 @@
+\hypertarget{class_c_settings_manager}{}\section{C\+Settings\+Manager Class Reference}
+\label{class_c_settings_manager}\index{C\+Settings\+Manager@{C\+Settings\+Manager}}
+
+
+{\ttfamily \#include $<$C\+Settings\+Manager.\+hpp$>$}
+
+
+
+Collaboration diagram for C\+Settings\+Manager\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=177pt]{class_c_settings_manager__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_c_settings_manager_ad0796e880134f641f6517d9a5433a877}{get\+Parametr}} (const std\+::string \&category, const std\+::string \&data\+Name, std\+::string \&parametr)
+\item 
+bool \mbox{\hyperlink{class_c_settings_manager_a6f45d4eaf3c79250f41bbac303b7c485}{get\+Parametr}} (const std\+::string \&category, const std\+::string \&data\+Name, int \&parametr)
+\item 
+bool \mbox{\hyperlink{class_c_settings_manager_a874956b5cb03b94bbb85ae0a5b25733f}{save\+Parametrs}} ()
+\item 
+void \mbox{\hyperlink{class_c_settings_manager_af67d1a3761332974fa0133e9d9819035}{set\+Path}} (const std\+::string \&path)
+\item 
+bool \mbox{\hyperlink{class_c_settings_manager_aa9efd965120731844f8ff2c2c994e638}{set\+Parametr}} (const std\+::string \&category, const std\+::string \&data\+Name, const std\+::string \&parametr)
+\item 
+bool \mbox{\hyperlink{class_c_settings_manager_a220fab46b436b6ded0ef311515a66899}{set\+Parametr}} (const std\+::string \&category, const std\+::string \&data\+Name, const int \&parametr)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_c_settings_manager}{C\+Settings\+Manager}} \& \mbox{\hyperlink{class_c_settings_manager_a40c0ffaf515eb306a9f83e3d631bcd21}{instance}} ()
+\item 
+static void \mbox{\hyperlink{class_c_settings_manager_a64524171654c8a7076af9ac9ac780bfc}{detach}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The class that manages the settings files.
+
+Static class. When the program is terminated, it is necessary to call method \begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_c_settings_manager_a64524171654c8a7076af9ac9ac780bfc}{C\+Settings\+Manager\+::detach}}. You also need to call the 
+
+\mbox{\hyperlink{class_c_settings_manager_a874956b5cb03b94bbb85ae0a5b25733f}{C\+Settings\+Manager\+::save\+Parametrs}} method to write the settings to files. 
+\end{DoxySeeAlso}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_c_settings_manager_a64524171654c8a7076af9ac9ac780bfc}\label{class_c_settings_manager_a64524171654c8a7076af9ac9ac780bfc}} 
+\index{C\+Settings\+Manager@{C\+Settings\+Manager}!detach@{detach}}
+\index{detach@{detach}!C\+Settings\+Manager@{C\+Settings\+Manager}}
+\subsubsection{\texorpdfstring{detach()}{detach()}}
+{\footnotesize\ttfamily void C\+Settings\+Manager\+::detach (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Release of resources.
+
+Not a thread-\/safe function. \mbox{\Hypertarget{class_c_settings_manager_ad0796e880134f641f6517d9a5433a877}\label{class_c_settings_manager_ad0796e880134f641f6517d9a5433a877}} 
+\index{C\+Settings\+Manager@{C\+Settings\+Manager}!get\+Parametr@{get\+Parametr}}
+\index{get\+Parametr@{get\+Parametr}!C\+Settings\+Manager@{C\+Settings\+Manager}}
+\subsubsection{\texorpdfstring{get\+Parametr()}{getParametr()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool C\+Settings\+Manager\+::get\+Parametr (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{category,  }\item[{const std\+::string \&}]{data\+Name,  }\item[{std\+::string \&}]{parametr }\end{DoxyParamCaption})}
+
+Function of obtaining parameters.
+
+Looks for among the loaded categories and looks for the required parameter. If the category is not found, it tries to load the \char`\"{}category\char`\"{}.conf file. Thread safe function.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em category} & The name of the category (File name) that contains the parameter. \\
+\hline
+\mbox{\tt in}  & {\em data\+Name} & Parametr name. \\
+\hline
+\mbox{\tt out}  & {\em parametr} & Requested data.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true Returns true if the parameter was found successfully, otherwise false. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_settings_manager_a6f45d4eaf3c79250f41bbac303b7c485}\label{class_c_settings_manager_a6f45d4eaf3c79250f41bbac303b7c485}} 
+\index{C\+Settings\+Manager@{C\+Settings\+Manager}!get\+Parametr@{get\+Parametr}}
+\index{get\+Parametr@{get\+Parametr}!C\+Settings\+Manager@{C\+Settings\+Manager}}
+\subsubsection{\texorpdfstring{get\+Parametr()}{getParametr()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily bool C\+Settings\+Manager\+::get\+Parametr (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{category,  }\item[{const std\+::string \&}]{data\+Name,  }\item[{int \&}]{parametr }\end{DoxyParamCaption})}
+
+Get integer parametr. \begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_c_settings_manager_ad0796e880134f641f6517d9a5433a877}{C\+Settings\+Manager\+::get\+Parametr}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_c_settings_manager_a40c0ffaf515eb306a9f83e3d631bcd21}\label{class_c_settings_manager_a40c0ffaf515eb306a9f83e3d631bcd21}} 
+\index{C\+Settings\+Manager@{C\+Settings\+Manager}!instance@{instance}}
+\index{instance@{instance}!C\+Settings\+Manager@{C\+Settings\+Manager}}
+\subsubsection{\texorpdfstring{instance()}{instance()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_settings_manager}{C\+Settings\+Manager}} \& C\+Settings\+Manager\+::instance (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Get instance.
+
+Not a thread-\/safe function. \mbox{\Hypertarget{class_c_settings_manager_a874956b5cb03b94bbb85ae0a5b25733f}\label{class_c_settings_manager_a874956b5cb03b94bbb85ae0a5b25733f}} 
+\index{C\+Settings\+Manager@{C\+Settings\+Manager}!save\+Parametrs@{save\+Parametrs}}
+\index{save\+Parametrs@{save\+Parametrs}!C\+Settings\+Manager@{C\+Settings\+Manager}}
+\subsubsection{\texorpdfstring{save\+Parametrs()}{saveParametrs()}}
+{\footnotesize\ttfamily bool C\+Settings\+Manager\+::save\+Parametrs (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Writes parameters to files.
+
+Thread safe function.
+
+\begin{DoxyReturn}{Returns}
+True if success write. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_settings_manager_aa9efd965120731844f8ff2c2c994e638}\label{class_c_settings_manager_aa9efd965120731844f8ff2c2c994e638}} 
+\index{C\+Settings\+Manager@{C\+Settings\+Manager}!set\+Parametr@{set\+Parametr}}
+\index{set\+Parametr@{set\+Parametr}!C\+Settings\+Manager@{C\+Settings\+Manager}}
+\subsubsection{\texorpdfstring{set\+Parametr()}{setParametr()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool C\+Settings\+Manager\+::set\+Parametr (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{category,  }\item[{const std\+::string \&}]{data\+Name,  }\item[{const std\+::string \&}]{parametr }\end{DoxyParamCaption})}
+
+Parameter entry function.
+
+Looks for among the loaded categories and looks for the required parameter. If the category is not found, it tries to load the \char`\"{}category\char`\"{}.conf file. Thread safe function.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em category} & The name of the category (File name) that contains the parameter. \\
+\hline
+\mbox{\tt in}  & {\em data\+Name} & Parametr name. \\
+\hline
+\mbox{\tt in}  & {\em parametr} & New data.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true Returns true if the parameter was set successfully, otherwise false. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_settings_manager_a220fab46b436b6ded0ef311515a66899}\label{class_c_settings_manager_a220fab46b436b6ded0ef311515a66899}} 
+\index{C\+Settings\+Manager@{C\+Settings\+Manager}!set\+Parametr@{set\+Parametr}}
+\index{set\+Parametr@{set\+Parametr}!C\+Settings\+Manager@{C\+Settings\+Manager}}
+\subsubsection{\texorpdfstring{set\+Parametr()}{setParametr()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily bool C\+Settings\+Manager\+::set\+Parametr (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{category,  }\item[{const std\+::string \&}]{data\+Name,  }\item[{const int \&}]{parametr }\end{DoxyParamCaption})}
+
+Parameter entry function.
+
+Looks for among the loaded categories and looks for the required parameter. If the category is not found, it tries to load the $<$category$>$.conf file. Thread safe function.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em category} & The name of the category (File name) that contains the parameter. \\
+\hline
+\mbox{\tt in}  & {\em data\+Name} & Parametr name. \\
+\hline
+\mbox{\tt in}  & {\em parametr} & New data.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true Returns true if the parameter was set successfully, otherwise false. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_settings_manager_af67d1a3761332974fa0133e9d9819035}\label{class_c_settings_manager_af67d1a3761332974fa0133e9d9819035}} 
+\index{C\+Settings\+Manager@{C\+Settings\+Manager}!set\+Path@{set\+Path}}
+\index{set\+Path@{set\+Path}!C\+Settings\+Manager@{C\+Settings\+Manager}}
+\subsubsection{\texorpdfstring{set\+Path()}{setPath()}}
+{\footnotesize\ttfamily void C\+Settings\+Manager\+::set\+Path (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})}
+
+Set path where stored $\ast$.conf files.
+
+Thread safe function.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em path} & Path to dirictory. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+settings\+Manager/include/C\+Settings\+Manager.\+hpp\item 
+settings\+Manager/src/C\+Settings\+Manager.\+cpp\end{DoxyCompactItemize}

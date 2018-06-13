@@ -1,0 +1,10 @@
+<map id="TEST" name="TEST">
+<area shape="rect" id="node2" href="$class_net_1_1_c_net_socket_interface.html#a3f0603a3708ca966b9f37d9202761aa8" title="Interface initialization function. " alt="" coords="108,77,277,119"/>
+<area shape="rect" id="node3" href="$class_net_1_1_c_net.html#a802a6ab154226caaa8d70423374b8034" title="The function of connection waiting. " alt="" coords="113,143,272,170"/>
+<area shape="rect" id="node6" href="$class_net_1_1_c_net_socket_interface.html#a32974d8d814e78f05208eec685376df5" title="Close socket. " alt="" coords="325,201,495,243"/>
+<area shape="rect" id="node8" href="$class_net_1_1_c_net_socket_interface.html#a52ca61f347f9f08cf0ad85e45f081906" title="Create a client socket. " alt="" coords="108,245,277,287"/>
+<area shape="rect" id="node9" href="$class_net_1_1_c_net_socket_interface.html#a8d07a643a30977a250d611653d05e7d2" title="Function of disabling the initialized interface. " alt="" coords="108,311,277,352"/>
+<area shape="rect" id="node4" href="$class_net_1_1_c_net_socket_interface.html#a4fceb3945002b0aa62dbc7af4afac76d" title="Waiting for the client. " alt="" coords="325,5,495,47"/>
+<area shape="rect" id="node5" href="$class_net_1_1_c_net_socket_interface.html#a66531da7c243f12948bd79293d6299e2" title="Receiving data. " alt="" coords="325,71,495,112"/>
+<area shape="rect" id="node7" href="$class_net_1_1_c_net_socket_interface.html#ad6a594a3ebe2fd855399aabfcbe0f95e" title="Sending data. " alt="" coords="325,136,495,177"/>
+</map>

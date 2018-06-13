@@ -223,15 +223,17 @@ __kernel void countColise(__global __read_only unsigned int  *area,
     counters[area[i]] = 1;
 }
 
-__kernel void removeCommunityAreas(__global __read_only unsigned char *countersFirst,
-                                   __global __read_only unsigned char *countersSecond,
-                                   __global             unsigned int  *resultFirst,
-                                   __global             unsigned int  *resultSecond,
-                                   __global             unsigned int  *resultThird,
-                                   __global             unsigned int  *resultSizes) {
+__kernel void removeCommunityAreas(__global unsigned char *countersFirst,
+                                   __global unsigned char *countersSecond,
+                                   __global unsigned int  *resultFirst,
+                                   __global unsigned int  *resultSecond,
+                                   __global unsigned int  *resultThird,
+                                   __global unsigned int  *resultSizes) {
     unsigned int i = get_global_id(0),
                  writePos;
     if((countersFirst[i] + countersSecond[i]) == 2) {
+        countersFirst[i] = 0;
+        countersSecond[i] = 0;
         writePos = atomic_inc(&resultSizes[2]);
         resultThird[writePos] = i;
     } else if(countersFirst[i] == 1) {

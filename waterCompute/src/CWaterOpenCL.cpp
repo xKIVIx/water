@@ -902,7 +902,7 @@ private:
 int CWaterOpenCL::removeCommunityAreas(std::list<std::vector<uint32_t>>& areas,
                                        std::list<std::vector<uint32_t>>& newAreas) {
     // prepare bufffers
-    CClrear clearMem(bufferFaces_.getSize() / (3 * sizeof(uint32_t)));
+    CClrear clearMem(bufferFaces_.getSize() / 3);
     CMemObject bufferArea(context_,
                           bufferFaces_.getSize() / 3,
                           CL_MEM_READ_ONLY),
@@ -1036,7 +1036,7 @@ int CWaterOpenCL::removeCommunityAreas(std::list<std::vector<uint32_t>>& areas,
                 return err;
             }
 
-            workSize = bufferVertex_.getSize() / (3 * sizeof(uint32_t));
+            workSize = bufferFaces_.getSize() / (3 * sizeof(uint32_t));
             err = kernelRemoveCommunityAreas_.complite(commandQueue_, 
                                                        &workSize, 
                                                        1);
@@ -1050,58 +1050,51 @@ int CWaterOpenCL::removeCommunityAreas(std::list<std::vector<uint32_t>>& areas,
                 errorMessage("Fail get data from bufferResultSizes", err);
                 return err;
             }
-            if((sizes[0] != 0) && (sizes[0] != iterFirstArea->size())) {
-                iterFirstArea->clear();
-                err = bufferResultFirstArea.getData(commandQueue_, *iterFirstArea);
-                if(err != CL_SUCCESS) {
-                    errorMessage("Fail get data from bufferResultFirstArea", err);
-                    return err;
+            if(sizes[0] != iterFirstArea->size()) {
+                if(sizes[0] == 0) {
+                    iterFirstArea->clear();
+                    err = bufferResultThirdArea.getData(commandQueue_, *iterFirstArea);
+                    if(err != CL_SUCCESS) {
+                        errorMessage("Fail get data from bufferResultFirstArea", err);
+                        return err;
+                    }
+                    iterFirstArea->resize(sizes[2]);
+                } else {
+                    iterFirstArea->clear();
+                    err = bufferResultFirstArea.getData(commandQueue_, *iterFirstArea);
+                    if(err != CL_SUCCESS) {
+                        errorMessage("Fail get data from bufferResultFirstArea", err);
+                        return err;
+                    }
+                    iterFirstArea->resize(sizes[0]);
                 }
-                iterFirstArea->resize(sizes[0]);
-
-                err = kernelCountColise_.bindParametr(bufferResultFirstArea, 0);
-                if(err != CL_SUCCESS) {
-                    errorMessage("Fail bind bufferResultFirstArea", err);
-                    return err;
-                }
-                err = kernelCountColise_.bindParametr(bufferFirstCountersColise, 1);
-                if(err != CL_SUCCESS) {
-                    errorMessage("Fail bind bufferFirstCountersColise", err);
-                    return err;
-                }
-                err = bufferFirstCountersColise.loadData(context_, 
-                                                         commandQueue_, 
-                                                         clearMem.get(), 
-                                                         bufferFirstCountersColise.getSize());
-                if(err != CL_SUCCESS) {
-                    errorMessage("Fail zeroing bufferFirstCountersColise", err);
-                    return err;
-                }
-
-                workSize = iterFirstArea->size();
-                err = kernelCountColise_.complite(commandQueue_, &workSize, 1);
-                if(err != CL_SUCCESS) {
-                    errorMessage("Fail complite kernelCountColise", err);
-                    return err;
-                }
-
-                err = kernelCountColise_.bindParametr(bufferArea, 0);
-                if(err != CL_SUCCESS) {
-                    errorMessage("Fail bind bufferArea", err);
-                    return err;
-                }
-
+                
             }
-            if((sizes[1] != 0) && (sizes[1] != iterSecondArea->size())) {
+            if(sizes[1] != iterSecondArea->size()) {
+                if(sizes[1] == 0) {
+                    iterSecondArea->clear();
+                    err = bufferResultThirdArea.getData(commandQueue_, *iterSecondArea);
+                    if(err != CL_SUCCESS) {
+                        errorMessage("Fail get data from bufferResultThirdArea", err);
+                        return err;
+                    }
+                    iterFirstArea->resize(sizes[2]);
+                } else {
+                    iterSecondArea->clear();
+                    err = bufferResultSecondArea.getData(commandQueue_, *iterSecondArea);
+                    if(err != CL_SUCCESS) {
+                        errorMessage("Fail get data from bufferResultSecondArea", err);
+                        return err;
+                    }
+                    iterSecondArea->resize(sizes[1]);
+                }
                 iterSecondArea->clear();
-                std::vector<uint32_t> result;
                 err = bufferResultSecondArea.getData(commandQueue_, *iterSecondArea);
                 if(err != CL_SUCCESS) {
                     errorMessage("Fail get data from bufferResultSecondArea", err);
                     return err;
                 }
-                result.resize(sizes[1]);
-                iterSecondArea->swap(result);
+                iterSecondArea->resize(sizes[1]);
             }
             if((sizes[0] != 0) && (sizes[1] != 0) && (sizes[2] != 0)) {
                 newAreas.emplace_back();

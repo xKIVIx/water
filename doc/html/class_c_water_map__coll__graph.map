@@ -1,0 +1,3 @@
+<map id="CWaterMap" name="CWaterMap">
+<area shape="rect" id="node2" href="$class_c_water_open_c_l.html" title="{CWaterOpenCL\n|# facesIn_\l# edgesHoleBorders_\l# countInnerEdges_\l# countBorderEdges_\l# countFractureEdges_\l|+ CWaterOpenCL()\l+ ~CWaterOpenCL()\l+ loadData()\l+ getInnerEdgesFaces()\l+ getBorderFaces()\l+ getFractureEdges()\l+ getBorderEdges()\l+ getVertex()\l# clearOpenCl()\l# computeInnerFaces()\l# computeAreaData()\l# removeCommunityAreas()\l# findUnionVertex()\l# getFacesToHeight()\l}" alt="" coords="5,5,188,332"/>
+</map>

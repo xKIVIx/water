@@ -1,0 +1,6 @@
+<map id="Net::CNet::acceptClient" name="Net::CNet::acceptClient">
+<area shape="rect" id="node2" href="$class_net_1_1_c_net_socket_interface.html#a4fceb3945002b0aa62dbc7af4afac76d" title="Waiting for the client. " alt="" coords="212,5,381,47"/>
+<area shape="rect" id="node3" href="$class_net_1_1_c_net_socket_interface.html#a66531da7c243f12948bd79293d6299e2" title="Receiving data. " alt="" coords="212,71,381,112"/>
+<area shape="rect" id="node4" href="$class_net_1_1_c_net_socket_interface.html#a32974d8d814e78f05208eec685376df5" title="Close socket. " alt="" coords="212,136,381,177"/>
+<area shape="rect" id="node5" href="$class_net_1_1_c_net_socket_interface.html#ad6a594a3ebe2fd855399aabfcbe0f95e" title="Sending data. " alt="" coords="212,201,381,243"/>
+</map>

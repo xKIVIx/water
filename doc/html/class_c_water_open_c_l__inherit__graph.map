@@ -1,0 +1,4 @@
+<map id="CWaterOpenCL" name="CWaterOpenCL">
+<area shape="rect" id="node2" href="$class_c_water_map.html" title="{CWaterMap\n||+ addWater()\l+ getWaterLvls()\l# buildMap()\l}" alt="" coords="38,380,155,487"/>
+<area shape="rect" id="node3" href="$class_c_water_compute.html" title="{CWaterCompute\n||+ prepareData()\l+ clear()\l}" alt="" coords="37,535,156,627"/>
+</map>

@@ -74,59 +74,123 @@ $(function() {
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="_c_water_open_c_l_8hpp_source.html">CWaterOpenCL.hpp</a>&gt;</code></p>
-
-<p>Inherited by <a class="el" href="class_c_water_compute.html">CWaterCompute</a>.</p>
+<div class="dynheader">
+Inheritance diagram for CWaterOpenCL:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_c_water_open_c_l__inherit__graph.png" border="0" usemap="#_c_water_open_c_l_inherit__map" alt="Inheritance graph"/></div>
+<map name="_c_water_open_c_l_inherit__map" id="_c_water_open_c_l_inherit__map">
+<area shape="rect" id="node2" href="class_c_water_map.html" title="{CWaterMap\n||+ addWater()\l+ getWaterLvls()\l# buildMap()\l}" alt="" coords="38,380,155,487"/>
+<area shape="rect" id="node3" href="class_c_water_compute.html" title="{CWaterCompute\n||+ prepareData()\l+ clear()\l}" alt="" coords="37,535,156,627"/>
+</map>
+</div>
+<div class="dynheader">
+Collaboration diagram for CWaterOpenCL:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_c_water_open_c_l__coll__graph.png" border="0" usemap="#_c_water_open_c_l_coll__map" alt="Collaboration graph"/></div>
+</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a40ad7bc6720195721f3129aa8c2739d4"><td class="memItemLeft" align="right" valign="top"><a id="a40ad7bc6720195721f3129aa8c2739d4"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>loadData</b> (const std::vector&lt; float &gt; &amp;vertex, const std::vector&lt; uint32_t &gt; &amp;faces)</td></tr>
+<tr class="memitem:a2976d64e5946023c0ea6ccc1f59c5f69"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_water_open_c_l.html#a2976d64e5946023c0ea6ccc1f59c5f69">CWaterOpenCL</a> ()</td></tr>
+<tr class="separator:a2976d64e5946023c0ea6ccc1f59c5f69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a542d640ef169c0626417b8d3d8c98ba3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_water_open_c_l.html#a542d640ef169c0626417b8d3d8c98ba3">~CWaterOpenCL</a> ()</td></tr>
+<tr class="separator:a542d640ef169c0626417b8d3d8c98ba3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40ad7bc6720195721f3129aa8c2739d4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_water_open_c_l.html#a40ad7bc6720195721f3129aa8c2739d4">loadData</a> (const std::vector&lt; float &gt; &amp;vertex, const std::vector&lt; uint32_t &gt; &amp;faces)</td></tr>
 <tr class="separator:a40ad7bc6720195721f3129aa8c2739d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e817028b963e53eba18e0c7591885e6"><td class="memItemLeft" align="right" valign="top"><a id="a9e817028b963e53eba18e0c7591885e6"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>getInnerEdgesFaces</b> (std::vector&lt; uint32_t &gt; &amp;faces) const</td></tr>
+<tr class="memitem:a9e817028b963e53eba18e0c7591885e6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_water_open_c_l.html#a9e817028b963e53eba18e0c7591885e6">getInnerEdgesFaces</a> (std::vector&lt; uint32_t &gt; &amp;faces) const</td></tr>
 <tr class="separator:a9e817028b963e53eba18e0c7591885e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2e33f7535616c17a9e93fd92a0664b2"><td class="memItemLeft" align="right" valign="top"><a id="ab2e33f7535616c17a9e93fd92a0664b2"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>getBorderFaces</b> (std::vector&lt; uint32_t &gt; &amp;faces) const</td></tr>
+<tr class="memitem:ab2e33f7535616c17a9e93fd92a0664b2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_water_open_c_l.html#ab2e33f7535616c17a9e93fd92a0664b2">getBorderFaces</a> (std::vector&lt; uint32_t &gt; &amp;faces) const</td></tr>
 <tr class="separator:ab2e33f7535616c17a9e93fd92a0664b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b09f2f3bd783f601ee34981bc26c112"><td class="memItemLeft" align="right" valign="top"><a id="a9b09f2f3bd783f601ee34981bc26c112"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>getFractureEdges</b> (std::vector&lt; uint32_t &gt; &amp;edges) const</td></tr>
+<tr class="memitem:a9b09f2f3bd783f601ee34981bc26c112"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_water_open_c_l.html#a9b09f2f3bd783f601ee34981bc26c112">getFractureEdges</a> (std::vector&lt; uint32_t &gt; &amp;edges) const</td></tr>
 <tr class="separator:a9b09f2f3bd783f601ee34981bc26c112"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab935c58d2c24c2739988d980cec389b8"><td class="memItemLeft" align="right" valign="top"><a id="ab935c58d2c24c2739988d980cec389b8"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>getBorderEdges</b> (std::vector&lt; uint32_t &gt; &amp;edges) const</td></tr>
+<tr class="memitem:ab935c58d2c24c2739988d980cec389b8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_water_open_c_l.html#ab935c58d2c24c2739988d980cec389b8">getBorderEdges</a> (std::vector&lt; uint32_t &gt; &amp;edges) const</td></tr>
 <tr class="separator:ab935c58d2c24c2739988d980cec389b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac99522af5b8a9653beb5cdafc456d454"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_water_open_c_l.html#ac99522af5b8a9653beb5cdafc456d454">getVertex</a> (std::vector&lt; float &gt; &amp;result) const</td></tr>
+<tr class="separator:ac99522af5b8a9653beb5cdafc456d454"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a213bd842a23c3a1d50e90b60d9395143"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_water_open_c_l.html#a213bd842a23c3a1d50e90b60d9395143">clearOpenCl</a> ()</td></tr>
 <tr class="separator:a213bd842a23c3a1d50e90b60d9395143"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af270a8ce81a691fd166ef1548a740d75"><td class="memItemLeft" align="right" valign="top"><a id="af270a8ce81a691fd166ef1548a740d75"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>computeInnerFaces</b> (const std::list&lt; std::vector&lt; uint32_t &gt;&gt; &amp;borders, std::list&lt; std::vector&lt; uint32_t &gt;&gt; &amp;faces)</td></tr>
+<tr class="memitem:af270a8ce81a691fd166ef1548a740d75"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_water_open_c_l.html#af270a8ce81a691fd166ef1548a740d75">computeInnerFaces</a> (const std::list&lt; std::vector&lt; uint32_t &gt;&gt; &amp;borders, std::list&lt; std::vector&lt; uint32_t &gt;&gt; &amp;faces)</td></tr>
 <tr class="separator:af270a8ce81a691fd166ef1548a740d75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67e69f0d1a0b9139bde5c8ded6a9137e"><td class="memItemLeft" align="right" valign="top"><a id="a67e69f0d1a0b9139bde5c8ded6a9137e"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>removeCommunityAreas</b> (std::list&lt; std::vector&lt; uint32_t &gt;&gt; &amp;areas, std::list&lt; std::vector&lt; uint32_t &gt;&gt; &amp;newAreas)</td></tr>
+<tr class="memitem:a30713ebb73035f4b64dbf2a392b33d72"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_water_open_c_l.html#a30713ebb73035f4b64dbf2a392b33d72">computeAreaData</a> (const std::list&lt; std::vector&lt; uint32_t &gt;&gt; &amp;areas, const std::vector&lt; float &gt; &amp;heights, std::vector&lt; float &gt; &amp;resultSquare, std::vector&lt; float &gt; &amp;resultVal)</td></tr>
+<tr class="separator:a30713ebb73035f4b64dbf2a392b33d72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67e69f0d1a0b9139bde5c8ded6a9137e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_water_open_c_l.html#a67e69f0d1a0b9139bde5c8ded6a9137e">removeCommunityAreas</a> (std::list&lt; std::vector&lt; uint32_t &gt;&gt; &amp;areas, std::list&lt; std::vector&lt; uint32_t &gt;&gt; &amp;newAreas)</td></tr>
 <tr class="separator:a67e69f0d1a0b9139bde5c8ded6a9137e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad6a697a2579f3679a7574aaa30bb7ef"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_water_open_c_l.html#aad6a697a2579f3679a7574aaa30bb7ef">findUnionVertex</a> (const std::list&lt; std::vector&lt; uint32_t &gt;&gt; &amp;areas, std::list&lt; std::vector&lt; uint32_t &gt;&gt; &amp;unionVertex)</td></tr>
+<tr class="separator:aad6a697a2579f3679a7574aaa30bb7ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6500cbf0c77d5b262374d69763de09a0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_water_open_c_l.html#a6500cbf0c77d5b262374d69763de09a0">getFacesToHeight</a> (const std::vector&lt; uint32_t &gt; &amp;area, const float height, std::vector&lt; uint32_t &gt; &amp;faces, std::vector&lt; float &gt; &amp;vertex)</td></tr>
+<tr class="separator:a6500cbf0c77d5b262374d69763de09a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:ac737018fb1ad601bdb27e916bcba2dc9"><td class="memItemLeft" align="right" valign="top"><a id="ac737018fb1ad601bdb27e916bcba2dc9"></a>
-std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>facesIn_</b></td></tr>
+<tr class="memitem:ac737018fb1ad601bdb27e916bcba2dc9"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_water_open_c_l.html#ac737018fb1ad601bdb27e916bcba2dc9">facesIn_</a></td></tr>
 <tr class="separator:ac737018fb1ad601bdb27e916bcba2dc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac77a547983236889023df42587eb5576"><td class="memItemLeft" align="right" valign="top"><a id="ac77a547983236889023df42587eb5576"></a>
-std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>edgesHoleBorders_</b></td></tr>
+<tr class="memitem:ac77a547983236889023df42587eb5576"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_water_open_c_l.html#ac77a547983236889023df42587eb5576">edgesHoleBorders_</a></td></tr>
 <tr class="separator:ac77a547983236889023df42587eb5576"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8ddc30747be7685da174f20d33976f2"><td class="memItemLeft" align="right" valign="top"><a id="ac8ddc30747be7685da174f20d33976f2"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>countInnerEdges_</b> = 0</td></tr>
+<tr class="memitem:ac8ddc30747be7685da174f20d33976f2"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_water_open_c_l.html#ac8ddc30747be7685da174f20d33976f2">countInnerEdges_</a> = 0</td></tr>
 <tr class="separator:ac8ddc30747be7685da174f20d33976f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a762f011180770ef178b923bd3afebb98"><td class="memItemLeft" align="right" valign="top"><a id="a762f011180770ef178b923bd3afebb98"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>countBorderEdges_</b> = 0</td></tr>
+<tr class="memitem:a762f011180770ef178b923bd3afebb98"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_water_open_c_l.html#a762f011180770ef178b923bd3afebb98">countBorderEdges_</a> = 0</td></tr>
 <tr class="separator:a762f011180770ef178b923bd3afebb98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70cf05f1d4d723bc90d671fcf9c6ed85"><td class="memItemLeft" align="right" valign="top"><a id="a70cf05f1d4d723bc90d671fcf9c6ed85"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>countFractureEdges_</b> = 0</td></tr>
+<tr class="memitem:a70cf05f1d4d723bc90d671fcf9c6ed85"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_water_open_c_l.html#a70cf05f1d4d723bc90d671fcf9c6ed85">countFractureEdges_</a> = 0</td></tr>
 <tr class="separator:a70cf05f1d4d723bc90d671fcf9c6ed85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A class that performs parallel processing of data. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a2976d64e5946023c0ea6ccc1f59c5f69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2976d64e5946023c0ea6ccc1f59c5f69">&#9670;&nbsp;</a></span>CWaterOpenCL()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">CWaterOpenCL::CWaterOpenCL </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_c_water_open_c_l_a2976d64e5946023c0ea6ccc1f59c5f69_cgraph.png" border="0" usemap="#class_c_water_open_c_l_a2976d64e5946023c0ea6ccc1f59c5f69_cgraph" alt=""/></div>
+<map name="class_c_water_open_c_l_a2976d64e5946023c0ea6ccc1f59c5f69_cgraph" id="class_c_water_open_c_l_a2976d64e5946023c0ea6ccc1f59c5f69_cgraph">
+<area shape="rect" id="node2" href="_c_water_open_c_l_8cpp.html#ab6665f5e33cf483ed3eb0e26d684f301" title="chek" alt="" coords="279,5,329,32"/>
+<area shape="rect" id="node3" href="_c_water_open_c_l_8cpp.html#adb073e42c3f85ae72b18856456b8e139" title="pfn_notify" alt="" coords="265,56,343,83"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a542d640ef169c0626417b8d3d8c98ba3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a542d640ef169c0626417b8d3d8c98ba3">&#9670;&nbsp;</a></span>~CWaterOpenCL()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">CWaterOpenCL::~CWaterOpenCL </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_c_water_open_c_l_a542d640ef169c0626417b8d3d8c98ba3_cgraph.png" border="0" usemap="#class_c_water_open_c_l_a542d640ef169c0626417b8d3d8c98ba3_cgraph" alt=""/></div>
+<map name="class_c_water_open_c_l_a542d640ef169c0626417b8d3d8c98ba3_cgraph" id="class_c_water_open_c_l_a542d640ef169c0626417b8d3d8c98ba3_cgraph">
+<area shape="rect" id="node2" href="class_c_water_open_c_l.html#a213bd842a23c3a1d50e90b60d9395143" title="CWaterOpenCL::clearOpenCl" alt="" coords="273,5,465,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="a213bd842a23c3a1d50e90b60d9395143"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a213bd842a23c3a1d50e90b60d9395143">&#9670;&nbsp;</a></span>clearOpenCl()</h2>
 
@@ -150,12 +214,511 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>countFractureEdge
 </table>
 </div><div class="memdoc">
 <p>Cleaning of internal data. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_c_water_open_c_l_a213bd842a23c3a1d50e90b60d9395143_icgraph.png" border="0" usemap="#class_c_water_open_c_l_a213bd842a23c3a1d50e90b60d9395143_icgraph" alt=""/></div>
+<map name="class_c_water_open_c_l_a213bd842a23c3a1d50e90b60d9395143_icgraph" id="class_c_water_open_c_l_a213bd842a23c3a1d50e90b60d9395143_icgraph">
+<area shape="rect" id="node2" href="class_c_water_compute.html#a6afba6407dd75a22e2beeac9472fdf6c" title="CWaterCompute::clear" alt="" coords="278,5,433,32"/>
+<area shape="rect" id="node3" href="class_c_water_open_c_l.html#a542d640ef169c0626417b8d3d8c98ba3" title="CWaterOpenCL::~CWaterOpenCL" alt="" coords="245,56,465,83"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a30713ebb73035f4b64dbf2a392b33d72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30713ebb73035f4b64dbf2a392b33d72">&#9670;&nbsp;</a></span>computeAreaData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CWaterOpenCL::computeAreaData </td>
+          <td>(</td>
+          <td class="paramtype">const std::list&lt; std::vector&lt; uint32_t &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>areas</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; float &gt; &amp;&#160;</td>
+          <td class="paramname"><em>heights</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; float &gt; &amp;&#160;</td>
+          <td class="paramname"><em>resultSquare</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; float &gt; &amp;&#160;</td>
+          <td class="paramname"><em>resultVal</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_c_water_open_c_l_a30713ebb73035f4b64dbf2a392b33d72_icgraph.png" border="0" usemap="#class_c_water_open_c_l_a30713ebb73035f4b64dbf2a392b33d72_icgraph" alt=""/></div>
+<map name="class_c_water_open_c_l_a30713ebb73035f4b64dbf2a392b33d72_icgraph" id="class_c_water_open_c_l_a30713ebb73035f4b64dbf2a392b33d72_icgraph">
+<area shape="rect" id="node2" href="class_c_water_map.html#a3dcda9c5dd50d45f317e526c6949f8db" title="CWaterMap::buildMap" alt="" coords="279,5,429,32"/>
+<area shape="rect" id="node3" href="class_c_water_compute.html#a5486835df389547dea8403401738c071" title="CWaterCompute::prepareData" alt="" coords="477,5,673,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="af270a8ce81a691fd166ef1548a740d75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af270a8ce81a691fd166ef1548a740d75">&#9670;&nbsp;</a></span>computeInnerFaces()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CWaterOpenCL::computeInnerFaces </td>
+          <td>(</td>
+          <td class="paramtype">const std::list&lt; std::vector&lt; uint32_t &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>borders</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::list&lt; std::vector&lt; uint32_t &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>faces</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_c_water_open_c_l_af270a8ce81a691fd166ef1548a740d75_icgraph.png" border="0" usemap="#class_c_water_open_c_l_af270a8ce81a691fd166ef1548a740d75_icgraph" alt=""/></div>
+<map name="class_c_water_open_c_l_af270a8ce81a691fd166ef1548a740d75_icgraph" id="class_c_water_open_c_l_af270a8ce81a691fd166ef1548a740d75_icgraph">
+<area shape="rect" id="node2" href="class_c_water_compute.html#a5486835df389547dea8403401738c071" title="CWaterCompute::prepareData" alt="" coords="252,13,448,39"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="aad6a697a2579f3679a7574aaa30bb7ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad6a697a2579f3679a7574aaa30bb7ef">&#9670;&nbsp;</a></span>findUnionVertex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CWaterOpenCL::findUnionVertex </td>
+          <td>(</td>
+          <td class="paramtype">const std::list&lt; std::vector&lt; uint32_t &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>areas</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::list&lt; std::vector&lt; uint32_t &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>unionVertex</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_c_water_open_c_l_aad6a697a2579f3679a7574aaa30bb7ef_icgraph.png" border="0" usemap="#class_c_water_open_c_l_aad6a697a2579f3679a7574aaa30bb7ef_icgraph" alt=""/></div>
+<map name="class_c_water_open_c_l_aad6a697a2579f3679a7574aaa30bb7ef_icgraph" id="class_c_water_open_c_l_aad6a697a2579f3679a7574aaa30bb7ef_icgraph">
+<area shape="rect" id="node2" href="class_c_water_compute.html#a5486835df389547dea8403401738c071" title="CWaterCompute::prepareData" alt="" coords="265,5,461,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ab935c58d2c24c2739988d980cec389b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab935c58d2c24c2739988d980cec389b8">&#9670;&nbsp;</a></span>getBorderEdges()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CWaterOpenCL::getBorderEdges </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; uint32_t &gt; &amp;&#160;</td>
+          <td class="paramname"><em>edges</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab2e33f7535616c17a9e93fd92a0664b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2e33f7535616c17a9e93fd92a0664b2">&#9670;&nbsp;</a></span>getBorderFaces()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CWaterOpenCL::getBorderFaces </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; uint32_t &gt; &amp;&#160;</td>
+          <td class="paramname"><em>faces</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_c_water_open_c_l_ab2e33f7535616c17a9e93fd92a0664b2_icgraph.png" border="0" usemap="#class_c_water_open_c_l_ab2e33f7535616c17a9e93fd92a0664b2_icgraph" alt=""/></div>
+<map name="class_c_water_open_c_l_ab2e33f7535616c17a9e93fd92a0664b2_icgraph" id="class_c_water_open_c_l_ab2e33f7535616c17a9e93fd92a0664b2_icgraph">
+<area shape="rect" id="node2" href="unit_tests_2_c_water_open_c_l_8cpp.html#a3802ff366222351d119d100a395a135d" title="TEST" alt="" coords="267,5,321,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a6500cbf0c77d5b262374d69763de09a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6500cbf0c77d5b262374d69763de09a0">&#9670;&nbsp;</a></span>getFacesToHeight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CWaterOpenCL::getFacesToHeight </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; uint32_t &gt; &amp;&#160;</td>
+          <td class="paramname"><em>area</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>height</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; uint32_t &gt; &amp;&#160;</td>
+          <td class="paramname"><em>faces</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; float &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vertex</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_c_water_open_c_l_a6500cbf0c77d5b262374d69763de09a0_icgraph.png" border="0" usemap="#class_c_water_open_c_l_a6500cbf0c77d5b262374d69763de09a0_icgraph" alt=""/></div>
+<map name="class_c_water_open_c_l_a6500cbf0c77d5b262374d69763de09a0_icgraph" id="class_c_water_open_c_l_a6500cbf0c77d5b262374d69763de09a0_icgraph">
+<area shape="rect" id="node2" href="class_c_water_map.html#aca1fa16390fe2a39e4d576045f3404e9" title="CWaterMap::getWaterLvls" alt="" coords="243,13,417,39"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a9b09f2f3bd783f601ee34981bc26c112"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b09f2f3bd783f601ee34981bc26c112">&#9670;&nbsp;</a></span>getFractureEdges()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CWaterOpenCL::getFractureEdges </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; uint32_t &gt; &amp;&#160;</td>
+          <td class="paramname"><em>edges</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9e817028b963e53eba18e0c7591885e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e817028b963e53eba18e0c7591885e6">&#9670;&nbsp;</a></span>getInnerEdgesFaces()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CWaterOpenCL::getInnerEdgesFaces </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; uint32_t &gt; &amp;&#160;</td>
+          <td class="paramname"><em>faces</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac99522af5b8a9653beb5cdafc456d454"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac99522af5b8a9653beb5cdafc456d454">&#9670;&nbsp;</a></span>getVertex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CWaterOpenCL::getVertex </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; float &gt; &amp;&#160;</td>
+          <td class="paramname"><em>result</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a40ad7bc6720195721f3129aa8c2739d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40ad7bc6720195721f3129aa8c2739d4">&#9670;&nbsp;</a></span>loadData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CWaterOpenCL::loadData </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; float &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vertex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; uint32_t &gt; &amp;&#160;</td>
+          <td class="paramname"><em>faces</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_c_water_open_c_l_a40ad7bc6720195721f3129aa8c2739d4_icgraph.png" border="0" usemap="#class_c_water_open_c_l_a40ad7bc6720195721f3129aa8c2739d4_icgraph" alt=""/></div>
+<map name="class_c_water_open_c_l_a40ad7bc6720195721f3129aa8c2739d4_icgraph" id="class_c_water_open_c_l_a40ad7bc6720195721f3129aa8c2739d4_icgraph">
+<area shape="rect" id="node2" href="unit_tests_2_c_water_open_c_l_8cpp.html#a531bd86f20495ec84eea08f266f79e0b" title="TEST" alt="" coords="225,5,280,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a67e69f0d1a0b9139bde5c8ded6a9137e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67e69f0d1a0b9139bde5c8ded6a9137e">&#9670;&nbsp;</a></span>removeCommunityAreas()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CWaterOpenCL::removeCommunityAreas </td>
+          <td>(</td>
+          <td class="paramtype">std::list&lt; std::vector&lt; uint32_t &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>areas</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::list&lt; std::vector&lt; uint32_t &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>newAreas</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_c_water_open_c_l_a67e69f0d1a0b9139bde5c8ded6a9137e_icgraph.png" border="0" usemap="#class_c_water_open_c_l_a67e69f0d1a0b9139bde5c8ded6a9137e_icgraph" alt=""/></div>
+<map name="class_c_water_open_c_l_a67e69f0d1a0b9139bde5c8ded6a9137e_icgraph" id="class_c_water_open_c_l_a67e69f0d1a0b9139bde5c8ded6a9137e_icgraph">
+<area shape="rect" id="node2" href="class_c_water_compute.html#a5486835df389547dea8403401738c071" title="CWaterCompute::prepareData" alt="" coords="281,13,477,39"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a762f011180770ef178b923bd3afebb98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a762f011180770ef178b923bd3afebb98">&#9670;&nbsp;</a></span>countBorderEdges_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t CWaterOpenCL::countBorderEdges_ = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a70cf05f1d4d723bc90d671fcf9c6ed85"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70cf05f1d4d723bc90d671fcf9c6ed85">&#9670;&nbsp;</a></span>countFractureEdges_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t CWaterOpenCL::countFractureEdges_ = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac8ddc30747be7685da174f20d33976f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8ddc30747be7685da174f20d33976f2">&#9670;&nbsp;</a></span>countInnerEdges_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t CWaterOpenCL::countInnerEdges_ = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac77a547983236889023df42587eb5576"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac77a547983236889023df42587eb5576">&#9670;&nbsp;</a></span>edgesHoleBorders_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;uint32_t&gt; CWaterOpenCL::edgesHoleBorders_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac737018fb1ad601bdb27e916bcba2dc9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac737018fb1ad601bdb27e916bcba2dc9">&#9670;&nbsp;</a></span>facesIn_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;uint32_t&gt; CWaterOpenCL::facesIn_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>waterCompute/include/<a class="el" href="_c_water_open_c_l_8hpp_source.html">CWaterOpenCL.hpp</a></li>
-<li>waterCompute/src/CWaterOpenCL.cpp</li>
+<li>waterCompute/src/<a class="el" href="_c_water_open_c_l_8cpp.html">CWaterOpenCL.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

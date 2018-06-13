@@ -107,7 +107,7 @@ inline void clearStatesEdges(std::vector <char> &states) {
 inline void useEdges(std::vector <char> &states,
                      const std::vector <uint32_t> &cycle) {
     for(auto iter = cycle.begin(); iter != cycle.end(); ++iter) {
-        states[*iter] |= USED;
+        states[*iter] = USED;
     }
 }
 
@@ -116,6 +116,7 @@ int CWaterCompute::findBorderHoles(std::list <std::vector<uint32_t>> &cycles) {
     std::vector <uint32_t> cycle;
     std::vector <char> statesEdges;
     uint32_t sizeFractureEdges;
+    roadMatOut(edgesHoleBorders_);
     statesEdges.resize(edgesHoleBorders_.size() / 2);
     cycle.reserve(edgesHoleBorders_.size() / 2);
     for(uint32_t idEdge = 0; idEdge < edgesHoleBorders_.size() / 2; idEdge++) {

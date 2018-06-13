@@ -1,0 +1,6 @@
+<map id="TEST" name="TEST">
+<area shape="rect" id="node2" href="$class_net_1_1_c_net_handler_web_socket.html#aa408c8c686da45c36969a7dcf7478daa" title="Net::CNetHandlerWebSocket\l::packData" alt="" coords="108,5,299,47"/>
+<area shape="rect" id="node4" href="$class_net_1_1_c_net_handler_web_socket.html#a26a43acb16b7879df22aa3ce3fc1d172" title="Net::CNetHandlerWebSocket\l::decodMessageHead" alt="" coords="108,71,299,112"/>
+<area shape="rect" id="node5" href="$class_net_1_1_c_net_handler_web_socket.html#a09297039609dca2d8e2c376626ef78f1" title="Net::CNetHandlerWebSocket\l::unpackData" alt="" coords="108,136,299,177"/>
+<area shape="rect" id="node3" href="$_c_net_handler_web_socket_8cpp.html#a7c68178db4ad64aed3a844986f220c70" title="useMask" alt="" coords="347,78,421,105"/>
+</map>

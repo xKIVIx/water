@@ -9,5 +9,6 @@ var searchData=
   ['cserver',['CServer',['../class_c_server.html',1,'']]],
   ['csettingsmanager',['CSettingsManager',['../class_c_settings_manager.html',1,'']]],
   ['cwatercompute',['CWaterCompute',['../class_c_water_compute.html',1,'']]],
+  ['cwatermap',['CWaterMap',['../class_c_water_map.html',1,'']]],
   ['cwateropencl',['CWaterOpenCL',['../class_c_water_open_c_l.html',1,'']]]
 ];

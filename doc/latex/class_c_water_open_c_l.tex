@@ -1,0 +1,111 @@
+\hypertarget{class_c_water_open_c_l}{}\section{C\+Water\+Open\+CL Class Reference}
+\label{class_c_water_open_c_l}\index{C\+Water\+Open\+CL@{C\+Water\+Open\+CL}}
+
+
+{\ttfamily \#include $<$C\+Water\+Open\+C\+L.\+hpp$>$}
+
+
+
+Inheritance diagram for C\+Water\+Open\+CL\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=217pt]{class_c_water_open_c_l__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for C\+Water\+Open\+CL\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=217pt]{class_c_water_open_c_l__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_water_open_c_l_a40ad7bc6720195721f3129aa8c2739d4}\label{class_c_water_open_c_l_a40ad7bc6720195721f3129aa8c2739d4}} 
+int {\bfseries load\+Data} (const std\+::vector$<$ float $>$ \&vertex, const std\+::vector$<$ uint32\+\_\+t $>$ \&faces)
+\item 
+\mbox{\Hypertarget{class_c_water_open_c_l_a9e817028b963e53eba18e0c7591885e6}\label{class_c_water_open_c_l_a9e817028b963e53eba18e0c7591885e6}} 
+int {\bfseries get\+Inner\+Edges\+Faces} (std\+::vector$<$ uint32\+\_\+t $>$ \&faces) const
+\item 
+\mbox{\Hypertarget{class_c_water_open_c_l_ab2e33f7535616c17a9e93fd92a0664b2}\label{class_c_water_open_c_l_ab2e33f7535616c17a9e93fd92a0664b2}} 
+int {\bfseries get\+Border\+Faces} (std\+::vector$<$ uint32\+\_\+t $>$ \&faces) const
+\item 
+\mbox{\Hypertarget{class_c_water_open_c_l_a9b09f2f3bd783f601ee34981bc26c112}\label{class_c_water_open_c_l_a9b09f2f3bd783f601ee34981bc26c112}} 
+int {\bfseries get\+Fracture\+Edges} (std\+::vector$<$ uint32\+\_\+t $>$ \&edges) const
+\item 
+\mbox{\Hypertarget{class_c_water_open_c_l_ab935c58d2c24c2739988d980cec389b8}\label{class_c_water_open_c_l_ab935c58d2c24c2739988d980cec389b8}} 
+int {\bfseries get\+Border\+Edges} (std\+::vector$<$ uint32\+\_\+t $>$ \&edges) const
+\item 
+\mbox{\Hypertarget{class_c_water_open_c_l_ac99522af5b8a9653beb5cdafc456d454}\label{class_c_water_open_c_l_ac99522af5b8a9653beb5cdafc456d454}} 
+int {\bfseries get\+Vertex} (std\+::vector$<$ float $>$ \&result) const
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_c_water_open_c_l_a213bd842a23c3a1d50e90b60d9395143}{clear\+Open\+Cl}} ()
+\item 
+\mbox{\Hypertarget{class_c_water_open_c_l_af270a8ce81a691fd166ef1548a740d75}\label{class_c_water_open_c_l_af270a8ce81a691fd166ef1548a740d75}} 
+int {\bfseries compute\+Inner\+Faces} (const std\+::list$<$ std\+::vector$<$ uint32\+\_\+t $>$$>$ \&borders, std\+::list$<$ std\+::vector$<$ uint32\+\_\+t $>$$>$ \&faces)
+\item 
+\mbox{\Hypertarget{class_c_water_open_c_l_a30713ebb73035f4b64dbf2a392b33d72}\label{class_c_water_open_c_l_a30713ebb73035f4b64dbf2a392b33d72}} 
+int {\bfseries compute\+Area\+Data} (const std\+::list$<$ std\+::vector$<$ uint32\+\_\+t $>$$>$ \&areas, const std\+::vector$<$ float $>$ \&heights, std\+::vector$<$ float $>$ \&result\+Square, std\+::vector$<$ float $>$ \&result\+Val)
+\item 
+\mbox{\Hypertarget{class_c_water_open_c_l_a67e69f0d1a0b9139bde5c8ded6a9137e}\label{class_c_water_open_c_l_a67e69f0d1a0b9139bde5c8ded6a9137e}} 
+int {\bfseries remove\+Community\+Areas} (std\+::list$<$ std\+::vector$<$ uint32\+\_\+t $>$$>$ \&areas, std\+::list$<$ std\+::vector$<$ uint32\+\_\+t $>$$>$ \&new\+Areas)
+\item 
+\mbox{\Hypertarget{class_c_water_open_c_l_aad6a697a2579f3679a7574aaa30bb7ef}\label{class_c_water_open_c_l_aad6a697a2579f3679a7574aaa30bb7ef}} 
+int {\bfseries find\+Union\+Vertex} (const std\+::list$<$ std\+::vector$<$ uint32\+\_\+t $>$$>$ \&areas, std\+::list$<$ std\+::vector$<$ uint32\+\_\+t $>$$>$ \&union\+Vertex)
+\item 
+\mbox{\Hypertarget{class_c_water_open_c_l_a6500cbf0c77d5b262374d69763de09a0}\label{class_c_water_open_c_l_a6500cbf0c77d5b262374d69763de09a0}} 
+int {\bfseries get\+Faces\+To\+Height} (const std\+::vector$<$ uint32\+\_\+t $>$ \&area, const float height, std\+::vector$<$ uint32\+\_\+t $>$ \&faces, std\+::vector$<$ float $>$ \&vertex)
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_water_open_c_l_ac737018fb1ad601bdb27e916bcba2dc9}\label{class_c_water_open_c_l_ac737018fb1ad601bdb27e916bcba2dc9}} 
+std\+::vector$<$ uint32\+\_\+t $>$ {\bfseries faces\+In\+\_\+}
+\item 
+\mbox{\Hypertarget{class_c_water_open_c_l_ac77a547983236889023df42587eb5576}\label{class_c_water_open_c_l_ac77a547983236889023df42587eb5576}} 
+std\+::vector$<$ uint32\+\_\+t $>$ {\bfseries edges\+Hole\+Borders\+\_\+}
+\item 
+\mbox{\Hypertarget{class_c_water_open_c_l_ac8ddc30747be7685da174f20d33976f2}\label{class_c_water_open_c_l_ac8ddc30747be7685da174f20d33976f2}} 
+uint32\+\_\+t {\bfseries count\+Inner\+Edges\+\_\+} = 0
+\item 
+\mbox{\Hypertarget{class_c_water_open_c_l_a762f011180770ef178b923bd3afebb98}\label{class_c_water_open_c_l_a762f011180770ef178b923bd3afebb98}} 
+uint32\+\_\+t {\bfseries count\+Border\+Edges\+\_\+} = 0
+\item 
+\mbox{\Hypertarget{class_c_water_open_c_l_a70cf05f1d4d723bc90d671fcf9c6ed85}\label{class_c_water_open_c_l_a70cf05f1d4d723bc90d671fcf9c6ed85}} 
+uint32\+\_\+t {\bfseries count\+Fracture\+Edges\+\_\+} = 0
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A class that performs parallel processing of data. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_c_water_open_c_l_a213bd842a23c3a1d50e90b60d9395143}\label{class_c_water_open_c_l_a213bd842a23c3a1d50e90b60d9395143}} 
+\index{C\+Water\+Open\+CL@{C\+Water\+Open\+CL}!clear\+Open\+Cl@{clear\+Open\+Cl}}
+\index{clear\+Open\+Cl@{clear\+Open\+Cl}!C\+Water\+Open\+CL@{C\+Water\+Open\+CL}}
+\subsubsection{\texorpdfstring{clear\+Open\+Cl()}{clearOpenCl()}}
+{\footnotesize\ttfamily void C\+Water\+Open\+C\+L\+::clear\+Open\+Cl (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Cleaning of internal data. Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_c_water_open_c_l_a213bd842a23c3a1d50e90b60d9395143_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+water\+Compute/include/C\+Water\+Open\+C\+L.\+hpp\item 
+water\+Compute/src/C\+Water\+Open\+C\+L.\+cpp\end{DoxyCompactItemize}

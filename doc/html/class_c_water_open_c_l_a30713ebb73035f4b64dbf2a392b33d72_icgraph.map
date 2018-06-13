@@ -1,0 +1,4 @@
+<map id="CWaterOpenCL::computeAreaData" name="CWaterOpenCL::computeAreaData">
+<area shape="rect" id="node2" href="$class_c_water_map.html#a3dcda9c5dd50d45f317e526c6949f8db" title="CWaterMap::buildMap" alt="" coords="279,5,429,32"/>
+<area shape="rect" id="node3" href="$class_c_water_compute.html#a5486835df389547dea8403401738c071" title="CWaterCompute::prepareData" alt="" coords="477,5,673,32"/>
+</map>

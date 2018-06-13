@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['getdata',['getData',['../class_net_1_1_c_net.html#a77d474d293656443de888283db8a74f0',1,'Net::CNet']]],
-  ['getmessageheadmaxsize',['getMessageHeadMaxSize',['../class_net_1_1_c_net_handler.html#a6d0a79a8fc8126f6bf90e348c90152a7',1,'Net::CNetHandler::getMessageHeadMaxSize()'],['../class_net_1_1_c_net_handler_web_socket.html#a5c3fa1c1f926119482b25159afffb6cd',1,'Net::CNetHandlerWebSocket::getMessageHeadMaxSize()']]],
-  ['getparametr',['getParametr',['../class_c_settings_manager.html#ad0796e880134f641f6517d9a5433a877',1,'CSettingsManager::getParametr(const std::string &amp;category, const std::string &amp;dataName, std::string &amp;parametr)'],['../class_c_settings_manager.html#a6f45d4eaf3c79250f41bbac303b7c485',1,'CSettingsManager::getParametr(const std::string &amp;category, const std::string &amp;dataName, int &amp;parametr)']]],
-  ['gettask',['getTask',['../class_c_reception.html#a842ffb5e64b4e65ff9faa087ffcd31fe',1,'CReception']]]
+  ['decodmessagehead',['decodMessageHead',['../class_net_1_1_c_net_handler.html#a992b6c07fcda7c7f8ee411773b7dc3c6',1,'Net::CNetHandler::decodMessageHead()'],['../class_net_1_1_c_net_handler_web_socket.html#a26a43acb16b7879df22aa3ce3fc1d172',1,'Net::CNetHandlerWebSocket::decodMessageHead()']]],
+  ['detach',['detach',['../class_c_settings_manager.html#a64524171654c8a7076af9ac9ac780bfc',1,'CSettingsManager']]],
+  ['disconect',['disconect',['../class_net_1_1_c_net_handler.html#a1f43099b8631032d4555a326dd71f4d1',1,'Net::CNetHandler::disconect()'],['../class_net_1_1_c_net_handler_web_socket.html#ac5a2c812c7a1fdb426265a4590409ae3',1,'Net::CNetHandlerWebSocket::disconect()']]],
+  ['disconnect',['disconnect',['../class_net_1_1_c_net.html#a7f66009e63ed53b541331143bb2f4bfb',1,'Net::CNet']]]
 ];

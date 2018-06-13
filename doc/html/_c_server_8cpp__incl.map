@@ -1,0 +1,10 @@
+<map id="server/CServer.cpp" name="server/CServer.cpp">
+<area shape="rect" id="node4" href="$_c_settings_manager_8hpp.html" title="CSettingsManager.hpp" alt="" coords="635,229,789,256"/>
+<area shape="rect" id="node8" href="$_c_server_8hpp.html" title="CServer.hpp" alt="" coords="285,80,377,107"/>
+<area shape="rect" id="node9" href="$_c_reception_8hpp.html" title="CReception.hpp" alt="" coords="273,229,388,256"/>
+<area shape="rect" id="node15" href="$_c_water_compute_8hpp.html" title="CWaterCompute.hpp" alt="" coords="489,155,631,181"/>
+<area shape="rect" id="node13" href="$_c_net_8hpp.html" title="CNet/CNet.hpp" alt="" coords="35,304,144,331"/>
+<area shape="rect" id="node14" href="$_c_net_handler_8hpp.html" title="Handler/CNetHandler.hpp" alt="" coords="5,379,173,405"/>
+<area shape="rect" id="node16" href="$_c_water_map_8hpp.html" title="CWaterMap.hpp" alt="" coords="814,229,930,256"/>
+<area shape="rect" id="node18" href="$_c_water_open_c_l_8hpp.html" title="CWaterOpenCL.hpp" alt="" coords="891,304,1029,331"/>
+</map>

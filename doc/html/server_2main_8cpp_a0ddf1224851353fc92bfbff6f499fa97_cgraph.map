@@ -1,0 +1,7 @@
+<map id="main" name="main">
+<area shape="rect" id="node2" href="$class_net_1_1_c_net_socket_interface.html#a3f0603a3708ca966b9f37d9202761aa8" title="Interface initialization function. " alt="" coords="131,5,300,47"/>
+<area shape="rect" id="node3" href="$class_net_1_1_c_net_socket_interface.html#a8d07a643a30977a250d611653d05e7d2" title="Function of disabling the initialized interface. " alt="" coords="131,71,300,112"/>
+<area shape="rect" id="node4" href="$class_c_settings_manager.html#a40c0ffaf515eb306a9f83e3d631bcd21" title="CSettingsManager::instance" alt="" coords="122,137,309,163"/>
+<area shape="rect" id="node5" href="$class_c_settings_manager.html#a874956b5cb03b94bbb85ae0a5b25733f" title="CSettingsManager::saveParametrs" alt="" coords="104,187,327,214"/>
+<area shape="rect" id="node6" href="$class_c_settings_manager.html#a64524171654c8a7076af9ac9ac780bfc" title="CSettingsManager::detach" alt="" coords="127,238,303,265"/>
+</map>

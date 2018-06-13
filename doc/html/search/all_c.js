@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['Дипломная_20работа_20_22Расчет_20затопления_20местности_20по_203d_20карте_22',['Дипломная работа &quot;Расчет затопления местности по 3d карте&quot;',['../md__r_e_a_d_m_e.html',1,'']]]
+  ['opcod_5fflag',['OPCOD_FLAG',['../_c_net_handler_web_socket_8cpp.html#a71d39149a4f16317b75ab4b1a1910ba2',1,'CNetHandlerWebSocket.cpp']]],
+  ['opcode',['OpCode',['../_c_net_handler_web_socket_8cpp.html#abeb7dfb0e9e2b3114e240a405d046ea7',1,'CNetHandlerWebSocket.cpp']]]
 ];

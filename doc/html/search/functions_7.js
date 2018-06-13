@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['recv',['recv',['../class_net_1_1_c_net_socket_interface.html#a66531da7c243f12948bd79293d6299e2',1,'Net::CNetSocketInterface']]]
+  ['handle',['handle',['../class_net_1_1_c_net_handler.html#a7bd761afe7eff3897b840db84f870135',1,'Net::CNetHandler::handle()'],['../class_net_1_1_c_net_handler_web_socket.html#ad4c16a911b8cb26f69dda807b5ca2c70',1,'Net::CNetHandlerWebSocket::handle()']]]
 ];

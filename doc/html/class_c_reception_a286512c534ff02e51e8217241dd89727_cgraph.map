@@ -1,0 +1,6 @@
+<map id="CReception::compliteTask" name="CReception::compliteTask">
+<area shape="rect" id="node2" href="$class_net_1_1_c_net.html#a22a961e8db355efd94539336937b956b" title="Sending data to the client. " alt="" coords="232,13,375,39"/>
+<area shape="rect" id="node4" href="$class_net_1_1_c_net.html#a7f66009e63ed53b541331143bb2f4bfb" title="Disconnect the client. " alt="" coords="228,63,379,90"/>
+<area shape="rect" id="node3" href="$class_net_1_1_c_net_socket_interface.html#ad6a594a3ebe2fd855399aabfcbe0f95e" title="Sending data. " alt="" coords="427,5,596,47"/>
+<area shape="rect" id="node5" href="$class_net_1_1_c_net_socket_interface.html#a32974d8d814e78f05208eec685376df5" title="Close socket. " alt="" coords="427,71,596,112"/>
+</map>

@@ -1,0 +1,166 @@
+\hypertarget{class_net_1_1_c_net_handler_web_socket}{}\section{Net\+:\+:C\+Net\+Handler\+Web\+Socket Class Reference}
+\label{class_net_1_1_c_net_handler_web_socket}\index{Net\+::\+C\+Net\+Handler\+Web\+Socket@{Net\+::\+C\+Net\+Handler\+Web\+Socket}}
+
+
+The protocol handler of the Web\+Socket.  
+
+
+
+
+{\ttfamily \#include $<$C\+Net\+Handler\+Web\+Socket.\+hpp$>$}
+
+
+
+Inheritance diagram for Net\+:\+:C\+Net\+Handler\+Web\+Socket\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=226pt]{class_net_1_1_c_net_handler_web_socket__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Net\+:\+:C\+Net\+Handler\+Web\+Socket\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=226pt]{class_net_1_1_c_net_handler_web_socket__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{struct_net_1_1_s_message_head}{S\+Message\+Head}} \mbox{\hyperlink{class_net_1_1_c_net_handler_web_socket_a26a43acb16b7879df22aa3ce3fc1d172}{decod\+Message\+Head}} (const std\+::string \&message\+Head)
+\item 
+virtual std\+::string \mbox{\hyperlink{class_net_1_1_c_net_handler_web_socket_ac5a2c812c7a1fdb426265a4590409ae3}{disconect}} (Disconnect\+Reason reason)
+\item 
+virtual std\+::string \mbox{\hyperlink{class_net_1_1_c_net_handler_web_socket_ad4c16a911b8cb26f69dda807b5ca2c70}{handle}} (const std\+::string \&head, bool \&is\+Send\+Answer)
+\item 
+virtual uint \mbox{\hyperlink{class_net_1_1_c_net_handler_web_socket_a5c3fa1c1f926119482b25159afffb6cd}{get\+Message\+Head\+Max\+Size}} ()
+\item 
+virtual std\+::string \mbox{\hyperlink{class_net_1_1_c_net_handler_web_socket_aa408c8c686da45c36969a7dcf7478daa}{pack\+Data}} (const std\+::string \&data, const bool is\+Use\+Mask)
+\item 
+virtual std\+::string \mbox{\hyperlink{class_net_1_1_c_net_handler_web_socket_aa19e13e42fa3a31ab8d8a8291af4b5e6}{ping}} ()
+\item 
+virtual std\+::string \mbox{\hyperlink{class_net_1_1_c_net_handler_web_socket_a51d3618ba601abc5047cf0da91b8a374}{pong}} ()
+\item 
+virtual std\+::string \mbox{\hyperlink{class_net_1_1_c_net_handler_web_socket_a09297039609dca2d8e2c376626ef78f1}{unpack\+Data}} (const \mbox{\hyperlink{struct_net_1_1_s_message_head}{S\+Message\+Head}} \&head, const std\+::string \&data\+Pack)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The protocol handler of the Web\+Socket. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_net_1_1_c_net_handler_web_socket_a26a43acb16b7879df22aa3ce3fc1d172}\label{class_net_1_1_c_net_handler_web_socket_a26a43acb16b7879df22aa3ce3fc1d172}} 
+\index{Net\+::\+C\+Net\+Handler\+Web\+Socket@{Net\+::\+C\+Net\+Handler\+Web\+Socket}!decod\+Message\+Head@{decod\+Message\+Head}}
+\index{decod\+Message\+Head@{decod\+Message\+Head}!Net\+::\+C\+Net\+Handler\+Web\+Socket@{Net\+::\+C\+Net\+Handler\+Web\+Socket}}
+\subsubsection{\texorpdfstring{decod\+Message\+Head()}{decodMessageHead()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_net_1_1_s_message_head}{S\+Message\+Head}} C\+Net\+Handler\+Web\+Socket\+::decod\+Message\+Head (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{message\+Head }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_net_1_1_c_net_handler_a992b6c07fcda7c7f8ee411773b7dc3c6}{Net\+::\+C\+Net\+Handler\+::decod\+Message\+Head}} 
+\end{DoxySeeAlso}
+
+
+Implements \mbox{\hyperlink{class_net_1_1_c_net_handler_a992b6c07fcda7c7f8ee411773b7dc3c6}{Net\+::\+C\+Net\+Handler}}.
+
+\mbox{\Hypertarget{class_net_1_1_c_net_handler_web_socket_ac5a2c812c7a1fdb426265a4590409ae3}\label{class_net_1_1_c_net_handler_web_socket_ac5a2c812c7a1fdb426265a4590409ae3}} 
+\index{Net\+::\+C\+Net\+Handler\+Web\+Socket@{Net\+::\+C\+Net\+Handler\+Web\+Socket}!disconect@{disconect}}
+\index{disconect@{disconect}!Net\+::\+C\+Net\+Handler\+Web\+Socket@{Net\+::\+C\+Net\+Handler\+Web\+Socket}}
+\subsubsection{\texorpdfstring{disconect()}{disconect()}}
+{\footnotesize\ttfamily std\+::string C\+Net\+Handler\+Web\+Socket\+::disconect (\begin{DoxyParamCaption}\item[{Disconnect\+Reason}]{reason }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_net_1_1_c_net_handler_a1f43099b8631032d4555a326dd71f4d1}{Net\+::\+C\+Net\+Handler\+::disconect}} 
+\end{DoxySeeAlso}
+
+
+Implements \mbox{\hyperlink{class_net_1_1_c_net_handler_a1f43099b8631032d4555a326dd71f4d1}{Net\+::\+C\+Net\+Handler}}.
+
+\mbox{\Hypertarget{class_net_1_1_c_net_handler_web_socket_a5c3fa1c1f926119482b25159afffb6cd}\label{class_net_1_1_c_net_handler_web_socket_a5c3fa1c1f926119482b25159afffb6cd}} 
+\index{Net\+::\+C\+Net\+Handler\+Web\+Socket@{Net\+::\+C\+Net\+Handler\+Web\+Socket}!get\+Message\+Head\+Max\+Size@{get\+Message\+Head\+Max\+Size}}
+\index{get\+Message\+Head\+Max\+Size@{get\+Message\+Head\+Max\+Size}!Net\+::\+C\+Net\+Handler\+Web\+Socket@{Net\+::\+C\+Net\+Handler\+Web\+Socket}}
+\subsubsection{\texorpdfstring{get\+Message\+Head\+Max\+Size()}{getMessageHeadMaxSize()}}
+{\footnotesize\ttfamily uint C\+Net\+Handler\+Web\+Socket\+::get\+Message\+Head\+Max\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_net_1_1_c_net_handler_a6d0a79a8fc8126f6bf90e348c90152a7}{Net\+::\+C\+Net\+Handler\+::get\+Message\+Head\+Max\+Size}} 
+\end{DoxySeeAlso}
+
+
+Implements \mbox{\hyperlink{class_net_1_1_c_net_handler_a6d0a79a8fc8126f6bf90e348c90152a7}{Net\+::\+C\+Net\+Handler}}.
+
+\mbox{\Hypertarget{class_net_1_1_c_net_handler_web_socket_ad4c16a911b8cb26f69dda807b5ca2c70}\label{class_net_1_1_c_net_handler_web_socket_ad4c16a911b8cb26f69dda807b5ca2c70}} 
+\index{Net\+::\+C\+Net\+Handler\+Web\+Socket@{Net\+::\+C\+Net\+Handler\+Web\+Socket}!handle@{handle}}
+\index{handle@{handle}!Net\+::\+C\+Net\+Handler\+Web\+Socket@{Net\+::\+C\+Net\+Handler\+Web\+Socket}}
+\subsubsection{\texorpdfstring{handle()}{handle()}}
+{\footnotesize\ttfamily std\+::string C\+Net\+Handler\+Web\+Socket\+::handle (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{head,  }\item[{bool \&}]{is\+Send\+Answer }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_net_1_1_c_net_handler_a7bd761afe7eff3897b840db84f870135}{Net\+::\+C\+Net\+Handler\+::handle}} 
+\end{DoxySeeAlso}
+
+
+Implements \mbox{\hyperlink{class_net_1_1_c_net_handler_a7bd761afe7eff3897b840db84f870135}{Net\+::\+C\+Net\+Handler}}.
+
+\mbox{\Hypertarget{class_net_1_1_c_net_handler_web_socket_aa408c8c686da45c36969a7dcf7478daa}\label{class_net_1_1_c_net_handler_web_socket_aa408c8c686da45c36969a7dcf7478daa}} 
+\index{Net\+::\+C\+Net\+Handler\+Web\+Socket@{Net\+::\+C\+Net\+Handler\+Web\+Socket}!pack\+Data@{pack\+Data}}
+\index{pack\+Data@{pack\+Data}!Net\+::\+C\+Net\+Handler\+Web\+Socket@{Net\+::\+C\+Net\+Handler\+Web\+Socket}}
+\subsubsection{\texorpdfstring{pack\+Data()}{packData()}}
+{\footnotesize\ttfamily std\+::string C\+Net\+Handler\+Web\+Socket\+::pack\+Data (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{data,  }\item[{const bool}]{is\+Use\+Mask }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_net_1_1_c_net_handler_a9e8b6b44b05d2acb7b7cb28c57bedcb8}{Net\+::\+C\+Net\+Handler\+::pack\+Data}} 
+\end{DoxySeeAlso}
+
+
+Implements \mbox{\hyperlink{class_net_1_1_c_net_handler_a9e8b6b44b05d2acb7b7cb28c57bedcb8}{Net\+::\+C\+Net\+Handler}}.
+
+\mbox{\Hypertarget{class_net_1_1_c_net_handler_web_socket_aa19e13e42fa3a31ab8d8a8291af4b5e6}\label{class_net_1_1_c_net_handler_web_socket_aa19e13e42fa3a31ab8d8a8291af4b5e6}} 
+\index{Net\+::\+C\+Net\+Handler\+Web\+Socket@{Net\+::\+C\+Net\+Handler\+Web\+Socket}!ping@{ping}}
+\index{ping@{ping}!Net\+::\+C\+Net\+Handler\+Web\+Socket@{Net\+::\+C\+Net\+Handler\+Web\+Socket}}
+\subsubsection{\texorpdfstring{ping()}{ping()}}
+{\footnotesize\ttfamily std\+::string C\+Net\+Handler\+Web\+Socket\+::ping (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_net_1_1_c_net_handler_af905edf8c2f5dee54f278f78d66b400d}{Net\+::\+C\+Net\+Handler\+::ping}} 
+\end{DoxySeeAlso}
+
+
+Implements \mbox{\hyperlink{class_net_1_1_c_net_handler_af905edf8c2f5dee54f278f78d66b400d}{Net\+::\+C\+Net\+Handler}}.
+
+\mbox{\Hypertarget{class_net_1_1_c_net_handler_web_socket_a51d3618ba601abc5047cf0da91b8a374}\label{class_net_1_1_c_net_handler_web_socket_a51d3618ba601abc5047cf0da91b8a374}} 
+\index{Net\+::\+C\+Net\+Handler\+Web\+Socket@{Net\+::\+C\+Net\+Handler\+Web\+Socket}!pong@{pong}}
+\index{pong@{pong}!Net\+::\+C\+Net\+Handler\+Web\+Socket@{Net\+::\+C\+Net\+Handler\+Web\+Socket}}
+\subsubsection{\texorpdfstring{pong()}{pong()}}
+{\footnotesize\ttfamily std\+::string C\+Net\+Handler\+Web\+Socket\+::pong (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_net_1_1_c_net_handler_a818189d3332d68cf28d30ec31bed0e17}{Net\+::\+C\+Net\+Handler\+::pong}} 
+\end{DoxySeeAlso}
+
+
+Implements \mbox{\hyperlink{class_net_1_1_c_net_handler_a818189d3332d68cf28d30ec31bed0e17}{Net\+::\+C\+Net\+Handler}}.
+
+\mbox{\Hypertarget{class_net_1_1_c_net_handler_web_socket_a09297039609dca2d8e2c376626ef78f1}\label{class_net_1_1_c_net_handler_web_socket_a09297039609dca2d8e2c376626ef78f1}} 
+\index{Net\+::\+C\+Net\+Handler\+Web\+Socket@{Net\+::\+C\+Net\+Handler\+Web\+Socket}!unpack\+Data@{unpack\+Data}}
+\index{unpack\+Data@{unpack\+Data}!Net\+::\+C\+Net\+Handler\+Web\+Socket@{Net\+::\+C\+Net\+Handler\+Web\+Socket}}
+\subsubsection{\texorpdfstring{unpack\+Data()}{unpackData()}}
+{\footnotesize\ttfamily std\+::string C\+Net\+Handler\+Web\+Socket\+::unpack\+Data (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_net_1_1_s_message_head}{S\+Message\+Head}} \&}]{head,  }\item[{const std\+::string \&}]{data\+Pack }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_net_1_1_c_net_handler_aea2d09ea3bfa8d7a13ace3aec6ba9356}{Net\+::\+C\+Net\+Handler\+::unpack\+Data}} 
+\end{DoxySeeAlso}
+
+
+Implements \mbox{\hyperlink{class_net_1_1_c_net_handler_aea2d09ea3bfa8d7a13ace3aec6ba9356}{Net\+::\+C\+Net\+Handler}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+server/\+C\+Net/\+Handler/C\+Net\+Handler\+Web\+Socket.\+hpp\item 
+server/\+C\+Net/\+Handler/C\+Net\+Handler\+Web\+Socket.\+cpp\end{DoxyCompactItemize}

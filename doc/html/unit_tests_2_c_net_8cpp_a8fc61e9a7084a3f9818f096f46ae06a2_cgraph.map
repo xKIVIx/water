@@ -1,0 +1,11 @@
+<map id="serverWork" name="serverWork">
+<area shape="rect" id="node2" href="$class_net_1_1_c_net.html#a802a6ab154226caaa8d70423374b8034" title="The function of connection waiting. " alt="" coords="140,93,299,119"/>
+<area shape="rect" id="node5" href="$class_net_1_1_c_net_socket_interface.html#a32974d8d814e78f05208eec685376df5" title="Close socket. " alt="" coords="347,201,516,243"/>
+<area shape="rect" id="node7" href="$class_net_1_1_c_net.html#a77d474d293656443de888283db8a74f0" title="Receiving data from the client. " alt="" coords="153,42,285,69"/>
+<area shape="rect" id="node8" href="$class_net_1_1_c_net.html#a22a961e8db355efd94539336937b956b" title="Sending data to the client. " alt="" coords="148,143,291,170"/>
+<area shape="rect" id="node9" href="$class_net_1_1_c_net.html#a7dbe5d1a571964634d88596d7c6e7c2f" title="Closing of clients&#39; expectations. " alt="" coords="160,245,279,271"/>
+<area shape="rect" id="node3" href="$class_net_1_1_c_net_socket_interface.html#a4fceb3945002b0aa62dbc7af4afac76d" title="Waiting for the client. " alt="" coords="347,71,516,112"/>
+<area shape="rect" id="node4" href="$class_net_1_1_c_net_socket_interface.html#a66531da7c243f12948bd79293d6299e2" title="Receiving data. " alt="" coords="347,5,516,47"/>
+<area shape="rect" id="node6" href="$class_net_1_1_c_net_socket_interface.html#ad6a594a3ebe2fd855399aabfcbe0f95e" title="Sending data. " alt="" coords="347,136,516,177"/>
+<area shape="rect" id="node10" href="$class_net_1_1_c_net_socket_interface.html#a52ca61f347f9f08cf0ad85e45f081906" title="Create a client socket. " alt="" coords="347,267,516,308"/>
+</map>
