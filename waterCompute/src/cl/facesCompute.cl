@@ -85,6 +85,7 @@ __kernel void countColise(__global __read_only unsigned int  *area,
 
 __kernel void removeCommunityAreas(__global unsigned char *countersFirst,
                                    __global unsigned char *countersSecond,
+                                   __global unsigned char *countersThird,
                                    __global unsigned int  *resultFirst,
                                    __global unsigned int  *resultSecond,
                                    __global unsigned int  *resultThird,
@@ -95,12 +96,15 @@ __kernel void removeCommunityAreas(__global unsigned char *countersFirst,
         countersFirst[i] = 0;
         countersSecond[i] = 0;
         writePos = atomic_inc(&resultSizes[2]);
+        countersThird[i] = 1;
         resultThird[writePos] = i;
     } else if(countersFirst[i] == 1) {
         writePos = atomic_inc(&resultSizes[0]);
+        countersThird[i] = 0;
         resultFirst[writePos] = i;
     } else if(countersSecond[i] == 1) {
         writePos = atomic_inc(&resultSizes[1]);
+        countersThird[i] = 0;
         resultSecond[writePos] = i;
     }
 }

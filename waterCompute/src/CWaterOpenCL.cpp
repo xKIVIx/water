@@ -912,6 +912,9 @@ int CWaterOpenCL::removeCommunityAreas(std::list<std::vector<uint32_t>>& areas,
         bufferSecondCountersColise(context_,
                                    bufferFaces_.getSize() / (3 * sizeof(uint32_t)),
                                    CL_MEM_READ_WRITE),
+        bufferThirdCountersColise(context_,
+                                   bufferFaces_.getSize() / (3 * sizeof(uint32_t)),
+                                   CL_MEM_READ_WRITE),
         bufferResultFirstArea(context_,
                               bufferFaces_.getSize() / 3,
                               CL_MEM_READ_WRITE),
@@ -941,22 +944,27 @@ int CWaterOpenCL::removeCommunityAreas(std::list<std::vector<uint32_t>>& areas,
         errorMessage("Fail bind bufferSecondCountersColise", err);
         return err;
     }
-    err = kernelRemoveCommunityAreas_.bindParametr(bufferResultFirstArea, 2);
+    err = kernelRemoveCommunityAreas_.bindParametr(bufferThirdCountersColise, 2);
+    if(err != CL_SUCCESS) {
+        errorMessage("Fail bind bufferThirdCountersColise", err);
+        return err;
+    }
+    err = kernelRemoveCommunityAreas_.bindParametr(bufferResultFirstArea, 3);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind bufferResultFirstArea", err);
         return err;
     }
-    err = kernelRemoveCommunityAreas_.bindParametr(bufferResultSecondArea, 3);
+    err = kernelRemoveCommunityAreas_.bindParametr(bufferResultSecondArea, 4);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind bufferResultSecondArea", err);
         return err;
     }
-    err = kernelRemoveCommunityAreas_.bindParametr(bufferResultThirdArea, 4);
+    err = kernelRemoveCommunityAreas_.bindParametr(bufferResultThirdArea, 5);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind bufferResultThirdArea", err);
         return err;
     }
-    err = kernelRemoveCommunityAreas_.bindParametr(bufferResultSizes, 5);
+    err = kernelRemoveCommunityAreas_.bindParametr(bufferResultSizes, 6);
     if(err != CL_SUCCESS) {
         errorMessage("Fail bind bufferResultSizes", err);
         return err;
@@ -1059,6 +1067,20 @@ int CWaterOpenCL::removeCommunityAreas(std::list<std::vector<uint32_t>>& areas,
                         return err;
                     }
                     iterFirstArea->resize(sizes[2]);
+
+                    bufferFirstCountersColise.swap(bufferThirdCountersColise);
+
+                    // rebind
+                    err = kernelRemoveCommunityAreas_.bindParametr(bufferFirstCountersColise, 0);
+                    if(err != CL_SUCCESS) {
+                        errorMessage("Fail rebind bufferFirstCountersColise", err);
+                        return err;
+                    }
+                    err = kernelRemoveCommunityAreas_.bindParametr(bufferThirdCountersColise, 2);
+                    if(err != CL_SUCCESS) {
+                        errorMessage("Fail rebind bufferThirdCountersColise", err);
+                        return err;
+                    }
                 } else {
                     iterFirstArea->clear();
                     err = bufferResultFirstArea.getData(commandQueue_, *iterFirstArea);
@@ -1078,7 +1100,7 @@ int CWaterOpenCL::removeCommunityAreas(std::list<std::vector<uint32_t>>& areas,
                         errorMessage("Fail get data from bufferResultThirdArea", err);
                         return err;
                     }
-                    iterFirstArea->resize(sizes[2]);
+                    iterSecondArea->resize(sizes[2]);
                 } else {
                     iterSecondArea->clear();
                     err = bufferResultSecondArea.getData(commandQueue_, *iterSecondArea);
@@ -1088,13 +1110,6 @@ int CWaterOpenCL::removeCommunityAreas(std::list<std::vector<uint32_t>>& areas,
                     }
                     iterSecondArea->resize(sizes[1]);
                 }
-                iterSecondArea->clear();
-                err = bufferResultSecondArea.getData(commandQueue_, *iterSecondArea);
-                if(err != CL_SUCCESS) {
-                    errorMessage("Fail get data from bufferResultSecondArea", err);
-                    return err;
-                }
-                iterSecondArea->resize(sizes[1]);
             }
             if((sizes[0] != 0) && (sizes[1] != 0) && (sizes[2] != 0)) {
                 newAreas.emplace_back();

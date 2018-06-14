@@ -274,3 +274,17 @@ int CWaterOpenCL::CMemObject::setFlag(const CLdescriptor context,
     }
     return err;
 }
+
+void CWaterOpenCL::CMemObject::swap(CMemObject & second) {
+    CLdescriptor mem = mem_;
+    uint32_t size = size_;
+    int flag = flag_;
+
+    mem_ = second.mem_;
+    size_ = second.size_;
+    flag_ = second.flag_;
+
+    second.mem_ = mem;
+    second.size_ = size;
+    second.flag_ = flag;
+}

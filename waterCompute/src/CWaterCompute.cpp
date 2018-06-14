@@ -116,7 +116,6 @@ int CWaterCompute::findBorderHoles(std::list <std::vector<uint32_t>> &cycles) {
     std::vector <uint32_t> cycle;
     std::vector <char> statesEdges;
     uint32_t sizeFractureEdges;
-    roadMatOut(edgesHoleBorders_);
     statesEdges.resize(edgesHoleBorders_.size() / 2);
     cycle.reserve(edgesHoleBorders_.size() / 2);
     for(uint32_t idEdge = 0; idEdge < edgesHoleBorders_.size() / 2; idEdge++) {

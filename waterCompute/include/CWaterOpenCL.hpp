@@ -211,6 +211,8 @@ private:
         int setFlag(const CLdescriptor context,
                     const int flag);
 
+        void swap(CMemObject &second);
+
         /*
          * Set new size of memory object.
          * @details If you specify a size that differs from the current object, 
