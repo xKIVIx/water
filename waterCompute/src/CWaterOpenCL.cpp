@@ -971,6 +971,9 @@ int CWaterOpenCL::removeCommunityAreas(std::list<std::vector<uint32_t>>& areas,
     }
 
     for(auto iterFirstArea = areas.begin(); iterFirstArea != areas.end(); ++iterFirstArea) {
+        if(iterFirstArea->empty()) {
+            continue;
+        }
 
         err = bufferArea.loadData(context_, 
                                   commandQueue_, 
@@ -1004,6 +1007,9 @@ int CWaterOpenCL::removeCommunityAreas(std::list<std::vector<uint32_t>>& areas,
         auto iterSecondArea = iterFirstArea;
         iterSecondArea++;
         for(; iterSecondArea != areas.end(); ++iterSecondArea) {
+            if(iterSecondArea->empty()) {
+                continue;
+            }
             err = bufferArea.loadData(context_, 
                                       commandQueue_, 
                                       (char *)iterSecondArea->data(), 
@@ -1058,51 +1064,10 @@ int CWaterOpenCL::removeCommunityAreas(std::list<std::vector<uint32_t>>& areas,
                 errorMessage("Fail get data from bufferResultSizes", err);
                 return err;
             }
-            if(sizes[0] != iterFirstArea->size()) {
-                if(sizes[0] == 0) {
-                    iterFirstArea->clear();
-                    err = bufferResultThirdArea.getData(commandQueue_, *iterFirstArea);
-                    if(err != CL_SUCCESS) {
-                        errorMessage("Fail get data from bufferResultFirstArea", err);
-                        return err;
-                    }
-                    iterFirstArea->resize(sizes[2]);
-
-                    bufferFirstCountersColise.swap(bufferThirdCountersColise);
-
-                    // rebind
-                    err = kernelRemoveCommunityAreas_.bindParametr(bufferFirstCountersColise, 0);
-                    if(err != CL_SUCCESS) {
-                        errorMessage("Fail rebind bufferFirstCountersColise", err);
-                        return err;
-                    }
-                    err = kernelRemoveCommunityAreas_.bindParametr(bufferThirdCountersColise, 2);
-                    if(err != CL_SUCCESS) {
-                        errorMessage("Fail rebind bufferThirdCountersColise", err);
-                        return err;
-                    }
-                } else {
-                    iterFirstArea->clear();
-                    err = bufferResultFirstArea.getData(commandQueue_, *iterFirstArea);
-                    if(err != CL_SUCCESS) {
-                        errorMessage("Fail get data from bufferResultFirstArea", err);
-                        return err;
-                    }
-                    iterFirstArea->resize(sizes[0]);
-                }
-                
-            }
+ 
             if(sizes[1] != iterSecondArea->size()) {
-                if(sizes[1] == 0) {
-                    iterSecondArea->clear();
-                    err = bufferResultThirdArea.getData(commandQueue_, *iterSecondArea);
-                    if(err != CL_SUCCESS) {
-                        errorMessage("Fail get data from bufferResultThirdArea", err);
-                        return err;
-                    }
-                    iterSecondArea->resize(sizes[2]);
-                } else {
-                    iterSecondArea->clear();
+                iterSecondArea->clear();
+                if(sizes[1] != 0) {
                     err = bufferResultSecondArea.getData(commandQueue_, *iterSecondArea);
                     if(err != CL_SUCCESS) {
                         errorMessage("Fail get data from bufferResultSecondArea", err);
@@ -1110,14 +1075,33 @@ int CWaterOpenCL::removeCommunityAreas(std::list<std::vector<uint32_t>>& areas,
                     }
                     iterSecondArea->resize(sizes[1]);
                 }
+
             }
-            if((sizes[0] != 0) && (sizes[1] != 0) && (sizes[2] != 0)) {
+            if(sizes[2] != 0) {
                 newAreas.emplace_back();
                 bufferResultThirdArea.getData(commandQueue_, newAreas.back());
                 newAreas.back().resize(sizes[2]);
             }
+
+            if(sizes[0] != iterFirstArea->size()) {
+                iterFirstArea->clear();
+                if(sizes[0] != 0) {
+                    err = bufferResultFirstArea.getData(commandQueue_, *iterFirstArea);
+                    if(err != CL_SUCCESS) {
+                        errorMessage("Fail get data from bufferResultFirstArea", err);
+                        return err;
+                    }
+                    iterFirstArea->resize(sizes[0]);
+                } else {
+                    break;
+                }
+
+            }
         }
     }
+    areas.remove_if([](std::vector<uint32_t> &item) {
+        return item.empty();
+    });
     return err;
 }
 

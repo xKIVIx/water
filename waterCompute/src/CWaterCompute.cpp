@@ -54,16 +54,16 @@ int CWaterCompute::prepareData() {
         return err;
     }
     while(!newArea.empty()) {
-        std::list <std::vector<uint32_t>> tmp;
-        err = removeCommunityAreas(newArea, tmp);
-        if(err != 0) {
-            return err;
-        }
         for(auto iter = newArea.begin(); iter != newArea.end(); ++iter) {
             innerFaces.emplace_back();
             innerFaces.back().swap(*iter);
         }
-        newArea.swap(tmp);
+        newArea.clear();
+        err = removeCommunityAreas(innerFaces, newArea);
+        if(err != 0) {
+            return err;
+        }
+        
     }
     borders.clear();
     err = findUnionVertex(innerFaces, borders);

@@ -233,6 +233,25 @@ int CWaterOpenCL::CMemObject::getData(const CLdescriptor commandQueue,
 }
 
 int CWaterOpenCL::CMemObject::getData(const CLdescriptor commandQueue,
+                                      std::vector<char> &data) const {
+    char *buffer = nullptr;
+    uint32_t sizeData = 0;
+    int err = getData(commandQueue, &buffer, sizeData);
+    if(err != CL_SUCCESS) {
+        delete[] buffer;
+        return err;
+    }
+    if(sizeData != 0) {
+        data.reserve(data.size() + sizeData);
+        data.insert(data.end(),
+                    buffer,
+                    buffer + sizeData);
+        delete[] buffer;
+    }
+    return err;
+}
+
+int CWaterOpenCL::CMemObject::getData(const CLdescriptor commandQueue,
                                       uint32_t &data) const {
     char *buffer = nullptr;
     uint32_t sizeData = 0;

@@ -195,6 +195,15 @@ private:
                     uint32_t &data) const;
 
         /*
+         * Get data from object.
+         * @param commandQueue  The command queue for uploading data.
+         * @param data Output buffer.
+         * @return 0 if sucsses, else OpenCl error code.
+         */
+        int getData(const CLdescriptor commandQueue,
+                    std::vector<char> &data) const;
+
+        /*
          * Get size of memory object.
          * @return Size in bytes.
          */
