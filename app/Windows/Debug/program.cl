@@ -254,13 +254,12 @@ __kernel void findUnionVertex(__global __read_only  unsigned int  *faces,
                               __global __read_only  unsigned int  *secondAera,
                               __global              unsigned int  *unionVertexMark) {
                                   
-    unsigned int idFirstFace = get_global_id(0),
-                 idSecondFace = get_global_id(1);
+    unsigned int idFirstFace = firstArea[get_global_id(0)] * 3,
+                 idSecondFace = secondAera[get_global_id(1)] * 3;
     for(unsigned char i = 0; i < 3; i++) {
         for(unsigned char k = 0; k < 3; k++) {
-            if(faces[firstArea[idFirstFace] * 3 + i] == 
-               faces[secondAera[idSecondFace] * 3 + k]) {
-                atomic_max(&unionVertexMark[firstArea[idFirstFace] * 3 + i], 1);
+            if(faces[idFirstFace + i] == faces[idSecondFace + k]) {
+                atomic_max(&unionVertexMark[faces[idFirstFace + i]], 1);
             }
         }
     }
