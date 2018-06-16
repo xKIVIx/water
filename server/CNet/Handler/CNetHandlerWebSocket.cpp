@@ -129,10 +129,10 @@ SMessageHead CNetHandlerWebSocket::decodMessageHead(const std::string &messageHe
             std::cout << "Not support 64bit size.\n";
             return result;
         }
-        *((char *)&result.dataSize_) = messageHead[6];
-        *((char *)&result.dataSize_ + 1) = messageHead[7];
-        *((char *)&result.dataSize_ + 2) = messageHead[8];
-        *((char *)&result.dataSize_ + 3) = messageHead[9];
+        *((char *)&result.dataSize_) = messageHead[9];
+        *((char *)&result.dataSize_ + 1) = messageHead[8];
+        *((char *)&result.dataSize_ + 2) = messageHead[7];
+        *((char *)&result.dataSize_ + 3) = messageHead[6];
         result.headSize_ += headSizeVBD;
         return result;
     }
