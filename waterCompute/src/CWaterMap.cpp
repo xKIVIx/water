@@ -6,7 +6,7 @@
 
 #define errorMessage(message, failCode) std::cout << message << ": " << failCode << std::endl
 
-const uint32_t COUNT_ITERATIONS = 50;
+const uint32_t COUNT_ITERATIONS = 20;
 
 int CWaterMap::buildMap(const std::list<std::vector<uint32_t>> &borders,
                         const std::list<std::vector<uint32_t>> &areas) {
@@ -84,9 +84,11 @@ void CWaterMap::addWater(const float size) {
                     twoVert->currVal_ = val1->second;
                     val0++;
                     val1++;
-                    float unionVal = val0->second + val1->second;
-                    twoVert->currVal_ += (val1->second / unionVal) * v;
-                    oneVert->currVal_ += (val0->second / unionVal) * v;
+                    float unionVal = val0->second + val1->second,
+                          k = v / unionVal;
+
+                    twoVert->currVal_ += val1->second * k;
+                    oneVert->currVal_ += val0->second * k;
                 }
             } else if(val1->second < twoVert->currVal_) {
                 oneVert->currVal_ += twoVert->currVal_ - val1->second;

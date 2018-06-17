@@ -374,22 +374,6 @@ private:
     int computeBorderEdges(const CMemObject &bufferEdges,
                            const CMemObject &bufferMarkNoneBorder);
 
-
-    /*
-     * Calculation of internal points of capacities.
-     * @param edges_ A buffer with data on the edges_ capable of creating a capacity.
-     * @param bufferBorder The buffer contains data about the boundary.
-     * @param borderSize Size boundary.
-     * @param buferInnerVertex Result buffer.
-     * @param countInnerVertex Size result.
-     * @return 0 if sucsses, else OpenCl error code.
-     */
-    int computeInnerVertex(const CMemObject &edges,
-                           const CMemObject &bufferBorder,
-                           const uint32_t   borderSize,
-                           const CMemObject &buferInnerVertex,
-                           uint32_t         &countInnerVertex);
-
     /*
      * Calculation of fracture edges_.
      * @details The result is filling the data with the following changes:
@@ -409,7 +393,6 @@ private:
             kernelFindInnerEdges_,
             kernelFindBorderEdges_,
             kernelFindFractureEdges_,
-            kernelFindInnerVertex_,
             kernelFindInnerFaces_,
             kernelCountColise_,
             kernelRemoveCommunityAreas_,

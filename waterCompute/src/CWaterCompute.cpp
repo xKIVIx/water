@@ -48,8 +48,12 @@ int CWaterCompute::prepareData() {
                                       innerFaces,
                                       newArea;
     findBorderHoles(borders);
-    computeInnerFaces(borders, innerFaces);
-    int err = removeCommunityAreas(innerFaces, newArea);
+    int err = computeInnerFaces(borders, innerFaces);
+    if(err != 0) {
+        return err;
+    }
+
+    err = removeCommunityAreas(innerFaces, newArea);
     if(err != 0) {
         return err;
     }

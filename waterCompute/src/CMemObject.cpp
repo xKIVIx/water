@@ -5,7 +5,7 @@
 #include "CWaterOpenCL.hpp"
 
 CWaterOpenCL::CMemObject::CMemObject() {
-    flag_ = CL_MEM_READ_WRITE;
+    flag_ = CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR;
     mem_ = nullptr;
     size_ = 0;
 }
@@ -13,7 +13,7 @@ CWaterOpenCL::CMemObject::CMemObject() {
 CWaterOpenCL::CMemObject::CMemObject(const CLdescriptor context,
                                      const uint32_t size,
                                      const int flag) {
-    flag_ = flag;
+    flag_ = flag | CL_MEM_ALLOC_HOST_PTR;
     mem_ = nullptr;
     size_ = 0;
     resize(context,
@@ -277,7 +277,7 @@ int CWaterOpenCL::CMemObject::setFlag(const CLdescriptor context,
         return CL_SUCCESS;
     }
 
-    flag_ = flag;
+    flag_ = flag | CL_MEM_ALLOC_HOST_PTR;
     if(mem_ != nullptr) {
         clReleaseMemObject((cl_mem)mem_);
         mem_ = nullptr;
