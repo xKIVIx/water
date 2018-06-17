@@ -163,7 +163,6 @@ __kernel void findInnerFaces(__global __read_only unsigned int *edges,
                               __global             unsigned int *countInnerFaces) {
     char countCorrect = 0;
     unsigned int idChekedFace = get_global_id(0),
-                 countColise = 0,
                  idVertsFace[3] = {faces[idChekedFace * 3],
                                    faces[idChekedFace * 3 + 1],
                                    faces[idChekedFace * 3 + 2]},
@@ -171,12 +170,13 @@ __kernel void findInnerFaces(__global __read_only unsigned int *edges,
                  idVertEdge1;
                  
     for(unsigned int idChekedVert = 0; idChekedVert < 3; idChekedVert++) {
+        unsigned int countColise = 0;
         for(unsigned int i = 0; i < sizeBorder; i ++) {
             idVertEdge0 = edges[edgesBorder[i] * 2];
             idVertEdge1 = edges[edgesBorder[i] * 2 + 1];
             if((idVertEdge0 == idVertsFace[idChekedVert])||
                (idVertEdge1 == idVertsFace[idChekedVert])) {
-                countCorrect++;
+                countColise = 1;
                 break;           
             }
             float2 vert0 = (float2){vertex[idVertEdge0 * 3],  
