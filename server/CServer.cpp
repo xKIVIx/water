@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include<windows.h>
 
 #include "CSettingsManager.hpp"
 
@@ -76,7 +77,11 @@ void CServer::work() {
         std::string result;
         switch(opCode) {
             case 0:
+                clock_t start, end;
+                start = clock();
                 err = computeWaterLvl(task.data_, 1, result);
+                end = clock();
+                std::cout << ((float)end - start) / CLOCKS_PER_SEC << std::endl;
                 break;
             default:
                 break;
