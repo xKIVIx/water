@@ -4,7 +4,7 @@
 
 // Context
 /** @type {number[]} background fill color [R,G,B,A] */
-export var clearColor = [0.0, 0.0, 0.0, 1.0];
+export var clearColor = [1.0, 1.0, 1.0, 1.0];
 
 // Camera
 /** @type {number} minimal distance */
