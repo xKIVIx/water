@@ -121,6 +121,10 @@ document.getElementById('start-button').onclick = function() {
         return;
     }
     let valWater = document.getElementById('rain-val').value / 1000;
+    if(valWater <= 0) {
+        objects.length = 1;
+        return;
+    }
     let k = 1 / document.getElementById('scale-model').value;
     valWater *= k;
     let data = [new Uint8Array([0]), // opcode
